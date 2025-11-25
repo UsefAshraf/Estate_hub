@@ -1,18 +1,21 @@
 // src/App.tsx
-import React from "react";
-import { BrowserRouter as Router } from "react-router-dom";
-//import Propertydetail from "./components/Propertydetail/propertydetail";
-import UserManagement from "./pages/admin/usermanagement";
-//import AppRoutes from "./routes/AppRoutes";
-//import Navbar from "./components/Navbar/Navbar";
-//import Footer from "./components/Footer/Footer"; // import Footer
+import React, { useEffect } from "react";
+import AppRoutes from "./routes/AppRoutes";
+import { loadTheme } from "./hooks/ThemeLoader";
+import { useAppDispatch } from "./hooks/HooksStore";
+import { changeTheme } from "./store/slices/ThemeSlice";
 
 const App: React.FC = () => {
+  const dispatch = useAppDispatch();
+
+  useEffect(()=>{
+    const theme = loadTheme()
+    dispatch(changeTheme(theme));
+  },[])
   return (
-    <Router>
-      
-      <UserManagement></UserManagement>
-    </Router>
+    <div className="App">
+      <AppRoutes />
+    </div>
   );
 };
 

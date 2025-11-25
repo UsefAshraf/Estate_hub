@@ -1,46 +1,47 @@
 // src/routes/AppRoutes.tsx
 import React from "react";
-import { Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 
-// import Login from "../pages/auth/Login";
-// import Signup from "../pages/auth/Signup";
-// import ResetPassword from "../pages/auth/ResetPassword";
-// import OTP from "../pages/auth/OTP";
-// import Success from "../pages/auth/Success";
-// import BuyerMain from "../pages/buyer/MainPage";
-// import SellerMain from "../pages/seller/MainPage";
-// import AdminMain from "../pages/admin/MainPage";
-// import Profile from "../pages/general/Profile";
-// import AboutUs from "../pages/general/AboutUs";
-// import ContactUs from "../pages/general/ContactUs";
-// import NotFound404 from "../pages/general/NotFound404";
+// Pages
+import SignUpPage from "../pages/auth/Signup";
+import SignInPage from "../pages/auth/Login";
+import ForgotPasswordPage from "../pages/auth/ForgetPassword";
+import OTPPage from "../pages/auth/OTP";
+import RenewPasswordPage from "../pages/auth/ResetPassword";
+import SuccessPage from "../pages/auth/Success";
+import { PagePaths } from "../types/pages"
+import HomeSellerPage from "@/pages/seller/HomeSellere";
+import Navbar from "@/components/Navbar/navbar";
+import Footer from "@/components/Footer/footer";
+import AuthLayout from "@/Layouts/AuthLayout";
+import MainLayout from "@/Layouts/MainLayout";
 
-const AppRoutes: React.FC = () => (
-  <Routes>
-    {/* Auth */}
-    {/* <Route path="/login" element={<Login />} />
-    <Route path="/signup" element={<Signup />} />
-    <Route path="/reset-password" element={<ResetPassword />} />
-    <Route path="/otp" element={<OTP />} />
-    <Route path="/success" element={<Success />} /> */}
+const AppRoutes: React.FC = () => {
+  return (
+    <Router>
+      <Routes>
+        {/* Auth Routes */}
+        <Route element={<AuthLayout />}>
+          <Route path={PagePaths.signup} element={<SignUpPage />} />
+          <Route path={PagePaths.signin} element={<SignInPage />} />
+          <Route path={PagePaths.forgot} element={<ForgotPasswordPage />} />
+          <Route path={PagePaths.otp} element={<OTPPage />} />
+          <Route path={PagePaths.renew} element={<RenewPasswordPage />} />
+          <Route path={PagePaths.success} element={<SuccessPage />} />
+        </Route>
+         {/* Main App Routes */}
+        <Route element={<MainLayout />}>
+          <Route path="/home-seller" element={<HomeSellerPage />} />
+          {/* Add other main app routes here */}
+        </Route>
+        {/* Redirect root to Sign In */}
+        <Route path="/" element={<Navigate to={PagePaths.signin} replace />} />
 
-    {/* Buyer */}
-    {/* <Route path="/buyer" element={<BuyerMain />} /> */}
-
-    {/* Seller */}
-    {/* <Route path="/seller" element={<SellerMain />} /> */}
-
-    {/* Admin */}
-    {/* <Route path="/admin" element={<AdminMain />} /> */}
-
-    {/* General */}
-    {/* <Route path="/profile" element={<Profile />} />
-    <Route path="/about" element={<AboutUs />} />
-    <Route path="/contact" element={<ContactUs />} /> */}
-
-    {/* 404 */}
-    {/* <Route path="*" element={<NotFound404 />} /> */}
-  </Routes>
-);
+        {/* Catch all 404 */}
+        <Route path="*" element={<h1>404 - Page Not Found</h1>} />
+      </Routes>
+    </Router>
+  );
+};
 
 export default AppRoutes;
