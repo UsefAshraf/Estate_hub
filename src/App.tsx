@@ -4,6 +4,8 @@ import AppRoutes from "./routes/AppRoutes";
 import { loadTheme } from "./hooks/ThemeLoader";
 import { useAppDispatch } from "./hooks/HooksStore";
 import { changeTheme } from "./store/slices/ThemeSlice";
+import UserManagement from "./pages/admin/usermanagement";
+import Propertydetail from "./components/Propertydetail/propertydetail";
 
 const App: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -14,7 +16,7 @@ const App: React.FC = () => {
   },[])
   return (
     <div className="App">
-      <AppRoutes />
+      <AppRoutes/>
     </div>
   );
 };

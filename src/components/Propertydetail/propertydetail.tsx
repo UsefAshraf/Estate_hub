@@ -147,18 +147,18 @@ const Propertydetail: React.FC = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-gray-50 dark:bg-primary">
             {/* Header */}
 
 
             {/* Breadcrumb */}
-            <div className="max-w-9xl mx-auto px-5 py-4 bg-white mb-4 shadow-sm">
-                <div className="flex items-center space-x-2 text-sm text-gray-600">
+            <div className="max-w-9xl mx-auto px-5 py-4 bg-primary mb-4 shadow-sm">
+                <div className="flex items-center space-x-2 text-sm text-black">
                     <a href="#" className="hover:text-blue-600">Home</a>
                     <span>/</span>
                     <a href="#" className="hover:text-blue-600">Properties</a>
                     <span>/</span>
-                    <span className="text-gray-900">{propertyData.title}</span>
+                    <span className="text-black">{propertyData.title}</span>
                 </div>
             </div>
 
@@ -167,7 +167,7 @@ const Propertydetail: React.FC = () => {
                     {/* Main Content */}
                     <div className="lg:col-span-2 space-y-6">
                         {/* Image Gallery */}
-                        <div className="bg-white rounded-xl overflow-hidden shadow-sm">
+                        <div className="bg-primary rounded-xl overflow-hidden shadow-sm">
                             <div className="relative">
                                 <img
                                     src={images[mainImage]}
@@ -238,22 +238,22 @@ const Propertydetail: React.FC = () => {
                         </div>
 
                         {/* Property Info */}
-                        <div className="bg-white rounded-xl p-6 shadow-sm">
+                        <div className="bg-primary rounded-xl p-6 shadow-sm">
                             <div className="flex items-start justify-between mb-4">
                                 <div>
                                     <div className="flex items-center space-x-2 mb-2">
-                                        <span className="bg-cyan-500 text-white text-xs px-3 py-1 rounded-full">{propertyData.status}</span>
-                                        <span className="bg-gray-200 text-gray-700 text-xs px-3 py-1 rounded-full">{propertyData.type}</span>
-                                        <span className="bg-orange-500 text-white text-xs px-3 py-1 rounded-full">{propertyData.featured}</span>
+                                        <span className="bg-amber-900 text-white text-s px-3 py-1 rounded-full">{propertyData.status}</span>
+                                        <span className="bg-gray-200 text-gray-700 text-s px-3 py-1 rounded-full">{propertyData.type}</span>
+                                        <span className="bg-orange-500 text-white text-s px-3 py-1 rounded-full">{propertyData.featured}</span>
                                     </div>
-                                    <h1 className="text-3xl font-bold text-gray-900 mb-2">{propertyData.title}</h1>
+                                    <h1 className="text-3xl font-bold text-secondary mb-2">{propertyData.title}</h1>
                                     <p className="text-gray-600 flex items-center">
                                         <span className="mr-2">📍</span>
                                         {propertyData.address}
                                     </p>
                                 </div>
                                 <div className="text-right">
-                                    <div className="text-3xl font-bold text-cyan-500">{propertyData.price}</div>
+                                    <div className="text-3xl font-bold text-secondary">{propertyData.price}</div>
                                     <div className="text-sm text-gray-500">{propertyData.priceNote}</div>
                                 </div>
                             </div>
@@ -264,41 +264,41 @@ const Propertydetail: React.FC = () => {
                                     <Bed className="w-6 h-6 text-cyan-500" />
                                     <div>
                                         <div className="text-sm text-gray-500">Bedrooms</div>
-                                        <div className="font-semibold text-gray-900">{propertyData.bedrooms}</div>
+                                        <div className="font-semibold text-secondary">{propertyData.bedrooms}</div>
                                     </div>
                                 </div>
                                 <div className="flex items-center space-x-3">
                                     <Bath className="w-6 h-6 text-cyan-500" />
                                     <div>
                                         <div className="text-sm text-gray-500">Bathrooms</div>
-                                        <div className="font-semibold text-gray-900">{propertyData.bathrooms}</div>
+                                        <div className="font-semibold text-secondary">{propertyData.bathrooms}</div>
                                     </div>
                                 </div>
                                 <div className="flex items-center space-x-3">
                                     <Maximize className="w-6 h-6 text-cyan-500" />
                                     <div>
                                         <div className="text-sm text-gray-500">Area</div>
-                                        <div className="font-semibold text-gray-900">{propertyData.area}</div>
+                                        <div className="font-semibold text-secondary">{propertyData.area}</div>
                                     </div>
                                 </div>
                                 <div className="flex items-center space-x-3">
                                     <Calendar className="w-6 h-6 text-cyan-500" />
                                     <div>
                                         <div className="text-sm text-gray-500">Built</div>
-                                        <div className="font-semibold text-gray-900">{propertyData.built}</div>
+                                        <div className="font-semibold text-secondary">{propertyData.built}</div>
                                     </div>
                                 </div>
                             </div>
 
                             {/* About Property */}
                             <div className="mt-6">
-                                <h2 className="text-xl font-bold text-gray-900 mb-3">About This Property</h2>
+                                <h2 className="text-xl font-bold text-secondary mb-3">About This Property</h2>
                                 <p className="text-gray-600 leading-relaxed">{propertyData.description}</p>
                             </div>
 
                             {/* Features & Amenities */}
                             <div className="mt-6">
-                                <h2 className="text-xl font-bold text-gray-900 mb-4">Features & Amenities</h2>
+                                <h2 className="text-xl font-bold text-secondary mb-4">Features & Amenities</h2>
                                 <div className="grid grid-cols-2 gap-4">
                                     {propertyData.features.map((feature: Feature, idx: number) => (
                                         <div key={idx} className="flex items-center space-x-2">
@@ -314,8 +314,8 @@ const Propertydetail: React.FC = () => {
                     {/* Sidebar */}
                     <div className="space-y-6">
                         {/* Contact Agent */}
-                        <div className="bg-white rounded-xl p-6 shadow-sm sticky top-24">
-                            <h3 className="text-lg font-bold text-gray-900 mb-4">Contact Agent</h3>
+                        <div className="bg-primary rounded-xl p-6 shadow-sm sticky top-24">
+                            <h3 className="text-lg font-bold text-secondary mb-4">Contact Agent</h3>
 
                             <div className="flex items-center space-x-4 mb-6">
                                 <img
@@ -341,16 +341,16 @@ const Propertydetail: React.FC = () => {
                             </div>
 
                             <button onClick={() => setShowContactModal(true)}
-                                className="w-full bg-linear-to-r from-cyan-700 to-green-500 text-white py-3 rounded-lg font-semibold hover:from-cyan-600 hover:to-green-600 transition-all">
+                                className="w-full rounded-3xl p-4 text-xl btn-primary hover:hover:bg-linear-to-r from-white to-orange-300 ">
                                 📧 Send Message
                             </button>
 
                             <div className="mt-6 pt-6 border-t border-gray-200">
-                                <h4 className="font-semibold text-gray-900 mb-3">Schedule a Visit</h4>
+                                <h4 className="font-semibold text-black mb-3">Schedule a Visit</h4>
                                 <p className="text-sm text-gray-600 mb-4">Book a viewing to see this property in person</p>
                                 <button
                                     onClick={() => setShowScheduleModal(true)}
-                                    className="w-full border border-gray-300 text-black py-3 rounded-lg font-semibold hover:bg-gray-50 flex items-center justify-center space-x-2 hover:bg-linear-to-r from-cyan-700 to-green-500"
+                                    className="w-full border border-gray-300 text-black py-3 rounded-lg font-semibold btn-primary flex items-center justify-center space-x-2 hover:bg-linear-to-r from-white to-orange-300"
                                 >
                                     <CalendarDays className="w-5 h-5" />
                                     <span>Schedule Visit</span>
@@ -431,20 +431,20 @@ const Propertydetail: React.FC = () => {
             {/* Contact Agent Modal (UPDATED) */}
             {showContactModal && (
                 <div className="fixed inset-0 bg-black/10 backdrop-blur-[1px] flex items-center justify-center z-50 p-4">
-                    <div className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 relative">
+                    <div className="bg-primary rounded-xl shadow-2xl max-w-md w-full p-6 relative">
                         <button
                             onClick={() => setShowContactModal(false)}
                             className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
                         >
                             <X className="w-6 h-6" />
                         </button>
-                        <h2 className="text-xl font-bold text-gray-900 mb-6">Contact {propertyData.agent.name}</h2>
+                        <h2 className="text-xl font-bold text-secondary mb-6">Contact {propertyData.agent.name}</h2>
 
                         <form onSubmit={handleContactSubmit} className="space-y-4">
 
                             {/* 1. Name Input */}
                             <div>
-                                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                <label className="block text-sm font-semibold text-secondary mb-2">
                                     Your Name
                                 </label>
                                 <input
@@ -453,14 +453,14 @@ const Propertydetail: React.FC = () => {
                                     value={contactForm.name}
                                     onChange={handleContactInputChange}
                                     placeholder="John Doe"
-                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-200"
                                     required
                                 />
                             </div>
 
                             {/* 2. Email Input */}
                             <div>
-                                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                <label className="block text-sm font-semibold text-secondary mb-2">
                                     Email
                                 </label>
                                 <input
@@ -469,14 +469,14 @@ const Propertydetail: React.FC = () => {
                                     value={contactForm.email}
                                     onChange={handleContactInputChange}
                                     placeholder="john@example.com"
-                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-200"
                                     required
                                 />
                             </div>
 
                             {/* 3. Phone Input */}
                             <div>
-                                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                <label className="block text-sm font-semibold text-secondary mb-2">
                                     Phone
                                 </label>
                                 <input
@@ -485,14 +485,14 @@ const Propertydetail: React.FC = () => {
                                     value={contactForm.phone}
                                     onChange={handleContactInputChange}
                                     placeholder="+1 (555) 000-0000"
-                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-200"
                                     required
                                 />
                             </div>
 
                             {/* 4. Message Textarea */}
                             <div>
-                                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                <label className="block text-sm font-semibold text-secondary mb-2">
                                     Message
                                 </label>
                                 <textarea
@@ -501,7 +501,7 @@ const Propertydetail: React.FC = () => {
                                     onChange={handleContactInputChange as (e: React.ChangeEvent<HTMLTextAreaElement>) => void}
                                     placeholder="I'm interested in this property..."
                                     rows={4}
-                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 resize-none"
+                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-200 resize-none"
                                     required
                                 />
                             </div>
@@ -509,7 +509,7 @@ const Propertydetail: React.FC = () => {
 
                             <button
                                 type="submit"
-                                className="w-full bg-linear-to-r from-cyan-600 to-green-500 text-white py-3 rounded-lg font-semibold hover:from-cyan-700 hover:to-green-600 transition-all"
+                                className="w-full btn-primary text-white py-3 rounded-lg font-semibold hover:from-cyan-700 hover:to-green-600 transition-all"
                             >
                                 Send Message
                             </button>
@@ -522,7 +522,7 @@ const Propertydetail: React.FC = () => {
             {/* Schedule Visit Modal */}
             {showScheduleModal && (
                 <div className="fixed inset-0 bg-black/10 backdrop-blur-[1px] flex items-center justify-center z-50 p-4">
-                    <div className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 relative">
+                    <div className="bg-primary rounded-xl shadow-2xl max-w-md w-full p-6 relative">
                         <button
                             onClick={() => setShowScheduleModal(false)}
                             className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
@@ -530,7 +530,7 @@ const Propertydetail: React.FC = () => {
                             <X className="w-6 h-6" />
                         </button>
 
-                        <h2 className="text-2xl font-bold text-gray-900 mb-6">Schedule a Property Visit</h2>
+                        <h2 className="text-2xl font-bold text-secondary mb-6">Schedule a Property Visit</h2>
 
                         <form onSubmit={handleScheduleSubmit} className="space-y-4">
                             <div>
@@ -543,7 +543,7 @@ const Propertydetail: React.FC = () => {
                                     value={scheduleForm.date}
                                     onChange={handleInputChange}
                                     placeholder="dd/yyyy"
-                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-200"
                                     required
                                 />
                             </div>
@@ -558,7 +558,7 @@ const Propertydetail: React.FC = () => {
                                     value={scheduleForm.time}
                                     onChange={handleInputChange}
                                     placeholder="--:-- --"
-                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-200"
                                     required
                                 />
                             </div>
@@ -573,7 +573,7 @@ const Propertydetail: React.FC = () => {
                                     value={scheduleForm.name}
                                     onChange={handleInputChange}
                                     placeholder="John Doe"
-                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-200"
                                     required
                                 />
                             </div>
@@ -588,14 +588,14 @@ const Propertydetail: React.FC = () => {
                                     value={scheduleForm.phone}
                                     onChange={handleInputChange}
                                     placeholder="+1 (555) 000-0000"
-                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                                    className="w-full px-4 py-3 border  rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-200"
                                     required
                                 />
                             </div>
 
                             <button
                                 type="submit"
-                                className="w-full bg-linear-to-r from-cyan-500 to-green-500 text-white py-3 rounded-lg font-semibold hover:from-cyan-600 hover:to-green-600 transition-all mt-6"
+                                className="w-full btn-primary text-white py-3 rounded-lg font-semibold hover:from-cyan-600 hover:to-green-600 transition-all mt-6"
                             >
                                 Confirm Visit
                             </button>
