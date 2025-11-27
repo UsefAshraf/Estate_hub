@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Heart, Share2, Maximize2, Bed, Bath, Maximize, Calendar, CheckCircle, Phone, Mail, CalendarDays, X } from 'lucide-react';
 import Swal from 'sweetalert2';
 import { motion } from "motion/react"
+import MortgageCalculator from './mortgagecalculator'; 
 
 // Type definitions
 interface Feature {
@@ -310,6 +311,7 @@ const Propertydetail: React.FC = () => {
                             </div>
                         </div>
                     </div>
+                    
 
                     {/* Sidebar */}
                     <div className="space-y-6">
@@ -360,6 +362,8 @@ const Propertydetail: React.FC = () => {
                     </div>
                 </div>
             </div>
+            {/* Mortgage Calculator - Add here for main content area */}
+                          <MortgageCalculator propertyPrice={1250000} />
 
             {zoomedImageIndex !== null && (
                 <div className="fixed inset-0 bg-black/80 flex flex-col items-center justify-center z-50 p-4">
