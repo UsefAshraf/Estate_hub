@@ -41,134 +41,133 @@ const HomeSellerMergedPage: React.FC = () => {
   const [featuredFilter, setFeaturedFilter] = useState("All Properties");
 
   // ------- Featured Properties -------
-const featuredProperties = [
-  {
-    id: 1,
-    title: "Luxury Family Home",
-    address: "1800-1818 79th St",
-    price: "$395,000",
-    priceType: "sale",
-    beds: 4,
-    baths: 1,
-    sqft: 400,
-    image:
-      "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=400",
-    tags: ["FOR SALE", "FEATURED"],
-    type: "For Sale",
-  },
-  {
-    id: 2,
-    title: "Skyper Pool Apartment",
-    address: "1020 Bloomingdale Ave",
-    price: "$280,000",
-    priceType: "sale",
-    beds: 4,
-    baths: 2,
-    sqft: 450,
-    image: "https://images.unsplash.com/photo-1556912173-3bb406ef7e77?w=400",
-    tags: ["FOR SALE"],
-    type: "For Sale",
-  },
-  {
-    id: 3,
-    title: "North Dillard Street",
-    address: "4330 Bell Shoals Rd",
-    price: "$250",
-    priceType: "rent",
-    beds: 4,
-    baths: 2,
-    sqft: 400,
-    image:
-      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=400",
-    tags: ["FOR RENT"],
-    type: "For Rent",
-  },
-  {
-    id: 4,
-    title: "Eaton Garth Penthouse",
-    address: "7722 18th Ave, Brooklyn",
-    price: "$180,000",
-    priceType: "sale",
-    beds: 4,
-    baths: 2,
-    sqft: 450,
-    image:
-      "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=400",
-    tags: ["FOR SALE", "FEATURED"],
-    type: "For Sale",
-  },
-  {
-    id: 5,
-    title: "New Apartment Nice View",
-    address: "42 Avenue Q, Brooklyn",
-    price: "$850",
-    priceType: "rent",
-    beds: 4,
-    baths: 1,
-    sqft: 460,
-    image:
-      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=400",
-    tags: ["FOR RENT", "FEATURED"],
-    type: "For Rent",
-  },
-  {
-    id: 9,
-    title: "Riverside Cottage",
-    address: "12 River Rd, Chicago",
-    price: "$450,000",
-    priceType: "sale",
-    beds: 3,
-    baths: 2,
-    sqft: 350,
-    image:
-      "https://images.unsplash.com/photo-1572120360610-d971b9d7767c?w=400",
-    tags: ["FOR SALE"],
-    type: "For Sale",
-  },
-  {
-    id: 10,
-    title: "Beachfront Condo",
-    address: "500 Ocean Dr, Miami",
-    price: "$2,200",
-    priceType: "rent",
-    beds: 3,
-    baths: 2,
-    sqft: 300,
-    image:
-      "https://images.unsplash.com/photo-1507089947368-19c1da9775ae?w=400",
-    tags: ["FOR RENT", "FEATURED"],
-    type: "For Rent",
-  },
-  {
-    id: 11,
-    title: "Historic Downtown House",
-    address: "99 Market St, San Francisco",
-    price: "$980,000",
-    priceType: "sale",
-    beds: 4,
-    baths: 3,
-    sqft: 550,
-    image:
-      "https://images.unsplash.com/photo-1505691938895-1758d7feb511?w=400",
-    tags: ["FOR SALE"],
-    type: "For Sale",
-  },
-  {
-    id: 12,
-    title: "Luxury Penthouse Suite",
-    address: "88 Park Ave, New York",
-    price: "$5,500",
-    priceType: "rent",
-    beds: 3,
-    baths: 3,
-    sqft: 400,
-    image:
-      "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=400",
-    tags: ["FOR RENT", "FEATURED"],
-    type: "For Rent",
-  },
-];
-
+  const featuredProperties = [
+    {
+      id: 1,
+      title: "Luxury Family Home",
+      address: "1800-1818 79th St",
+      price: "$395,000",
+      priceType: "sale",
+      beds: 4,
+      baths: 1,
+      sqft: 400,
+      image:
+        "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=400",
+      tags: ["FOR SALE", "FEATURED"],
+      type: "For Sale",
+    },
+    {
+      id: 2,
+      title: "Skyper Pool Apartment",
+      address: "1020 Bloomingdale Ave",
+      price: "$280,000",
+      priceType: "sale",
+      beds: 4,
+      baths: 2,
+      sqft: 450,
+      image: "https://images.unsplash.com/photo-1556912173-3bb406ef7e77?w=400",
+      tags: ["FOR SALE"],
+      type: "For Sale",
+    },
+    {
+      id: 3,
+      title: "North Dillard Street",
+      address: "4330 Bell Shoals Rd",
+      price: "$250",
+      priceType: "rent",
+      beds: 4,
+      baths: 2,
+      sqft: 400,
+      image:
+        "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=400",
+      tags: ["FOR RENT"],
+      type: "For Rent",
+    },
+    {
+      id: 4,
+      title: "Eaton Garth Penthouse",
+      address: "7722 18th Ave, Brooklyn",
+      price: "$180,000",
+      priceType: "sale",
+      beds: 4,
+      baths: 2,
+      sqft: 450,
+      image:
+        "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=400",
+      tags: ["FOR SALE", "FEATURED"],
+      type: "For Sale",
+    },
+    {
+      id: 5,
+      title: "New Apartment Nice View",
+      address: "42 Avenue Q, Brooklyn",
+      price: "$850",
+      priceType: "rent",
+      beds: 4,
+      baths: 1,
+      sqft: 460,
+      image:
+        "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=400",
+      tags: ["FOR RENT", "FEATURED"],
+      type: "For Rent",
+    },
+    {
+      id: 9,
+      title: "Riverside Cottage",
+      address: "12 River Rd, Chicago",
+      price: "$450,000",
+      priceType: "sale",
+      beds: 3,
+      baths: 2,
+      sqft: 350,
+      image:
+        "https://images.unsplash.com/photo-1572120360610-d971b9d7767c?w=400",
+      tags: ["FOR SALE"],
+      type: "For Sale",
+    },
+    {
+      id: 10,
+      title: "Beachfront Condo",
+      address: "500 Ocean Dr, Miami",
+      price: "$2,200",
+      priceType: "rent",
+      beds: 3,
+      baths: 2,
+      sqft: 300,
+      image:
+        "https://images.unsplash.com/photo-1507089947368-19c1da9775ae?w=400",
+      tags: ["FOR RENT", "FEATURED"],
+      type: "For Rent",
+    },
+    {
+      id: 11,
+      title: "Historic Downtown House",
+      address: "99 Market St, San Francisco",
+      price: "$980,000",
+      priceType: "sale",
+      beds: 4,
+      baths: 3,
+      sqft: 550,
+      image:
+        "https://images.unsplash.com/photo-1505691938895-1758d7feb511?w=400",
+      tags: ["FOR SALE"],
+      type: "For Sale",
+    },
+    {
+      id: 12,
+      title: "Luxury Penthouse Suite",
+      address: "88 Park Ave, New York",
+      price: "$5,500",
+      priceType: "rent",
+      beds: 3,
+      baths: 3,
+      sqft: 400,
+      image:
+        "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=400",
+      tags: ["FOR RENT", "FEATURED"],
+      type: "For Rent",
+    },
+  ];
 
   const filteredProperties =
     featuredFilter === "All Properties"
@@ -342,59 +341,60 @@ const featuredProperties = [
         </div>
       </section> */}
       <section
-  className="relative bg-cover bg-center bg-no-repeat py-20 h-[90vh]"
-  style={{ backgroundImage: "url('./src/assets/homeBuyer.png')" }}
->
-  {/* Overlay */}
-  <div className="absolute inset-0 dark:bg-black/70 transition-colors"></div>
+        className="relative bg-cover bg-center bg-no-repeat py-20 h-[90vh]
+             bg-[url('./src/assets/homebuyer.png')] 
+             dark:bg-[url('./src/assets/darkbg.png')]"
+      >
+        {/* Overlay */}
+        <div className="absolute inset-0 dark:bg-black/70 transition-colors"></div>
 
-  <div className="relative max-w-7xl mx-auto px-6 text-center rounded-lg p-6 pt-20">
-    <button className="px-4 py-1 border border-custom rounded-full text-sm mb-4 btn-primary hover:bg-accent-hover transition">
-      LET US GUIDE YOUR HOME
-    </button>
+        <div className="relative max-w-7xl mx-auto px-6 text-center rounded-lg p-6 pt-20">
+          <button className="px-4 py-1 border border-custom rounded-full text-sm mb-4 btn-primary hover:bg-accent-hover transition">
+            LET US GUIDE YOUR HOME
+          </button>
 
-    <p className="text-secondary mb-2">
-      We've more than 745,000 apartments, place & plot.
-    </p>
+          <p className="text-secondary mb-2">
+            We've more than 745,000 apartments, place & plot.
+          </p>
 
-    <h1 className="text-4xl md:text-5xl font-bold text-primary mb-6">
-      Find Your Perfect Home
-    </h1>
+          <h1 className="text-4xl md:text-5xl font-bold text-primary mb-6">
+            Find Your Perfect Home
+          </h1>
 
-    <div className="flex justify-center mb-6">
-      <div className="relative w-full max-w-xl">
-        <input
-          type="text"
-          placeholder="Enter Name, Keywords..."
-          value={searchInput}
-          onChange={(e) => setSearchInput(e.target.value)}
-          onKeyPress={handleKeyPress}
-          className="w-full rounded-full border border-custom py-3 px-6 shadow-sm focus:ring-2 focus:ring-accent bg-secondary text-primary relative z-10"
-        />
-        <button
-          onClick={handleSearchClick}
-          className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-accent p-3 rounded-full hover:bg-accent-hover transition z-10"
-        >
-          <Search className="w-5 h-5 text-primary" />
-        </button>
-      </div>
-    </div>
+          <div className="flex justify-center mb-6">
+            <div className="relative w-full max-w-xl">
+              <input
+                type="text"
+                placeholder="Enter Name, Keywords..."
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+                onKeyPress={handleKeyPress}
+                className="w-full rounded-full border border-custom py-3 px-6 shadow-sm focus:ring-2 focus:ring-accent bg-secondary text-primary relative z-10"
+              />
+              <button
+                onClick={handleSearchClick}
+                className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-accent p-3 rounded-full hover:bg-accent-hover transition z-10"
+              >
+                <Search className="w-5 h-5 text-primary" />
+              </button>
+            </div>
+          </div>
 
-    <div className="flex justify-center gap-4 relative z-10">
-      {["All Properties", "For Sale", "For Rent"].map((t) => (
-        <button
-          key={t}
-          onClick={() => handlePropertyTypeClick(t)}
-          className={`px-4 py-2 border cursor-pointer border-custom rounded-full hover:bg-accent-hover transition ${
-            selectedPropertyType === t ? "bg-accent" : "btn-primary"
-          }`}
-        >
-          {t}
-        </button>
-      ))}
-    </div>
-  </div>
-</section>
+          <div className="flex justify-center gap-4 relative z-10">
+            {["All Properties", "For Sale", "For Rent"].map((t) => (
+              <button
+                key={t}
+                onClick={() => handlePropertyTypeClick(t)}
+                className={`px-4 py-2 border cursor-pointer border-custom rounded-full hover:bg-accent-hover transition ${
+                  selectedPropertyType === t ? "bg-accent" : "btn-primary"
+                }`}
+              >
+                {t}
+              </button>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* ================= STEPS SECTION ================= */}
       <section className="bg-primary py-20">
