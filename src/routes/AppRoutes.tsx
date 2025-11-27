@@ -10,11 +10,16 @@ import OTPPage from "../pages/auth/OTP";
 import RenewPasswordPage from "../pages/auth/ResetPassword";
 import SuccessPage from "../pages/auth/Success";
 import { PagePaths } from "../types/pages"
-import HomeSellerPage from "@/pages/seller/HomeSellere";
-import Navbar from "@/components/Navbar/navbar";
-import Footer from "@/components/Footer/footer";
-import AuthLayout from "@/Layouts/AuthLayout";
-import MainLayout from "@/Layouts/MainLayout";
+// import HomeSellerPage from "../pages/seller/HomeSeller";
+import HomeBuyerPage from "../pages/buyer/HomeBuyer";
+import FavouritesBuyerPage from "../pages/buyer/FavouritesBuyer";
+import SearchResultsPage from "../pages/search/SearchResults";
+import AuthLayout from "../Layouts/AuthLayout";
+import MainLayout from "../Layouts/SellerLayout";
+import BuyerLayout from "../Layouts/BuyerLayout";
+import HomeSellerPage from "../pages/buyer/HomeBuyer";
+import SellerLayout from "../Layouts/SellerLayout";
+import AdminLayout from "@/Layouts/AdminLayout";
 
 const AppRoutes: React.FC = () => {
   return (
@@ -29,13 +34,27 @@ const AppRoutes: React.FC = () => {
           <Route path={PagePaths.renew} element={<RenewPasswordPage />} />
           <Route path={PagePaths.success} element={<SuccessPage />} />
         </Route>
-         {/* Main App Routes */}
-        <Route element={<MainLayout />}>
-          <Route path="/home-seller" element={<HomeSellerPage />} />
-          {/* Add other main app routes here */}
+        
+        <Route element={<BuyerLayout />}>
+          <Route path="/home" element={<HomeBuyerPage />} />
+          <Route path="/search" element={<SearchResultsPage />} />
+          <Route path="/favorites" element={<FavouritesBuyerPage />} />
         </Route>
-        {/* Redirect root to Sign In */}
-        <Route path="/" element={<Navigate to={PagePaths.signin} replace />} />
+
+        <Route element={<SellerLayout />}>
+          <Route path="/homeSeller" element={<HomeSellerPage />} />
+        </Route>
+        
+        <Route element={<AdminLayout />}>
+          <Route path="/users" element={<HomeSellerPage />} />
+          <Route path="/departments" element={<HomeSellerPage />} />
+
+        </Route>
+        
+
+
+        {/* Redirect root to home */}
+        <Route path="/" element={<Navigate to="/home" replace />} />
 
         {/* Catch all 404 */}
         <Route path="*" element={<h1>404 - Page Not Found</h1>} />

@@ -4,15 +4,16 @@ import Navbar from "../components/Navbar/navbar";
 import React from "react";
 import { Outlet } from "react-router-dom";
 
-const MainLayout: React.FC = () => (
+const BuyerLayout: React.FC = () => (
   <div>
     <Navbar />
-    <main>
+    <main className="pt-18"> {/* 20 * 4px = 80px, adjust to navbar height */}
       <Outlet />
     </main>
     <Footer />
   </div>
 );
 
-export default MainLayout;
+export default BuyerLayout;
+
 

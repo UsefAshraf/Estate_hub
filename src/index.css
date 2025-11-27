@@ -1,5 +1,7 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@import "tailwindcss";
+@import "flowbite";
 
 /* @custom-variant dark (&:is(.dark *)); */
 @custom-variant dark (&:where(.dark, .dark *));
@@ -160,6 +162,14 @@
     background-color: var(--button-primary);
     color: var(--button-text);
   }
+  .btn-primary:hover {
+    background-color: var(--accent-hover);
+    transform: translateY(-2px);
+    transition: all 0.2s ease;
+  }
+  .bg-accent:hover {
+  background-color: var(--accent-hover);
+}
   
   .text-primary {
     color: var(--text-primary);
@@ -179,5 +189,52 @@
   
   .bg-accent {
     background-color: var(--custom-accent);
+  }
+  
+  /* Favorites Component Styles */
+  .favorite-card {
+    transition: all 0.3s ease;
+  }
+  
+  .favorite-card:hover {
+    transform: translateY(-4px);
+  }
+  
+  .favorite-card .favorite-actions {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  .favorite-card:hover .favorite-actions {
+    opacity: 1;
+  }
+  
+  /* Enhanced button hover effects */
+  .btn-favorite {
+    background: linear-gradient(135deg, var(--custom-accent), var(--accent-hover, #E8D5C9));
+    transition: all 0.3s ease;
+  }
+  
+  .btn-favorite:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(221, 199, 187, 0.3);
+  }
+  
+  /* Dark mode specific enhancements */
+  .dark .favorite-card {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  }
+  
+  .dark .favorite-card:hover {
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+  }
+  
+  /* Light mode specific enhancements */
+  .favorite-card {
+    box-shadow: 0 4px 20px rgba(43, 27, 18, 0.1);
+  }
+  
+  .favorite-card:hover {
+    box-shadow: 0 12px 40px rgba(43, 27, 18, 0.15);
   }
 }
