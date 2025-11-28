@@ -13,12 +13,12 @@ export default function SimpleProfilePage() {
         <div className="bg-orange-200 rounded-lg shadow-sm p-8">
           <div className="flex flex-col items-center mb-8">
             {/* <div className="animate-in fade-in duration-700 w-32 h-32 rounded-full bg-red-200 flex items-center justify-center shadow-lg"> */}
-            <div className=" animate-in fade-in duration-700 w-32 h-32 rounded-full bg-red-200 flex items-center justify-items-center shadow-lg overflow-auto">
+            <div className=" animate-in fade-in duration-700 w-32 h-32 rounded-full bg-red-200 flex items-center justify-center shadow-lg overflow-auto">
             {user.avatar ? (
               <img
                 src={user.avatar}
                 alt="Profile"
-                className="w-full h-full object-cover"/>
+                className="w-full h-full object-center"/>
             ) : (
               <User className="w-16 h-16 text-white" />
             )}
