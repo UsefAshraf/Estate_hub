@@ -16,7 +16,7 @@ export default function ProfileLayout() {
       <div className="min-h-screen bg-gray-50">
         <div className="bg-orange-200 border-b border-gray-200 sticky top-0 z-10 shadow-sm">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex gap-8 overflow-x-auto">
+            <div className="flex  gap-8 overflow-x-auto scrollbar-hide snap-x snap-mandatory">
               {tabs.map((tab) => {
                 const IconComponent = tab.icon;
                 return (
@@ -26,10 +26,10 @@ export default function ProfileLayout() {
                     end={tab.id === "profile"}  //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                     className={({ isActive }) =>
                       
-                      `flex items-center gap-2 px-3 py-7 border-b-2 ${
+                      `flex items-center gap-2 px-3 py-7 border-b-2 snap-start ${
                         isActive
-                          ? "border-blue-600 text-gray-700"
-                          : "border-transparent text-gray-600 hover:text-gray-900 hover:border-gray-300"
+                          ? "border-blue-600 text-gray-700 scale-105 snap-start"
+                          : "border-transparent text-gray-600 hover:text-gray-900 hover:border-gray-300 snap-start"
                       }`
                     }
                   >
@@ -38,6 +38,7 @@ export default function ProfileLayout() {
                   </NavLink>
                 );
               })}
+              
             </div>
           </div>
         </div>
