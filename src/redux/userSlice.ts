@@ -4,24 +4,26 @@ import { createSlice } from "@reduxjs/toolkit";
 
 
 interface UserState {
-  name: string;
+  fullName: string;
   email: string;
   phone: string;
   location: string;
+  avatar: string;
 };
 
 const initialState: UserState = {
-  name: "John Doe",
-  email: "john.doe@example.com",
-  phone: "+1 (555) 123-4567",
-  location: "Los Angeles, CA",
+  fullName: "",
+  email: "",
+  phone: "",
+  location: "",
+  avatar: "",
 };
 
 export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    updateUser: (state, action: PayloadAction<UserState>) => {
+    updateUser: (state, action: PayloadAction<Partial<UserState>>) => {
       return { ...state, ...action.payload }; // ⭐ ADDED
     },
   },
