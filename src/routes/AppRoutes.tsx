@@ -5,7 +5,7 @@ import Profile from "../pages/general/profilepages/ProfilePage";
 import FavoritesPage from "../pages/general/profilepages/FavoritesPage";
 import VisitsPage from "../pages/general/profilepages/VisitsPage";
 import HistoryPage from "../pages/general/profilepages//HistoryPage";
-
+import EditProfile from "../pages/general/profilepages/EditPage";
 // import Login from "../pages/auth/Login";
 // import Signup from "../pages/auth/Signup";
 // import ResetPassword from "../pages/auth/ResetPassword";
