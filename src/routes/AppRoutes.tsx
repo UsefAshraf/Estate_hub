@@ -1,6 +1,10 @@
 // src/routes/AppRoutes.tsx
 import React from "react";
 import { Routes, Route } from "react-router-dom";
+import Profile from "../pages/general/profilepages/ProfilePage";
+import FavoritesPage from "../pages/general/profilepages/FavoritesPage";
+import VisitsPage from "../pages/general/profilepages/VisitsPage";
+import HistoryPage from "../pages/general/profilepages//HistoryPage";
 
 // import Login from "../pages/auth/Login";
 // import Signup from "../pages/auth/Signup";
@@ -10,7 +14,7 @@ import { Routes, Route } from "react-router-dom";
 // import BuyerMain from "../pages/buyer/MainPage";
 // import SellerMain from "../pages/seller/MainPage";
 // import AdminMain from "../pages/admin/MainPage";
-// import Profile from "../pages/general/Profile";
+import ProfileLayout from "../pages/general/ProfileLayout";
 // import AboutUs from "../pages/general/AboutUs";
 // import ContactUs from "../pages/general/ContactUs";
 // import NotFound404 from "../pages/general/NotFound404";
@@ -33,9 +37,17 @@ const AppRoutes: React.FC = () => (
     {/* Admin */}
     {/* <Route path="/admin" element={<AdminMain />} /> */}
 
-    {/* General */}
-    {/* <Route path="/profile" element={<Profile />} />
-    <Route path="/about" element={<AboutUs />} />
+  {/* General */}
+  
+    {/* Profile + nested routes */}
+    <Route path="/profile" element={<ProfileLayout/>}>
+      <Route index element={<Profile/>} />
+      <Route path="favorites" element={<FavoritesPage />} />
+      <Route path="visits" element={<VisitsPage />} />
+      <Route path="history" element={<HistoryPage />} />
+    </Route>
+  
+    {/* <Route path="/about" element={<AboutUs />} />
     <Route path="/contact" element={<ContactUs />} /> */}
 
     {/* 404 */}
