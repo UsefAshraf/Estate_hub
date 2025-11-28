@@ -10,11 +10,11 @@ export default function EditProfilePage() {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
-  const [form, setForm] = useState(user); // ⭐ ADDED
+  const [form, setForm] = useState(user); 
 
   const handleSave = () => {
-    dispatch(updateUser(form)); // ⭐ ADDED
-    navigate("/profile");       // ⭐ ADDED
+    dispatch(updateUser(form)); 
+    navigate("/profile");       
   };
 
   return (
