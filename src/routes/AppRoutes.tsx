@@ -1,7 +1,7 @@
 // src/routes/AppRoutes.tsx
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import Profile from "../pages/general/profilepages/ProfilePage";
+import Profile from "../pages/general/profilepages/ProfilePage";         
 import FavoritesPage from "../pages/general/profilepages/FavoritesPage";
 import VisitsPage from "../pages/general/profilepages/VisitsPage";
 import HistoryPage from "../pages/general/profilepages//HistoryPage";
@@ -44,7 +44,8 @@ const AppRoutes: React.FC = () => (
       <Route index element={<Profile/>} />
       <Route path="favorites" element={<FavoritesPage />} />
       <Route path="visits" element={<VisitsPage />} />
-      <Route path="history" element={<HistoryPage />} />
+      <Route path="history" element={<HistoryPage />} />              
+      <Route path="edit" element={<EditProfile />} />     
     </Route>
   
     {/* <Route path="/about" element={<AboutUs />} />
