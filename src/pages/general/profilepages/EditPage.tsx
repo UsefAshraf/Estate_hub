@@ -55,25 +55,6 @@ const EditProfile: React.FC = () => {
     navigate("/profile");
   };
 
-//   const {
-//     register,
-//     handleSubmit,
-//     formState: { errors },
-//   } = useForm<FormValues>({
-//     defaultValues: {
-//       fullName: user.fullName || "",
-//       email: user.email || "",
-//       phone: user.phone || "",
-//       location: user.location || "",
-//     },
-//     mode: "onSubmit", // validate ONLY on submit
-//   });
-
-//   const onSubmit = (data: FormValues) => {
-//     dispatch(updateUser(data));
-//     navigate("/profile");
-//   };
-
   return (
     <div className="max-w-2xl mx-auto p-6 bg-white rounded-xl shadow-md mt-6">
       <h2 className="text-2xl font-semibold mb-4">Edit Profile</h2>
@@ -209,79 +190,6 @@ export default EditProfile;
 
 
 
-// import { useForm } from "react-hook-form";
-// import { Button } from "@/components/ui/button";
-// import { Input } from "@/components/ui/input";
-// import { Card, CardContent } from "@/components/ui/card";
-
-// export default function ProfileEdit() {
-//   const {
-//     register,
-//     handleSubmit,
-//     formState: { errors },
-//   } = useForm({ mode: "onSubmit" });
-
-//   const onSubmit = (data) => {
-//     console.log(data);
-//   };
-
-//   return (
-//     <div className="flex justify-center p-4">
-//       <Card className="w-full max-w-xl p-4">
-//         <CardContent>
-//           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-//             <div>
-//               <label className="block mb-1">Full Name</label>
-//               <Input
-//                 {...register("fullName", { required: "Full name is required" })}
-//                 placeholder="John Doe"
-//               />
-//               {errors.fullName && (
-//                 <p className="text-red-500 text-sm">{errors.fullName.message}</p>
-//               )}
-//             </div>
-
-//             <div>
-//               <label className="block mb-1">Email</label>
-//               <Input
-//                 {...register("email", {
-//                   required: "Email is required",
-//                   pattern: {
-//                     value: /[^@\s]+@[^@\s]+\.[^@\s]+/,
-//                     message: "Invalid email format",
-//                   },
-//                 })}
-//                 placeholder="example@mail.com"
-//               />
-//               {errors.email && (
-//                 <p className="text-red-500 text-sm">{errors.email.message}</p>
-//               )}
-//             </div>
-
-//             <div>
-//               <label className="block mb-1">Phone</label>
-//               <Input
-//                 {...register("phone", {
-//                   required: "Phone number is required",
-//                   pattern: {
-//                     value: /^[0-9]{10,15}$/,
-//                     message: "Phone must be 10-15 digits",
-//                   },
-//                 })}
-//                 placeholder="0123456789"
-//               />
-//               {errors.phone && (
-//                 <p className="text-red-500 text-sm">{errors.phone.message}</p>
-//               )}
-//             </div>
-
-//             <Button type="submit" className="w-full">Save Changes</Button>
-//           </form>
-//         </CardContent>
-//       </Card>
-//     </div>
-//   );
-// }
 
 
 
