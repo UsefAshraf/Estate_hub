@@ -4,15 +4,13 @@ import {
   MapPin,
   Bed,
   Square,
-  Cpu,
-  Monitor,
-  Music,
   Home,
   Calendar,
   Key,
   ArrowRight,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 
 // Bath icon component
 const Bath: React.FC<{ className?: string }> = ({ className }) => (
@@ -198,6 +196,22 @@ const HomeSellerMergedPage: React.FC = () => {
   const handlePropertyClick = (id: number) => {
     console.log("Property:", id);
   };
+  const fadeIn = (direction = "up") => {
+    const variants = {
+      hidden: {
+        opacity: 0,
+        x: direction === "left" ? -100 : direction === "right" ? 100 : 0,
+        y: direction === "up" ? 100 : direction === "down" ? -100 : 0,
+      },
+      show: {
+        opacity: 1,
+        x: 0,
+        y: 0,
+        transition: { duration: 0.8, ease: "easeOut" },
+      },
+    };
+    return variants;
+  };
 
   // ------- Cities Section Data -------
   const cities = [
@@ -285,11 +299,11 @@ const HomeSellerMergedPage: React.FC = () => {
   const handleViewAllClick = () => {
     console.log("View All Cities clicked");
   };
-
-  return (
-    <>
-      {/* ================= HERO SEARCH SECTION ================= */}
-      {/* <section
+  {
+    /* ================= HERO SEARCH SECTION ================= */
+  }
+  {
+    /* <section
         className="bg-cover bg-center bg-no-repeat py-20 h-[90vh]"
         style={{ backgroundImage: "url('./src/assets/homeBuyer.png')" }}
       >
@@ -339,15 +353,25 @@ const HomeSellerMergedPage: React.FC = () => {
             ))}
           </div>
         </div>
-      </section> */}
-      <section
+      </section> */
+  }
+  return (
+    <>
+    <motion.section
+  variants={fadeIn("up")}
+  initial="hidden"
+  whileInView="show"
+  viewport={{ once: true }}
+  className="relative bg-cover bg-center bg-no-repeat py-20 h-[90vh]
+        bg-[url('./src/assets/homebuyer.png')] 
+        dark:bg-[url('./src/assets/darkbg.png')]"
+>
+
+      {/* <section
         className="relative bg-cover bg-center bg-no-repeat py-20 h-[90vh]
              bg-[url('./src/assets/homebuyer.png')] 
              dark:bg-[url('./src/assets/darkbg.png')]"
-      >
-        {/* Overlay */}
-        <div className="absolute inset-0 dark:bg-black/70 transition-colors"></div>
-
+      > */}
         <div className="relative max-w-7xl mx-auto px-6 text-center rounded-lg p-6 pt-20">
           <button className="px-4 py-1 border border-custom rounded-full text-sm mb-4 btn-primary hover:bg-accent-hover transition">
             LET US GUIDE YOUR HOME
@@ -394,10 +418,19 @@ const HomeSellerMergedPage: React.FC = () => {
             ))}
           </div>
         </div>
-      </section>
+      {/* </section> */}        
+      </motion.section>
 
       {/* ================= STEPS SECTION ================= */}
-      <section className="bg-primary py-20">
+      <motion.section
+  variants={fadeIn("left")}
+  initial="hidden"
+  whileInView="show"
+  viewport={{ once: true }}
+  className="bg-primary py-20"
+>
+
+      {/* <section className="bg-primary py-20"> */}
         <div className="max-w-7xl mx-auto px-6 text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">
             Find Your Dream House as Easy as 1,2,3
@@ -444,10 +477,19 @@ const HomeSellerMergedPage: React.FC = () => {
             </div>
           </div>
         </div>
-      </section>
+      {/* </section> */}
+      </motion.section>
 
       {/* ================= CITIES SECTION (MERGED) ================= */}
-      <section className="py-20">
+      <motion.section
+  variants={fadeIn("right")}
+  initial="hidden"
+  whileInView="show"
+  viewport={{ once: true }}
+  className="py-20"
+>
+
+      {/* <section className="py-20"> */}
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex justify-between items-start mb-12">
             <div>
@@ -498,10 +540,19 @@ const HomeSellerMergedPage: React.FC = () => {
             ))}
           </div>
         </div>
-      </section>
+      {/* </section> */}
+      </motion.section>
       {/* ================= COMPANY LOGOS ================= */}
+      <motion.section
+  variants={fadeIn("up")}
+  initial="hidden"
+  whileInView="show"
+  viewport={{ once: true }}
+  className="bg-secondary py-16 border-y border-custom"
+>
 
-      <section className="bg-secondary py-16 border-y border-custom">
+
+      {/* <section className="bg-secondary py-16 border-y border-custom"> */}
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-12">
             <p className="text-2xl text-secondary font-medium tracking-wide">
@@ -528,7 +579,8 @@ const HomeSellerMergedPage: React.FC = () => {
             ))}
           </div>
         </div>
-      </section>
+      {/* </section> */}
+      </motion.section>
       {/* <section
         className="bg-cover bg-center py-16 bg-secondary"
         style={{
@@ -649,7 +701,15 @@ const HomeSellerMergedPage: React.FC = () => {
       </section> */}
 
       {/* ================= FEATURED PROPERTIES ================= */}
-      <section className="py-20">
+      <motion.section
+  variants={fadeIn("up")}
+  initial="hidden"
+  whileInView="show"
+  viewport={{ once: true }}
+  className="py-20"
+>
+
+      {/* <section className="py-20"> */}
         <div className="max-w-7xl mx-auto px-6">
           {/* Header */}
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-4">
@@ -750,7 +810,8 @@ const HomeSellerMergedPage: React.FC = () => {
             ))}
           </div>
         </div>
-      </section>
+      {/* </section> */}
+      </motion.section>
     </>
   );
 };

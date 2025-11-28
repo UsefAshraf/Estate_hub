@@ -1,253 +1,439 @@
-import React, { useEffect, useRef, useState } from "react";
-import { Search } from "lucide-react";
-import { Cpu, Monitor, Music, Home, Calendar, Key, Check, ArrowRight, Building, MapPin, Bed, Square, Star } from "lucide-react";
+import React, { useState } from "react";
+import {
+  Search,
+  MapPin,
+  Bed,
+  Square,
+  ArrowRight,
+  DollarSign,
+  TrendingUp,
+  ClipboardCheck,
+} from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import Map from 'ol/Map';
-import View from 'ol/View';
-import TileLayer from 'ol/layer/Tile';
-import OSM from 'ol/source/OSM';
-import { fromLonLat } from 'ol/proj';
-import 'ol/ol.css';
 
-const HomeSellerPage: React.FC = () => {
+// Bath icon component
+const Bath: React.FC<{ className?: string }> = ({ className }) => (
+  <svg
+    className={className}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M9 6 6.5 3.5a1.5 1.5 0 0 0-1 2.5V10h15V6a1.5 1.5 0 0 0-1-2.5L17 6" />
+    <path d="M22 10v5a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-5" />
+    <path d="M4 15v3" />
+    <path d="M20 15v3" />
+  </svg>
+);
+
+const HomeSeller: React.FC = () => {
   const navigate = useNavigate();
-  const mapRef = useRef<HTMLDivElement>(null);
-  const mapInstanceRef = useRef<Map | null>(null);
+
   const [searchInput, setSearchInput] = useState("");
-  const [selectedPropertyType, setSelectedPropertyType] = useState("All Properties");
+  const [selectedPropertyType, setSelectedPropertyType] = useState("Sell");
+  const [featuredFilter, setFeaturedFilter] = useState("All Properties");
 
-  // Initialize map
-  useEffect(() => {
-    if (mapRef.current && !mapInstanceRef.current) {
-      mapInstanceRef.current = new Map({
-        target: mapRef.current,
-        layers: [
-          new TileLayer({
-            source: new OSM(),
-          }),
-        ],
-        view: new View({
-          center: fromLonLat([-74.006, 40.7128]), // New York coordinates
-          zoom: 10,
-        }),
-      });
-    }
+  // ------- Featured Properties (Mock Data for Market Insight) -------
+  const featuredProperties = [
+    {
+      id: 1,
+      title: "Luxury Family Home",
+      address: "1800-1818 79th St",
+      price: "$395,000",
+      priceType: "sale",
+      beds: 4,
+      baths: 1,
+      sqft: 400,
+      image:
+        "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=400",
+      tags: ["SOLD", "FEATURED"],
+      type: "Sold",
+    },
+    {
+      id: 2,
+      title: "Skyper Pool Apartment",
+      address: "1020 Bloomingdale Ave",
+      price: "$280,000",
+      priceType: "sale",
+      beds: 4,
+      baths: 2,
+      sqft: 450,
+      image: "https://images.unsplash.com/photo-1556912173-3bb406ef7e77?w=400",
+      tags: ["SOLD"],
+      type: "Sold",
+    },
+    {
+      id: 3,
+      title: "North Dillard Street",
+      address: "4330 Bell Shoals Rd",
+      price: "$250,000",
+      priceType: "sale",
+      beds: 4,
+      baths: 2,
+      sqft: 400,
+      image:
+        "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=400",
+      tags: ["SOLD"],
+      type: "Sold",
+    },
+    {
+      id: 4,
+      title: "Eaton Garth Penthouse",
+      address: "7722 18th Ave, Brooklyn",
+      price: "$180,000",
+      priceType: "sale",
+      beds: 4,
+      baths: 2,
+      sqft: 450,
+      image:
+        "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=400",
+      tags: ["SOLD", "FEATURED"],
+      type: "Sold",
+    },
+    {
+      id: 5,
+      title: "New Apartment Nice View",
+      address: "42 Avenue Q, Brooklyn",
+      price: "$850,000",
+      priceType: "sale",
+      beds: 4,
+      baths: 1,
+      sqft: 460,
+      image:
+        "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=400",
+      tags: ["SOLD", "FEATURED"],
+      type: "Sold",
+    },
+    {
+      id: 9,
+      title: "Riverside Cottage",
+      address: "12 River Rd, Chicago",
+      price: "$450,000",
+      priceType: "sale",
+      beds: 3,
+      baths: 2,
+      sqft: 350,
+      image:
+        "https://images.unsplash.com/photo-1572120360610-d971b9d7767c?w=400",
+      tags: ["SOLD"],
+      type: "Sold",
+    },
+    {
+      id: 10,
+      title: "Beachfront Condo",
+      address: "500 Ocean Dr, Miami",
+      price: "$2,200,000",
+      priceType: "sale",
+      beds: 3,
+      baths: 2,
+      sqft: 300,
+      image:
+        "https://images.unsplash.com/photo-1507089947368-19c1da9775ae?w=400",
+      tags: ["SOLD", "FEATURED"],
+      type: "Sold",
+    },
+    {
+      id: 11,
+      title: "Historic Downtown House",
+      address: "99 Market St, San Francisco",
+      price: "$980,000",
+      priceType: "sale",
+      beds: 4,
+      baths: 3,
+      sqft: 550,
+      image:
+        "https://images.unsplash.com/photo-1505691938895-1758d7feb511?w=400",
+      tags: ["SOLD"],
+      type: "Sold",
+    },
+    {
+      id: 12,
+      title: "Luxury Penthouse Suite",
+      address: "88 Park Ave, New York",
+      price: "$5,500,000",
+      priceType: "sale",
+      beds: 3,
+      baths: 3,
+      sqft: 400,
+      image:
+        "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=400",
+      tags: ["SOLD", "FEATURED"],
+      type: "Sold",
+    },
+  ];
 
-    return () => {
-      if (mapInstanceRef.current) {
-        mapInstanceRef.current.setTarget(undefined);
-      }
-    };
-  }, []);
+  const filteredProperties =
+    featuredFilter === "All Properties"
+      ? featuredProperties
+      : featuredProperties.filter((p) => p.type === featuredFilter);
 
-  // Navigate to search page with query
+  // ------- Search -------
   const handleSearchClick = () => {
-    if (searchInput.trim()) {
-      navigate(`/search?q=${encodeURIComponent(searchInput)}&type=${selectedPropertyType}`);
-    } else {
-      navigate(`/search?type=${selectedPropertyType}`);
-    }
-  };
+    const query = searchInput.trim()
+      ? `?q=${encodeURIComponent(searchInput)}&type=${selectedPropertyType}`
+      : `?type=${selectedPropertyType}`;
 
-  // Handle Enter key press
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      handleSearchClick();
-    }
-  };
-
-  const handlePropertyTypeClick = (type: string) => {
-    console.log(`Property type clicked: ${type}`);
-    setSelectedPropertyType(type);
-    // Navigate immediately to search with selected type
-    const query = searchInput.trim() ? `?q=${encodeURIComponent(searchInput)}&type=${type}` : `?type=${type}`;
     navigate(`/search${query}`);
   };
 
-  const handleGetStartedClick = (action: string) => {
-    console.log(`Get Started clicked for: ${action}`);
-    // Future: Navigate to respective flow
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") handleSearchClick();
   };
 
-  const handleLearnMoreClick = () => {
-    console.log('Learn More button clicked');
-    // Future: Navigate to about page or show more info
+  const handlePropertyTypeClick = (type: string) => {
+    setSelectedPropertyType(type);
+    // Logic to switch between Sell / Rent Out / Valuation could go here
   };
 
-  const handleLocationClick = (location: string) => {
-    console.log(`Location clicked: ${location}`);
-    // Navigate to search with location filter
-    navigate(`/search?q=${encodeURIComponent(location)}&type=All Properties`);
+  const handlePropertyClick = (id: number) => {
+    console.log("Property:", id);
   };
 
-  const handlePropertySignUpClick = (property: string) => {
-    console.log(`Property sign up clicked: ${property}`);
-    // Future: Navigate to property details or sign up flow
+  // ------- Cities Section Data -------
+  const cities = [
+    {
+      id: 1,
+      name: "New York",
+      properties: 120,
+      image:
+        "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?w=200&h=200&fit=crop",
+    },
+    {
+      id: 2,
+      name: "San Diego",
+      properties: 45,
+      image:
+        "https://images.unsplash.com/photo-1539037116277-4db20889f2d4?w=200&h=200&fit=crop",
+    },
+    {
+      id: 3,
+      name: "Miami",
+      properties: 67,
+      image:
+        "https://images.unsplash.com/photo-1506966953602-c20cc11f75e3?w=200&h=200&fit=crop",
+    },
+    {
+      id: 4,
+      name: "Los Angeles",
+      properties: 89,
+      image:
+        "https://images.unsplash.com/photo-1444723121867-7a241cacace9?w=200&h=200&fit=crop",
+    },
+    {
+      id: 5,
+      name: "Chicago",
+      properties: 34,
+      image:
+        "https://images.unsplash.com/photo-1494522855154-9297ac14b55f?w=200&h=200&fit=crop",
+    },
+    {
+      id: 6,
+      name: "San Francisco",
+      properties: 56,
+      image:
+        "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?w=200&h=200&fit=crop",
+    },
+  ];
+
+  const companies = [
+    {
+      id: 1,
+      name: "Amazon",
+      logo: "https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg",
+    },
+    {
+      id: 2,
+      name: "Google",
+      logo: "https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg",
+    },
+    {
+      id: 3,
+      name: "Microsoft",
+      logo: "https://upload.wikimedia.org/wikipedia/commons/9/96/Microsoft_logo_%282012%29.svg",
+    },
+    {
+      id: 4,
+      name: "Meta",
+      logo: "https://upload.wikimedia.org/wikipedia/commons/7/7b/Meta_Platforms_Inc._logo.svg",
+    },
+    {
+      id: 5,
+      name: "Apple",
+      logo: "https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg",
+    },
+    {
+      id: 6,
+      name: "Netflix",
+      logo: "https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg",
+    },
+  ];
+
+  const handleCityClick = (cityName: string) => {
+    console.log(`City clicked: ${cityName}`);
+  };
+
+  const handleViewAllClick = () => {
+    console.log("View All Cities clicked");
   };
 
   return (
     <>
+      {/* ================= HERO SEARCH SECTION ================= */}
       <section
-        className="bg-cover bg-center bg-no-repeat py-20"
-        style={{ backgroundImage: "url('./homeSeller.png')" }}
+        className="relative bg-cover bg-center bg-no-repeat py-20 h-[90vh]
+             bg-[url('./src/assets/homebuyer.png')] 
+             dark:bg-[url('./src/assets/darkbg.png')]"
       >
-        <div className="max-w-7xl mx-auto px-6 text-center rounded-lg p-6">
-          <button 
-            onClick={() => console.log('Guide Your Home button clicked')}
-            className="px-4 py-1 border border-custom rounded-full text-sm mb-4 btn-primary hover:bg-accent-hover transition"
-          >
-            LET US GUIDE YOUR HOME
+        {/* Overlay */}
+        <div className="absolute inset-0 dark:bg-black/70 transition-colors"></div>
+
+        <div className="relative max-w-7xl mx-auto px-6 text-center rounded-lg p-6 pt-20">
+          <button className="px-4 py-1 border border-custom rounded-full text-sm mb-4 btn-primary hover:bg-accent-hover transition">
+            LET US GUIDE YOUR SALE
           </button>
+
           <p className="text-secondary mb-2">
-            We've more than 745,000 apartments, place & plot.
+            Get the best value for your property with our expert guidance.
           </p>
+
           <h1 className="text-4xl md:text-5xl font-bold text-primary mb-6">
-            Find Your Perfect Home
+            Sell Your Property with Confidence
           </h1>
 
           <div className="flex justify-center mb-6">
             <div className="relative w-full max-w-xl">
               <input
                 type="text"
-                placeholder="Enter Name, Keywords..."
+                placeholder="Enter Address for Valuation..."
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
                 onKeyPress={handleKeyPress}
-                className="w-full rounded-full border border-custom py-3 px-6 shadow-sm focus:outline-none focus:ring-2 focus:ring-accent bg-secondary text-primary"
+                className="w-full rounded-full border border-custom py-3 px-6 shadow-sm focus:ring-2 focus:ring-accent bg-secondary text-primary relative z-10"
               />
-              <button 
+              <button
                 onClick={handleSearchClick}
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-accent p-3 rounded-full hover:bg-accent-hover transition"
+                className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-accent p-3 rounded-full hover:bg-accent-hover transition z-10"
               >
                 <Search className="w-5 h-5 text-primary" />
               </button>
             </div>
           </div>
 
-          <div className="flex justify-center gap-4">
-            <button 
-              onClick={() => handlePropertyTypeClick('All Properties')}
-              className={`px-4 py-2 border border-custom rounded-full hover:bg-accent-hover transition ${
-                selectedPropertyType === 'All Properties' ? 'bg-accent' : 'btn-primary'
-              }`}
-            >
-              All Properties
-            </button>
-            <button 
-              onClick={() => handlePropertyTypeClick('For Sale')}
-              className={`px-4 py-2 border border-custom rounded-full hover:bg-accent-hover transition ${
-                selectedPropertyType === 'For Sale' ? 'bg-accent' : 'btn-primary'
-              }`}
-            >
-              For Sale
-            </button>
-            <button 
-              onClick={() => handlePropertyTypeClick('For Rent')}
-              className={`px-4 py-2 border border-custom rounded-full hover:bg-accent-hover transition ${
-                selectedPropertyType === 'For Rent' ? 'bg-accent' : 'btn-primary'
-              }`}
-            >
-              For Rent
-            </button>
+          <div className="flex justify-center gap-4 relative z-10">
+            {["Sell", "Rent Out", "Valuation"].map((t) => (
+              <button
+                key={t}
+                onClick={() => handlePropertyTypeClick(t)}
+                className={`px-4 py-2 border cursor-pointer border-custom rounded-full hover:bg-accent-hover transition ${
+                  selectedPropertyType === t ? "bg-accent" : "btn-primary"
+                }`}
+              >
+                {t}
+              </button>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Rest of your sections remain the same... */}
-      <section
-        className="bg-cover bg-center py-16 bg-secondary"
-        style={{ backgroundImage: "url('/mnt/data/6e420e8b-f118-48de-b3ae-7f92f6c49269.png')" }}
-      >
-        <div className="max-w-7xl mx-auto px-6 text-center text-primary">
-          <p className="mb-8 text-sm md:text-base text-secondary">
-            Thousands of world's leading companies trust Space
-          </p>
-          <div className="flex flex-wrap justify-center items-center gap-10 accent">
-            <Cpu className="h-10 w-10" />
-            <Monitor className="h-10 w-10" />
-            <Music className="h-10 w-10" />
-          </div>
-        </div>
-      </section>
-      
-      {/* Find Your Dream House Section */}
+      {/* ================= STEPS SECTION ================= */}
       <section className="bg-primary py-20">
         <div className="max-w-7xl mx-auto px-6 text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">
-            Find Your Dream House as Easy as 1,2,3
+            Sell Your House as Easy as 1,2,3
           </h2>
           <p className="text-secondary mb-16 max-w-md mx-auto">
-            Lorem ipsum dolor sit amet
+            We make the selling process simple and stress-free.
           </p>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-16">
             <div className="flex flex-col items-center">
               <div className="bg-accent rounded-full p-6 mb-6 w-20 h-20 flex items-center justify-center">
-                <Home className="w-8 h-8 text-primary" />
+                <DollarSign className="w-8 h-8 text-primary" />
               </div>
               <h3 className="text-lg font-semibold text-primary mb-4">
-                1. Search for you favorite house in your location
+                1. Get a Free Valuation
               </h3>
               <p className="text-secondary text-sm leading-relaxed max-w-xs">
-                Pellentesque egestas elementum egestas faucibus sem.
+                Find out how much your property is worth in today's market.
               </p>
             </div>
-            
+
             <div className="flex flex-col items-center">
               <div className="bg-accent rounded-full p-6 mb-6 w-20 h-20 flex items-center justify-center">
-                <Calendar className="w-8 h-8 text-primary" />
+                <ClipboardCheck className="w-8 h-8 text-primary" />
               </div>
               <h3 className="text-lg font-semibold text-primary mb-4">
-                2. Make a visit appointment with one of your agents
+                2. List Your Property
               </h3>
               <p className="text-secondary text-sm leading-relaxed max-w-xs">
-                Pellentesque egestas elementum egestas faucibus sem.
+                We'll showcase your home to thousands of potential buyers.
               </p>
             </div>
-            
+
             <div className="flex flex-col items-center">
               <div className="bg-accent rounded-full p-6 mb-6 w-20 h-20 flex items-center justify-center">
-                <Key className="w-8 h-8 text-primary" />
+                <TrendingUp className="w-8 h-8 text-primary" />
               </div>
               <h3 className="text-lg font-semibold text-primary mb-4">
-                3. Get your dream house in a month, or less
+                3. Close the Deal
               </h3>
               <p className="text-secondary text-sm leading-relaxed max-w-xs">
-                Pellentesque egestas elementum egestas faucibus sem.
+                Get the best price and close the sale quickly and securely.
               </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Properties by Area Section - with navigation */}
-      <section className="bg-primary py-20">
+      {/* ================= CITIES SECTION (MERGED) ================= */}
+      <section className="py-20">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">
-              Properties by Area
-            </h2>
-            <p className="text-secondary">
-              Lorem ipsum dolor sit amet
-            </p>
+          <div className="flex justify-between items-start mb-12">
+            <div>
+              <h2 className="text-3xl md:text-4xl font-bold text-primary mb-2">
+                High Demand Areas
+              </h2>
+              <p className="text-secondary">
+                See where buyers are looking right now.
+              </p>
+            </div>
+
+            <button
+              onClick={handleViewAllClick}
+              className="flex items-center gap-2 text-primary hover:text-[#DDC7BB] transition-colors font-medium"
+            >
+              View All Cities
+              <ArrowRight className="w-5 h-5" />
+            </button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {['New York', 'San Diego', 'Arizona', 'Miami', 'Los Angeles', 'Hawaii', 'Florida', 'Chicago', 'Washington'].map((location, idx) => (
-              <div 
-                key={idx}
-                onClick={() => handleLocationClick(location)}
-                className="bg-secondary rounded-lg p-6 hover:shadow-lg transition-shadow cursor-pointer group"
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+            {cities.map((city) => (
+              <div
+                key={city.id}
+                onClick={() => handleCityClick(city.name)}
+                className="bg-secondary rounded-xl p-4 hover:shadow-lg transition-all cursor-pointer group"
               >
-                <div className="flex items-center space-x-4">
-                  <div className="w-16 h-16 bg-accent rounded-lg overflow-hidden flex-shrink-0">
-                    <div className="w-full h-full bg-gradient-to-br from-accent/40 to-accent/20 flex items-center justify-center">
-                      <MapPin className="w-6 h-6 text-primary" />
-                    </div>
+                <div className="flex items-center gap-4">
+                  <div className="w-14 h-14 rounded-lg overflow-hidden flex-shrink-0">
+                    <img
+                      src={city.image}
+                      alt={city.name}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                    />
                   </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-primary mb-1">{location}</h3>
-                    <p className="text-secondary text-sm">{Math.floor(10)} Properties</p>
+
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-base font-semibold text-primary truncate">
+                      {city.name}
+                    </h3>
+                    <p className="text-sm text-secondary">
+                      {city.properties}{" "}
+                      {city.properties === 1 ? "Buyer" : "Buyers"} Active
+                    </p>
                   </div>
                 </div>
               </div>
@@ -255,10 +441,142 @@ const HomeSellerPage: React.FC = () => {
           </div>
         </div>
       </section>
+      {/* ================= COMPANY LOGOS ================= */}
 
-      {/* Other sections remain the same... */}
+      <section className="bg-secondary py-16 border-y border-custom">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-12">
+            <p className="text-2xl text-secondary font-medium tracking-wide">
+              Trusted by Leading Sellers
+            </p>
+            <p className="mt-2 text-base text-secondary">
+              Thousands of homeowners trust our platform to sell their homes
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center">
+            {companies.map((company) => (
+              <div
+                key={company.id}
+                className="flex items-center justify-center p-4 grayscale hover:grayscale-0 opacity-60 hover:opacity-100 transition-all duration-300"
+              >
+                <img
+                  src={company.logo}
+                  alt={`${company.name} logo`}
+                  className="h-8 w-auto object-contain filter dark:invert"
+                  loading="lazy"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ================= FEATURED PROPERTIES ================= */}
+      <section className="py-20">
+        <div className="max-w-7xl mx-auto px-6">
+          {/* Header */}
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-4">
+            <div>
+              <h2 className="text-3xl md:text-4xl font-bold text-primary mb-2">
+                Recently Sold Properties
+              </h2>
+              <p className="text-secondary">
+                See what properties like yours are selling for.
+              </p>
+            </div>
+
+            <div className="flex gap-2">
+              {["All Properties", "Sold", "Rented"].map((t) => (
+                <button
+                  key={t}
+                  onClick={() => setFeaturedFilter(t)}
+                  className={`px-4 py-2 border border-custom rounded-full cursor-pointer text-sm transition ${
+                    featuredFilter === t
+                      ? "bg-accent text-primary"
+                      : "btn-primary hover:bg-accent hover:text-primary"
+                  }`}
+                >
+                  {t}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Property Cards Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredProperties.map((property) => (
+              <div
+                key={property.id}
+                onClick={() => handlePropertyClick(property.id)}
+                className="bg-primary rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all cursor-pointer group"
+              >
+                <div className="relative h-56">
+                  <img
+                    src={property.image}
+                    alt={property.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                  <div className="absolute top-4 left-4 flex gap-2">
+                    {property.tags.map((tag, idx) => (
+                      <span
+                        key={idx}
+                        className={`px-3 py-1 text-xs font-semibold rounded ${
+                          tag === "FEATURED"
+                            ? "bg-accent text-primary"
+                            : tag === "SOLD"
+                            ? "bg-red-600 text-white"
+                            : "bg-blue-600 text-white"
+                        }`}
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="p-6">
+                  <div className="flex justify-between items-start mb-3">
+                    <h3 className="text-lg font-semibold text-primary">
+                      {property.title}
+                    </h3>
+                    <span className="text-xl font-bold text-red-500">
+                      {property.price}
+                      {property.priceType === "rent" && (
+                        <span className="text-sm text-secondary">/month</span>
+                      )}
+                    </span>
+                  </div>
+
+                  <p className="text-secondary text-sm mb-4 flex items-center">
+                    <MapPin className="w-4 h-4 mr-1" />
+                    {property.address}
+                  </p>
+
+                  <div className="flex items-center gap-4 text-sm text-secondary border-t border-custom pt-4">
+                    <div className="flex items-center gap-1">
+                      <Bed className="w-4 h-4" />
+                      <span>{property.beds} Beds</span>
+                    </div>
+
+                    <div className="flex items-center gap-1">
+                      <Bath className="w-4 h-4" />
+                      <span>{property.baths} Baths</span>
+                    </div>
+
+                    <div className="flex items-center gap-1">
+                      <Square className="w-4 h-4" />
+                      <span>{property.sqft} sqft</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
     </>
   );
 };
 
-export default HomeSellerPage;
+export default HomeSeller;

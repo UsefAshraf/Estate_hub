@@ -1,6 +1,11 @@
 // src/routes/AppRoutes.tsx
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 
 // Pages
 import SignUpPage from "../pages/auth/Signup";
@@ -9,15 +14,15 @@ import ForgotPasswordPage from "../pages/auth/ForgetPassword";
 import OTPPage from "../pages/auth/OTP";
 import RenewPasswordPage from "../pages/auth/ResetPassword";
 import SuccessPage from "../pages/auth/Success";
-import { PagePaths } from "../types/pages"
+import { PagePaths } from "../types/pages";
 // import HomeSellerPage from "../pages/seller/HomeSeller";
 import HomeBuyerPage from "../pages/buyer/HomeBuyer";
 import FavouritesBuyerPage from "../pages/buyer/FavouritesBuyer";
 import SearchResultsPage from "../pages/search/SearchResults";
 import AuthLayout from "../Layouts/AuthLayout";
-import MainLayout from "../Layouts/SellerLayout";
+
 import BuyerLayout from "../Layouts/BuyerLayout";
-import HomeSellerPage from "../pages/buyer/HomeBuyer";
+import HomeSellerPage from "../pages/seller/HomeSeller";
 import SellerLayout from "../Layouts/SellerLayout";
 import AdminLayout from "@/Layouts/AdminLayout";
 
@@ -34,7 +39,7 @@ const AppRoutes: React.FC = () => {
           <Route path={PagePaths.renew} element={<RenewPasswordPage />} />
           <Route path={PagePaths.success} element={<SuccessPage />} />
         </Route>
-        
+
         <Route element={<BuyerLayout />}>
           <Route path="/home" element={<HomeBuyerPage />} />
           <Route path="/search" element={<SearchResultsPage />} />
@@ -44,14 +49,11 @@ const AppRoutes: React.FC = () => {
         <Route element={<SellerLayout />}>
           <Route path="/homeSeller" element={<HomeSellerPage />} />
         </Route>
-        
+
         <Route element={<AdminLayout />}>
           <Route path="/users" element={<HomeSellerPage />} />
           <Route path="/departments" element={<HomeSellerPage />} />
-
         </Route>
-        
-
 
         {/* Redirect root to home */}
         <Route path="/" element={<Navigate to="/home" replace />} />

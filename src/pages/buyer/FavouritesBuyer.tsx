@@ -334,3 +334,4 @@ const FavouritesBuyer: React.FC = () => {
 };
 
 export default FavouritesBuyer;
+
