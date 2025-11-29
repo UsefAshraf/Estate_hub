@@ -15,6 +15,7 @@ import StepCard from "../general/StepCard";
 import CityCard from "../general/CityCard";
 import CompanyCard from "../general/CompanyCard";
 import PropertyCard from "../general/PropertyCard";
+import MapSearch from "../general/MapSearch";
 
 // Bath icon component
 const Bath: React.FC<{ className?: string }> = ({ className }) => (
@@ -41,6 +42,8 @@ const HomeSellerMergedPage: React.FC = () => {
   const [selectedPropertyType, setSelectedPropertyType] =
     useState("All Properties");
   const [featuredFilter, setFeaturedFilter] = useState("All Properties");
+  //////////
+  const [mapSearchQuery, setMapSearchQuery] = useState("");
 
   // ------- Featured Properties -------
   const featuredProperties = [
@@ -189,6 +192,22 @@ const HomeSellerMergedPage: React.FC = () => {
     if (e.key === "Enter") handleSearchClick();
   };
 
+  // Add this handler function
+  const handleMapAreaClick = (
+    coordinates: [number, number],
+    address: string
+  ) => {
+    console.log("Selected coordinates:", coordinates);
+    console.log("Selected address:", address);
+
+    // Navigate to search with location
+    navigate(
+      `/search?location=${encodeURIComponent(
+        address
+      )}&coords=${coordinates.join(",")}`
+    );
+  };
+
   const handlePropertyTypeClick = (type: string) => {
     setSelectedPropertyType(type);
     const query = searchInput.trim()
@@ -216,6 +235,31 @@ const HomeSellerMergedPage: React.FC = () => {
     };
     return variants;
   };
+
+  // Sample properties with coordinates for the map
+  const propertiesWithCoords = [
+    {
+      id: 1,
+      lat: 40.7589,
+      lon: -73.9851,
+      title: "Luxury Family Home",
+      price: "$395,000",
+    },
+    {
+      id: 2,
+      lat: 40.7128,
+      lon: -74.006,
+      title: "Skyper Pool Apartment",
+      price: "$280,000",
+    },
+    {
+      id: 3,
+      lat: 40.7614,
+      lon: -73.9776,
+      title: "North Dillard Street",
+      price: "$250",
+    },
+  ];
 
   // ------- Cities Section Data -------
   const cities = [
@@ -737,6 +781,40 @@ const HomeSellerMergedPage: React.FC = () => {
           </div>
         </div>
       </section> */}
+
+      <motion.section
+        variants={fadeIn("up")}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true }}
+        className="py-20"
+      >
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-primary mb-2">
+              Explore Properties by Location
+            </h2>
+            <p className="text-secondary">
+              Click anywhere on the map to search for properties in that area
+            </p>
+          </div>
+
+          <div className="bg-primary rounded-2xl overflow-hidden shadow-lg p-4">
+            <div className="h-[600px] w-full">
+              <MapSearch
+                onAreaClick={handleMapAreaClick}
+                properties={propertiesWithCoords}
+              />
+            </div>
+          </div>
+
+          <div className="mt-8 text-center">
+            <p className="text-sm text-secondary">
+              💡 Tip: Click on any location to see available properties nearby
+            </p>
+          </div>
+        </div>
+      </motion.section>
 
       {/* ================= FEATURED PROPERTIES ================= */}
       <motion.section

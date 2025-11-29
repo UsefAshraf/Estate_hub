@@ -29,6 +29,8 @@ import Propertydetail from "@/components/Propertydetail/propertydetail";
 import UserManagement from "@/pages/admin/usermanagement";
 import PaymentPage from "@/pages/buyer/payment";
 import PaymentSuccessPage from "@/pages/buyer/confirmpayment";
+import About from "@/pages/general/AboutUs";
+import Contact from "@/pages/general/ContactUs";
 
 const AppRoutes: React.FC = () => {
   return (
@@ -48,6 +50,8 @@ const AppRoutes: React.FC = () => {
           <Route path="/home" element={<HomeBuyerPage />} />
           <Route path="/search" element={<SearchResultsPage />} />
           <Route path="/propertydetail" element={<Propertydetail />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
           <Route path="/favorites" element={<FavouritesBuyerPage />} />
           <Route path="/payment" element={<PaymentPage />} />
           <Route path="/confirmPayment" element={<PaymentSuccessPage />} />
