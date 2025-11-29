@@ -19,20 +19,25 @@ import ProfileLayout from "../pages/general/ProfileLayout";
 // import ContactUs from "../pages/general/ContactUs";
 // import NotFound404 from "../pages/general/NotFound404";
 
-const AppRoutes: React.FC = () => (
-  <Routes>
-    {/* Auth */}
-    {/* <Route path="/login" element={<Login />} />
-    <Route path="/signup" element={<Signup />} />
-    <Route path="/reset-password" element={<ResetPassword />} />
-    <Route path="/otp" element={<OTP />} />
-    <Route path="/success" element={<Success />} /> */}
-
-    {/* Buyer */}
-    {/* <Route path="/buyer" element={<BuyerMain />} /> */}
-
-    {/* Seller */}
-    {/* <Route path="/seller" element={<SellerMain />} /> */}
+const AppRoutes: React.FC = () => {
+  return (
+    <Router>
+      <Routes>
+        {/* Auth Routes */}
+        <Route element={<AuthLayout />}>
+          <Route path={PagePaths.signup} element={<SignUpPage />} />
+          <Route path={PagePaths.signin} element={<SignInPage />} />
+          <Route path={PagePaths.forgot} element={<ForgotPasswordPage />} />
+          <Route path={PagePaths.otp} element={<OTPPage />} />
+          <Route path={PagePaths.renew} element={<RenewPasswordPage />} />
+          <Route path={PagePaths.success} element={<SuccessPage />} />
+        </Route>
+        
+        <Route element={<BuyerLayout />}>
+          <Route path="/home" element={<HomeBuyerPage />} />
+          <Route path="/search" element={<SearchResultsPage />} />
+          <Route path="/favorites" element={<FavouritesBuyerPage />} />
+        </Route>
 
     {/* Admin */}
     {/* <Route path="/admin" element={<AdminMain />} /> */}
