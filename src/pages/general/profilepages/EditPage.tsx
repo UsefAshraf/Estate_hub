@@ -60,7 +60,7 @@ const EditProfile: React.FC = () => {
       <h2 className="text-2xl font-semibold mb-4">Edit Profile</h2>
 
       <div className="flex flex-col items-center mb-6">
-        <div className="w-32 h-32 rounded-full overflow-hidden bg-gray-200 flex items-center justify-center shadow-md mb-4">
+        <div className="w-32 h-32 rounded-full overflow-hidden  bg-pink-200 flex items-center justify-center shadow-md mb-4">
           {preview ? (
             <img src={preview} alt="Profile" className="w-full h-full object-cover" />
           ) : (
