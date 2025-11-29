@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import  type { RootState } from "../../../redux/store";
-import { updateUser } from "../../../redux/userSlice";
+import  type { RootState } from "../../../redux/store/store";
+import { updateUser } from "../../../redux/slices/userSlice";
 import { useNavigate } from "react-router-dom";
 
 interface FormValues {
