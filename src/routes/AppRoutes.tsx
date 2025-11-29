@@ -27,6 +27,8 @@ import SellerLayout from "../Layouts/SellerLayout";
 import AdminLayout from "@/Layouts/AdminLayout";
 import Propertydetail from "@/components/Propertydetail/propertydetail";
 import UserManagement from "@/pages/admin/usermanagement";
+import PaymentPage from "@/pages/buyer/payment";
+import PaymentSuccessPage from "@/pages/buyer/confirmpayment";
 
 const AppRoutes: React.FC = () => {
   return (
@@ -47,6 +49,8 @@ const AppRoutes: React.FC = () => {
           <Route path="/search" element={<SearchResultsPage />} />
           <Route path="/propertydetail" element={<Propertydetail />} />
           <Route path="/favorites" element={<FavouritesBuyerPage />} />
+          <Route path="/payment" element={<PaymentPage />} />
+          <Route path="/confirmPayment" element={<PaymentSuccessPage />} />
         </Route>
 
         <Route element={<SellerLayout />}>
