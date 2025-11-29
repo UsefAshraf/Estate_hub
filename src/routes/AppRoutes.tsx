@@ -25,6 +25,8 @@ import BuyerLayout from "../Layouts/BuyerLayout";
 import HomeSellerPage from "../pages/seller/HomeSeller";
 import SellerLayout from "../Layouts/SellerLayout";
 import AdminLayout from "@/Layouts/AdminLayout";
+import Propertydetail from "@/components/Propertydetail/propertydetail";
+import UserManagement from "@/pages/admin/usermanagement";
 
 const AppRoutes: React.FC = () => {
   return (
@@ -43,6 +45,7 @@ const AppRoutes: React.FC = () => {
         <Route element={<BuyerLayout />}>
           <Route path="/home" element={<HomeBuyerPage />} />
           <Route path="/search" element={<SearchResultsPage />} />
+          <Route path="/propertydetail" element={<Propertydetail />} />
           <Route path="/favorites" element={<FavouritesBuyerPage />} />
         </Route>
 
@@ -51,7 +54,7 @@ const AppRoutes: React.FC = () => {
         </Route>
 
         <Route element={<AdminLayout />}>
-          <Route path="/users" element={<HomeSellerPage />} />
+          <Route path="/users" element={<UserManagement />} />
           <Route path="/departments" element={<HomeSellerPage />} />
         </Route>
 
