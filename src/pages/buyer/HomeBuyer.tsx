@@ -11,6 +11,10 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import StepCard from "../general/StepCard";
+import CityCard from "../general/CityCard";
+import CompanyCard from "../general/CompanyCard";
+import PropertyCard from "../general/PropertyCard";
 
 // Bath icon component
 const Bath: React.FC<{ className?: string }> = ({ className }) => (
@@ -357,17 +361,16 @@ const HomeSellerMergedPage: React.FC = () => {
   }
   return (
     <>
-    <motion.section
-  variants={fadeIn("up")}
-  initial="hidden"
-  whileInView="show"
-  viewport={{ once: true }}
-  className="relative bg-cover bg-center bg-no-repeat py-20 h-[90vh]
+      <motion.section
+        variants={fadeIn("up")}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true }}
+        className="relative bg-cover bg-center bg-no-repeat py-20 h-[90vh]
         bg-[url('./src/assets/homebuyer.png')] 
         dark:bg-[url('./src/assets/darkbg.png')]"
->
-
-      {/* <section
+      >
+        {/* <section
         className="relative bg-cover bg-center bg-no-repeat py-20 h-[90vh]
              bg-[url('./src/assets/homebuyer.png')] 
              dark:bg-[url('./src/assets/darkbg.png')]"
@@ -418,19 +421,18 @@ const HomeSellerMergedPage: React.FC = () => {
             ))}
           </div>
         </div>
-      {/* </section> */}        
+        {/* </section> */}
       </motion.section>
 
       {/* ================= STEPS SECTION ================= */}
       <motion.section
-  variants={fadeIn("left")}
-  initial="hidden"
-  whileInView="show"
-  viewport={{ once: true }}
-  className="bg-primary py-20"
->
-
-      {/* <section className="bg-primary py-20"> */}
+        variants={fadeIn("left")}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true }}
+        className="bg-primary py-20"
+      >
+        {/* <section className="bg-primary py-20"> */}
         <div className="max-w-7xl mx-auto px-6 text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">
             Find Your Dream House as Easy as 1,2,3
@@ -439,7 +441,7 @@ const HomeSellerMergedPage: React.FC = () => {
             Lorem ipsum dolor sit amet
           </p>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-16">
+          {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-16">
             <div className="flex flex-col items-center">
               <div className="bg-accent rounded-full p-6 mb-6 w-20 h-20 flex items-center justify-center">
                 <Home className="w-8 h-8 text-primary" />
@@ -475,21 +477,39 @@ const HomeSellerMergedPage: React.FC = () => {
                 Pellentesque egestas elementum.
               </p>
             </div>
+          </div> */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-16">
+            <StepCard
+              icon={<Home className="w-8 h-8 text-primary" />}
+              title="1. Search for your favorite house"
+              description="Pellentesque egestas elementum."
+            />
+
+            <StepCard
+              icon={<Calendar className="w-8 h-8 text-primary" />}
+              title="2. Make a visit appointment"
+              description="Pellentesque egestas elementum."
+            />
+
+            <StepCard
+              icon={<Key className="w-8 h-8 text-primary" />}
+              title="3. Get your dream house quickly"
+              description="Pellentesque egestas elementum."
+            />
           </div>
         </div>
-      {/* </section> */}
+        {/* </section> */}
       </motion.section>
 
       {/* ================= CITIES SECTION (MERGED) ================= */}
       <motion.section
-  variants={fadeIn("right")}
-  initial="hidden"
-  whileInView="show"
-  viewport={{ once: true }}
-  className="py-20"
->
-
-      {/* <section className="py-20"> */}
+        variants={fadeIn("right")}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true }}
+        className="py-20"
+      >
+        {/* <section className="py-20"> */}
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex justify-between items-start mb-12">
             <div>
@@ -510,7 +530,7 @@ const HomeSellerMergedPage: React.FC = () => {
             </button>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+          {/* <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
             {cities.map((city) => (
               <div
                 key={city.id}
@@ -538,21 +558,30 @@ const HomeSellerMergedPage: React.FC = () => {
                 </div>
               </div>
             ))}
+          </div> */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+            {cities.map((city) => (
+              <CityCard
+                key={city.id}
+                name={city.name}
+                image={city.image}
+                properties={city.properties}
+                onClick={() => handleCityClick(city.name)}
+              />
+            ))}
           </div>
         </div>
-      {/* </section> */}
+        {/* </section> */}
       </motion.section>
       {/* ================= COMPANY LOGOS ================= */}
       <motion.section
-  variants={fadeIn("up")}
-  initial="hidden"
-  whileInView="show"
-  viewport={{ once: true }}
-  className="bg-secondary py-16 border-y border-custom"
->
-
-
-      {/* <section className="bg-secondary py-16 border-y border-custom"> */}
+        variants={fadeIn("up")}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true }}
+        className="bg-secondary py-16 border-y border-custom"
+      >
+        {/* <section className="bg-secondary py-16 border-y border-custom"> */}
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-12">
             <p className="text-2xl text-secondary font-medium tracking-wide">
@@ -563,7 +592,7 @@ const HomeSellerMergedPage: React.FC = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center">
+          {/* <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center">
             {companies.map((company) => (
               <div
                 key={company.id}
@@ -577,9 +606,18 @@ const HomeSellerMergedPage: React.FC = () => {
                 />
               </div>
             ))}
+          </div> */}
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center">
+            {companies.map((company) => (
+              <CompanyCard
+                key={company.id}
+                logo={company.logo}
+                name={company.name}
+              />
+            ))}
           </div>
         </div>
-      {/* </section> */}
+        {/* </section> */}
       </motion.section>
       {/* <section
         className="bg-cover bg-center py-16 bg-secondary"
@@ -702,14 +740,13 @@ const HomeSellerMergedPage: React.FC = () => {
 
       {/* ================= FEATURED PROPERTIES ================= */}
       <motion.section
-  variants={fadeIn("up")}
-  initial="hidden"
-  whileInView="show"
-  viewport={{ once: true }}
-  className="py-20"
->
-
-      {/* <section className="py-20"> */}
+        variants={fadeIn("up")}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true }}
+        className="py-20"
+      >
+        {/* <section className="py-20"> */}
         <div className="max-w-7xl mx-auto px-6">
           {/* Header */}
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-4">
@@ -740,7 +777,7 @@ const HomeSellerMergedPage: React.FC = () => {
           </div>
 
           {/* Property Cards Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredProperties.map((property) => (
               <div
                 key={property.id}
@@ -808,9 +845,27 @@ const HomeSellerMergedPage: React.FC = () => {
                 </div>
               </div>
             ))}
+          </div> */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredProperties.map((property) => (
+              <PropertyCard
+                key={property.id}
+                id={property.id}
+                image={property.image}
+                title={property.title}
+                price={property.price}
+                priceType={property.priceType}
+                address={property.address}
+                beds={property.beds}
+                baths={property.baths}
+                sqft={property.sqft}
+                tags={property.tags}
+                onClick={() => handlePropertyClick(property.id)}
+              />
+            ))}
           </div>
         </div>
-      {/* </section> */}
+        {/* </section> */}
       </motion.section>
     </>
   );
