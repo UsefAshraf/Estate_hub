@@ -56,11 +56,12 @@ const EditProfile: React.FC = () => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto p-6 bg-white rounded-xl shadow-md mt-6">
+    
+    <div className="max-w-xl mx-auto mt-10 bg-(--bg-primary) shadow p-6 rounded-lg">
       <h2 className="text-2xl font-semibold mb-4">Edit Profile</h2>
 
       <div className="flex flex-col items-center mb-6">
-        <div className="w-32 h-32 rounded-full overflow-hidden bg-gray-200 flex items-center justify-center shadow-md mb-4">
+        <div className="w-32 h-32 rounded-full overflow-hidden bg-(--bg-secondary) flex items-center justify-center shadow-md mb-4">
           {preview ? (
             <img src={preview} alt="Profile" className="w-full h-full object-cover" />
           ) : (
@@ -145,7 +146,7 @@ const EditProfile: React.FC = () => {
         <div className="flex gap-4 pt-4">
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700 transition"
+          className="w-full bg-(--button-primary) text-(--text-primary) p-2 rounded-md hover:bg-(--button-primary-hover) transition"
         >
           Save Changes
         </button>
@@ -153,7 +154,7 @@ const EditProfile: React.FC = () => {
         <button
             type="button"
             onClick={() => navigate("/profile")}
-            className="flex-1 border border-gray-300 hover:bg-gray-100 p-2 rounded-md transition"
+            className="flex-1 border text-(--text-secondary) border-gray-300 hover:bg-(--button-secondary-hover) p-2 rounded-md transition"
           >
             Cancel
           </button>

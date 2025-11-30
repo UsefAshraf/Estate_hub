@@ -38,6 +38,27 @@ const VisitsPage = () => {
       time: "1:00 PM",
       status: "completed",
     },
+    {
+      id: 5,
+      propertyName: "Efilo Office Space",
+      date: "2026-03-15",
+      time: "1:00 PM",
+      status: "completed",
+    },
+    {
+      id: 6,
+      propertyName: "Efilo Office Space",
+      date: "2026-03-15",
+      time: "1:00 PM",
+      status: "upcoming",
+    },
+    {
+      id: 7,
+      propertyName: "City Heights Apartment",
+      date: "2026-03-15",
+      time: "1:00 PM",
+      status: "cancelled",
+    },
   ]);
 
   const getStatusColor = (status: Visit["status"]) => {
@@ -63,7 +84,7 @@ const VisitsPage = () => {
         {visits.map((visit) => (
           <div
             key={visit.id}
-            className="p-5 bg-red-100 shadow rounded-xl border border-gray-100 hover:shadow-md transition"
+            className="p-5 bg-(--bg-secondary) shadow rounded-xl border border-(--border-primary) hover:shadow-md transition"
           >
             <h2 className="text-lg font-medium text-gray-900">
               {visit.propertyName}
