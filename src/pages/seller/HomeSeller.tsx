@@ -278,6 +278,10 @@ const HomeSeller: React.FC = () => {
   const handleViewAllClick = () => {
     console.log("View All Cities clicked");
   };
+  const handleAddProperty = () => {
+    // Navigate or open modal — your choice
+    navigate("/add-property");
+  };
 
   return (
     <>
@@ -287,9 +291,6 @@ const HomeSeller: React.FC = () => {
              bg-[url('./src/assets/homebuyer.png')] 
              dark:bg-[url('./src/assets/darkbg.png')]"
       >
-        {/* Overlay */}
-        <div className="absolute inset-0 dark:bg-black/70 transition-colors"></div>
-
         <div className="relative max-w-7xl mx-auto px-6 text-center rounded-lg p-6 pt-20">
           <button className="px-4 py-1 border border-custom rounded-full text-sm mb-4 btn-primary hover:bg-accent-hover transition">
             LET US GUIDE YOUR SALE
@@ -304,26 +305,18 @@ const HomeSeller: React.FC = () => {
           </h1>
 
           <div className="flex justify-center mb-6">
-            <div className="relative w-full max-w-xl">
-              <input
-                type="text"
-                placeholder="Enter Address for Valuation..."
-                value={searchInput}
-                onChange={(e) => setSearchInput(e.target.value)}
-                onKeyPress={handleKeyPress}
-                className="w-full rounded-full border border-custom py-3 px-6 shadow-sm focus:ring-2 focus:ring-accent bg-secondary text-primary relative z-10"
-              />
+            <div className="flex justify-center mb-6">
               <button
-                onClick={handleSearchClick}
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-accent p-3 rounded-full hover:bg-accent-hover transition z-10"
+                onClick={handleAddProperty}
+                className="px-6 py-3 rounded-full bg-accent text-primary font-semibold hover:bg-accent-hover transition shadow"
               >
-                <Search className="w-5 h-5 text-primary" />
+                Add Property
               </button>
             </div>
           </div>
 
-          <div className="flex justify-center gap-4 relative z-10">
-            {["Sell", "Rent Out", "Valuation"].map((t) => (
+          {/* <div className="flex justify-center gap-4 relative z-10">
+            {["Sell", "Rent Out"].map((t) => (
               <button
                 key={t}
                 onClick={() => handlePropertyTypeClick(t)}
@@ -334,12 +327,12 @@ const HomeSeller: React.FC = () => {
                 {t}
               </button>
             ))}
-          </div>
+          </div> */}
         </div>
       </section>
 
       {/* ================= STEPS SECTION ================= */}
-      <section className="bg-primary py-20">
+      {/* <section className="bg-primary py-20">
         <div className="max-w-7xl mx-auto px-6 text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">
             Sell Your House as Easy as 1,2,3
@@ -382,6 +375,62 @@ const HomeSeller: React.FC = () => {
               </h3>
               <p className="text-secondary text-sm leading-relaxed max-w-xs">
                 Get the best price and close the sale quickly and securely.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section> */}
+      <section className="bg-primary py-20">
+        <div className="max-w-7xl mx-auto px-6 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">
+            Sell Your House as Easy as 1,2,3
+          </h2>
+
+          <p className="text-secondary mb-16 max-w-md mx-auto">
+            We handle the entire selling process for you from listing to final
+            deal.
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-16">
+            {/* Step 1 */}
+            <div className="flex flex-col items-center">
+              <div className="bg-accent rounded-full p-6 mb-6 w-20 h-20 flex items-center justify-center">
+                <DollarSign className="w-8 h-8 text-primary" />
+              </div>
+              <h3 className="text-lg font-semibold text-primary mb-4">
+                1. Add Your Property
+              </h3>
+              <p className="text-secondary text-sm leading-relaxed max-w-xs">
+                Enter all the details of your apartment and submit it for
+                review.
+              </p>
+            </div>
+
+            {/* Step 2 */}
+            <div className="flex flex-col items-center">
+              <div className="bg-accent rounded-full p-6 mb-6 w-20 h-20 flex items-center justify-center">
+                <ClipboardCheck className="w-8 h-8 text-primary" />
+              </div>
+              <h3 className="text-lg font-semibold text-primary mb-4">
+                2. We Showcase It
+              </h3>
+              <p className="text-secondary text-sm leading-relaxed max-w-xs">
+                We list your property and present it to potential buyers
+                professionally.
+              </p>
+            </div>
+
+            {/* Step 3 */}
+            <div className="flex flex-col items-center">
+              <div className="bg-accent rounded-full p-6 mb-6 w-20 h-20 flex items-center justify-center">
+                <TrendingUp className="w-8 h-8 text-primary" />
+              </div>
+              <h3 className="text-lg font-semibold text-primary mb-4">
+                3. Close the Deal
+              </h3>
+              <p className="text-secondary text-sm leading-relaxed max-w-xs">
+                We complete the sale securely and ensure you receive your
+                payment.
               </p>
             </div>
           </div>

@@ -75,8 +75,8 @@ const getLinkClassName = (path: string) => {
           {isUserMenuOpen && (
             <div className="absolute right-0 top-16 z-50 bg-neutral-primary-medium border border-default-medium rounded-base shadow-lg w-44">
               <div className="px-4 py-3 text-sm border-b border-default">
-                <span className="block text-heading font-medium">Joseph McFall</span>
-                <span className="block text-body truncate">name@flowbite.com</span>
+                <span className="block text-heading font-medium">Youssef Ashraf</span>
+                <span className="block text-body truncate">Youssef_ashraf@gmail.com</span>
               </div>
               <ul className="p-2 text-sm text-body font-medium">
                 <li>
@@ -115,27 +115,27 @@ const getLinkClassName = (path: string) => {
         <div className={`items-center justify-between ${isMenuOpen ? 'block' : 'hidden'} w-full md:flex md:w-auto md:order-1`}>
           <ul className="font-medium flex flex-col p-4 md:p-0 mt-4 border border-default rounded-base bg-neutral-secondary-soft md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-neutral-primary">
             <li>
-              <Link to="/home" className={getLinkClassName('/home')}>
+              <Link to="/homeBuyer" className={getLinkClassName('/homeBuyer')}>
                 Home
               </Link>
             </li>
             <li>
-              <Link to="/search" className={getLinkClassName('/search')}>
+              <Link to="/searchBuyer" className={getLinkClassName('/searchBuyer')}>
                 Properties
               </Link>
             </li>
             <li>
-              <Link to="/favorites" className={getLinkClassName('/favorites')}>
+              <Link to="/favoritesBuyer" className={getLinkClassName('/favoritesBuyer')}>
                 Favorites
               </Link>
             </li>
             <li>
-              <Link to="/about" className={getLinkClassName('/about')}>
+              <Link to="/aboutBuyer" className={getLinkClassName('/about')}>
                 About
               </Link>
             </li>
             <li>
-              <Link to="/contact" className={getLinkClassName('/contact')}>
+              <Link to="/contactBuyer" className={getLinkClassName('/contact')}>
                 Contact
               </Link>
             </li>

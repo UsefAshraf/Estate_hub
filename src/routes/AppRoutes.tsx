@@ -31,6 +31,7 @@ import PaymentPage from "@/pages/buyer/payment";
 import PaymentSuccessPage from "@/pages/buyer/confirmpayment";
 import About from "@/pages/general/AboutUs";
 import Contact from "@/pages/general/ContactUs";
+import NotFoundPage from "@/pages/general/NotFound";
 
 const AppRoutes: React.FC = () => {
   return (
@@ -47,18 +48,20 @@ const AppRoutes: React.FC = () => {
         </Route>
 
         <Route element={<BuyerLayout />}>
-          <Route path="/home" element={<HomeBuyerPage />} />
-          <Route path="/search" element={<SearchResultsPage />} />
-          <Route path="/propertydetail" element={<Propertydetail />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/favorites" element={<FavouritesBuyerPage />} />
-          <Route path="/payment" element={<PaymentPage />} />
+          <Route path="/homeBuyer" element={<HomeBuyerPage />} />
+          <Route path="/searchBuyer" element={<SearchResultsPage />} />
+          <Route path="/propertydetailBuyer" element={<Propertydetail />} />
+          <Route path="/aboutBuyer" element={<About />} />
+          <Route path="/contactBuyer" element={<Contact />} />
+          <Route path="/favoritesBuyer" element={<FavouritesBuyerPage />} />
+          <Route path="/paymentBuyer" element={<PaymentPage />} />
           <Route path="/confirmPayment" element={<PaymentSuccessPage />} />
         </Route>
 
         <Route element={<SellerLayout />}>
           <Route path="/homeSeller" element={<HomeSellerPage />} />
+          <Route path="/aboutSeller" element={<About />} />
+          <Route path="/contactSeller" element={<Contact />} />
         </Route>
 
         <Route element={<AdminLayout />}>
@@ -67,10 +70,10 @@ const AppRoutes: React.FC = () => {
         </Route>
 
         {/* Redirect root to home */}
-        <Route path="/" element={<Navigate to="/home" replace />} />
+        <Route path="/" element={<Navigate to="/homeBuyer" replace />} />
 
         {/* Catch all 404 */}
-        <Route path="*" element={<h1>404 - Page Not Found</h1>} />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </Router>
   );

@@ -19,12 +19,14 @@ interface FavoriteCardProps {
   property: Property;
   removeFavorite: (id: number) => void;
   shareProperty: (property: Property) => void;
+  onPropertyClick: (id: number) => void;
 }
 
 const FavoriteCard: React.FC<FavoriteCardProps> = ({
   property,
   removeFavorite,
   shareProperty,
+  onPropertyClick,
 }) => {
   return (
     <div className="favorite-card bg-secondary rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 group">
@@ -107,7 +109,7 @@ const FavoriteCard: React.FC<FavoriteCardProps> = ({
           </div>
 
           <div className="flex gap-2">
-            <button className="bg-accent cursor-pointer text-primary px-2 py-1 rounded-lg font-medium hover:bg-accent-hover transition-colors">
+            <button onClick={() => onPropertyClick(property.id)} className="bg-accent cursor-pointer text-primary px-2 py-1 rounded-lg font-medium hover:bg-accent-hover transition-colors">
               View Details
             </button>
             <button className="border border-custom cursor-pointer text-secondary px-2 py-1 rounded-lg hover:bg-accent/20 transition-colors">

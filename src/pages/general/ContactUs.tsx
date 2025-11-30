@@ -13,21 +13,21 @@ const ContactHeader: React.FC = () => (
 
 const contactDetails = [
     {
-        icon: "📞",
+        icon: <Phone className="w-6 h-6 text-[#2B1B12]" />,
         title: "Phone",
         description: "Give us a call",
         value: "+1 (555) 123-4567",
         href: "tel:+15551234567",
     },
     {
-        icon: "✉️",
+        icon: <Mail className="w-6 h-6 text-[#2B1B12]" />,
         title: "Email",
         description: "Send us an email",
         value: "info@estatehub.com",
         href: "mailto:info@estatehub.com",
     },
     {
-        icon: "📍",
+        icon: <MapPin className="w-6 h-6 text-[#2B1B12]" />,
         title: "Office",
         description: "Visit us at",
         value: "123 Real Estate Street\nSan Francisco, CA 94102",
@@ -36,7 +36,7 @@ const contactDetails = [
 
 const businessHours = [
     {
-        icon: "🕒",
+        icon: <Clock className="w-6 h-6 text-[#2B1B12]" />,
         title: "Business Hours",
         details:
             "Monday - Friday: 9:00 AM - 6:00 PM\nSaturday: 10:00 AM - 4:00 PM\nSunday: Closed",
@@ -47,7 +47,7 @@ const ContactInfo: React.FC = () => (
     <div className="space-y-8 min-w-[300px] shrink-0">
         {contactDetails.map((item, index) => (
             <div key={index} className="flex items-start space-x-4">
-                <div className="p-3 rounded-full bg-[#DDC7BB] text-2xl">
+                <div className="p-3 rounded-full bg-[#DDC7BB]">
                     {item.icon}
                 </div>
                 <div>
@@ -72,7 +72,7 @@ const ContactInfo: React.FC = () => (
                 key={index}
                 className="flex items-start space-x-4 pt-4 border-t border-[#DDC7BB]"
             >
-                <div className="p-3 rounded-full bg-[#DDC7BB] text-2xl">
+                <div className="p-3 rounded-full bg-[#DDC7BB]">
                     {item.icon}
                 </div>
                 <div>
@@ -142,7 +142,7 @@ const ContactForm: React.FC = () => {
                         className="flex items-center space-x-2 px-6 py-3 bg-[#DDC7BB] text-[#2B1B12] font-semibold rounded-lg hover:bg-[#E8D5C9] hover:-translate-y-1 transition-all shadow-lg"
                     >
                         <span>Send Message</span>
-                        <span className="text-xl">✉️</span>
+                        <Send className="w-5 h-5 text-[#2B1B12]" />
                     </button>
                 </div>
             </form>
@@ -159,18 +159,22 @@ const ImmediateAssistance: React.FC = () => (
             For urgent matters, our support team is available 24/7 via phone.
             We're committed to providing you with the best service possible.
         </p>
+
         <div className="flex justify-center space-x-6">
             <a
                 href="tel:+15551234567"
-                className="px-6 py-3 border-2 border-[#DDC7BB] text-[#2B1B12] rounded-lg hover:bg-[#DDC7BB] hover:-translate-y-1 transition-all font-medium"
+                className="px-6 py-3 border-2 border-[#DDC7BB] text-[#2B1B12] rounded-lg hover:bg-[#DDC7BB] hover:-translate-y-1 transition-all font-medium flex items-center space-x-2"
             >
-                Call Now
+                <Phone className="w-5 h-5" />
+                <span>Call Now</span>
             </a>
+
             <a
                 href="mailto:info@estatehub.com"
-                className="px-6 py-3 bg-[#DDC7BB] text-[#2B1B12] rounded-lg hover:bg-[#E8D5C9] hover:-translate-y-1 transition-all font-medium"
+                className="px-6 py-3 bg-[#DDC7BB] text-[#2B1B12] rounded-lg hover:bg-[#E8D5C9] hover:-translate-y-1 transition-all font-medium flex items-center space-x-2"
             >
-                Email Us
+                <Mail className="w-5 h-5" />
+                <span>Email Us</span>
             </a>
         </div>
     </div>
