@@ -13,7 +13,7 @@ import EditProfile from "../pages/general/profilepages/EditPage";
 // import Success from "../pages/auth/Success";
 // import BuyerMain from "../pages/buyer/MainPage";
 // import SellerMain from "../pages/seller/MainPage";
-import AdminMain from "../pages/admin/AdminMain";
+import AdminMain from "../pages/admin/AdminPropPage";
 import ProfileLayout from "../pages/general/ProfileLayout";
 // import AboutUs from "../pages/general/AboutUs";
 // import ContactUs from "../pages/general/ContactUs";
