@@ -165,21 +165,21 @@ const Propertydetail: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-primary">
+    <div className="min-h-screen bg-gray-50 bg-primary ">
       {/* Header */}
 
       {/* Breadcrumb */}
-      <div className="max-w-9xl mx-auto px-5 py-4 bg-primary mb-4 shadow-sm">
-        <div className="flex items-center space-x-2 text-sm text-black">
-          <a href="#" className="hover:text-blue-600">
+      <div className="max-w-9xl mx-auto px-5 py-4 bg-primary mb-4 shadow-sm bg-secondary">
+        <div className="flex items-center space-x-2 text-sm text-black dark:text-gray-200">
+          <a href="#" className="hover:text-amber-600">
             Home
           </a>
           <span>/</span>
-          <a href="#" className="hover:text-blue-600">
+          <a href="#" className="hover:text-amber-600">
             Properties
           </a>
           <span>/</span>
-          <span className="text-black">{propertyData.title}</span>
+          <span className="text-black dark:text-white">{propertyData.title}</span>
         </div>
       </div>
 
@@ -188,7 +188,7 @@ const Propertydetail: React.FC = () => {
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-6">
             {/* Image Gallery */}
-            <div className="bg-primary rounded-xl overflow-hidden shadow-sm">
+            <div className="bg-primary rounded-xl overflow-hidden shadow-sm bg-secondary">
               <div className="relative">
                 <img
                   src={images[mainImage]}
@@ -269,7 +269,7 @@ const Propertydetail: React.FC = () => {
             </div>
 
             {/* Property Info */}
-            <div className="bg-primary rounded-xl p-6 shadow-sm">
+            <div className="bg-primary rounded-xl p-6 shadow-sm bg-secondary">
               <div className="flex items-start justify-between mb-4">
                 <div>
                   <div className="flex items-center space-x-2 mb-2">
@@ -286,7 +286,7 @@ const Propertydetail: React.FC = () => {
                   <h1 className="text-3xl font-bold text-secondary mb-2">
                     {propertyData.title}
                   </h1>
-                  <p className="text-gray-600 flex items-center">
+                  <p className="text-gray-600 flex items-center text-secondary">
                     <span className="mr-2">📍</span>
                     {propertyData.address}
                   </p>
@@ -306,7 +306,7 @@ const Propertydetail: React.FC = () => {
                 <div className="flex items-center space-x-3">
                   <Bed className="w-6 h-6 text-cyan-500" />
                   <div>
-                    <div className="text-sm text-gray-500">Bedrooms</div>
+                    <div className="text-sm text-gray-500 text-secondary">Bedrooms</div>
                     <div className="font-semibold text-secondary">
                       {propertyData.bedrooms}
                     </div>
@@ -315,7 +315,7 @@ const Propertydetail: React.FC = () => {
                 <div className="flex items-center space-x-3">
                   <Bath className="w-6 h-6 text-cyan-500" />
                   <div>
-                    <div className="text-sm text-gray-500">Bathrooms</div>
+                    <div className="text-sm text-gray-500 text-secondary">Bathrooms</div>
                     <div className="font-semibold text-secondary">
                       {propertyData.bathrooms}
                     </div>
@@ -324,7 +324,7 @@ const Propertydetail: React.FC = () => {
                 <div className="flex items-center space-x-3">
                   <Maximize className="w-6 h-6 text-cyan-500" />
                   <div>
-                    <div className="text-sm text-gray-500">Area</div>
+                    <div className="text-sm text-gray-500 text-secondary">Area</div>
                     <div className="font-semibold text-secondary">
                       {propertyData.area}
                     </div>
@@ -333,7 +333,7 @@ const Propertydetail: React.FC = () => {
                 <div className="flex items-center space-x-3">
                   <Calendar className="w-6 h-6 text-cyan-500" />
                   <div>
-                    <div className="text-sm text-gray-500">Built</div>
+                    <div className="text-sm text-gray-500 text-secondary">Built</div>
                     <div className="font-semibold text-secondary">
                       {propertyData.built}
                     </div>
@@ -346,7 +346,7 @@ const Propertydetail: React.FC = () => {
                 <h2 className="text-xl font-bold text-secondary mb-3">
                   About This Property
                 </h2>
-                <p className="text-gray-600 leading-relaxed">
+                <p className="text-gray-600 leading-relaxed text-secondary">
                   {propertyData.description}
                 </p>
               </div>
@@ -361,7 +361,7 @@ const Propertydetail: React.FC = () => {
                     (feature: Feature, idx: number) => (
                       <div key={idx} className="flex items-center space-x-2">
                         <CheckCircle className="w-5 h-5 text-green-500" />
-                        <span className="text-gray-700">{feature.name}</span>
+                        <span className="text-gray-700 text-secondary">{feature.name}</span>
                       </div>
                     )
                   )}
@@ -373,7 +373,7 @@ const Propertydetail: React.FC = () => {
           {/* Sidebar */}
           <div className="space-y-6">
             {/* Contact Agent */}
-            <div className="bg-primary rounded-xl p-6 shadow-sm sticky top-24">
+            <div className="bg-primary rounded-xl p-6 shadow-sm sticky top-24 bg-secondary">
               <h3 className="text-lg font-bold text-secondary mb-4">
                 Contact Agent
               </h3>
@@ -385,21 +385,21 @@ const Propertydetail: React.FC = () => {
                   className="w-16 h-16 rounded-full object-cover"
                 />
                 <div>
-                  <div className="font-semibold text-gray-900">
+                  <div className="font-bold text-gray-900 text-secondary">
                     {propertyData.agent.name}
                   </div>
-                  <div className="text-sm text-gray-500">
+                  <div className="text-sm text-gray-500 text-secondary">
                     {propertyData.agent.title}
                   </div>
                 </div>
               </div>
 
               <div className="space-y-3 mb-6">
-                <div className="flex items-center space-x-3 text-gray-600">
+                <div className="flex items-center space-x-3 text-gray-600 text-secondary">
                   <Phone className="w-5 h-5" />
                   <span>{propertyData.agent.phone}</span>
                 </div>
-                <div className="flex items-center space-x-3 text-gray-600">
+                <div className="flex items-center space-x-3 text-gray-600 text-secondary">
                   <Mail className="w-5 h-5" />
                   <span className="text-sm">{propertyData.agent.email}</span>
                 </div>
@@ -413,10 +413,10 @@ const Propertydetail: React.FC = () => {
               </button>
 
               <div className="mt-6 pt-6 border-t border-gray-200">
-                <h4 className="font-semibold text-black mb-3">
+                <h4 className="font-semibold text-black mb-3 dark:text-primary">
                   Schedule a Visit
                 </h4>
-                <p className="text-sm text-gray-600 mb-4">
+                <p className="text-sm text-gray-600 mb-4 text-secondary ">
                   Book a viewing to see this property in person
                 </p>
                 <button
@@ -434,14 +434,14 @@ const Propertydetail: React.FC = () => {
 
       {/* ============ ADD THIS MAP SECTION HERE ============ */}
       <div className="max-w-7xl mx-auto px-4 pb-12">
-        <div className="bg-primary rounded-xl p-6 shadow-sm">
+        <div className="bg-primary rounded-xl p-6 shadow-sm bg-secondary">
           <div className="flex items-center justify-between mb-6">
             <div>
               <h2 className="text-2xl font-bold text-secondary mb-2">
                 Property Location
               </h2>
-              <p className="text-gray-600 flex items-center">
-                <MapPin className="w-4 h-4 mr-2" />
+              <p className="text-gray-600 flex items-center text-secondary">
+                <MapPin className="w-4 h-4 mr-2 dark:text-white" />
                 {propertyData.address}
               </p>
             </div>
@@ -551,7 +551,7 @@ const Propertydetail: React.FC = () => {
       {/* Contact Agent Modal (UPDATED) */}
       {showContactModal && (
         <div className="fixed inset-0 bg-black/10 backdrop-blur-[1px] flex items-center justify-center z-50 p-4">
-          <div className="bg-primary rounded-xl shadow-2xl max-w-md w-full p-6 relative">
+          <div className="bg-primary rounded-xl shadow-2xl max-w-md w-full p-6 relative bg-secondary">
             <button
               onClick={() => setShowContactModal(false)}
               className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
@@ -574,7 +574,7 @@ const Propertydetail: React.FC = () => {
                   value={contactForm.name}
                   onChange={handleContactInputChange}
                   placeholder="John Doe"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-200"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-200 text-black"
                   required
                 />
               </div>
@@ -590,7 +590,7 @@ const Propertydetail: React.FC = () => {
                   value={contactForm.email}
                   onChange={handleContactInputChange}
                   placeholder="john@example.com"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-200"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-200 text-black"
                   required
                 />
               </div>
@@ -606,7 +606,7 @@ const Propertydetail: React.FC = () => {
                   value={contactForm.phone}
                   onChange={handleContactInputChange}
                   placeholder="+1 (555) 000-0000"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-200"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-200 text-black"
                   required
                 />
               </div>
@@ -626,7 +626,7 @@ const Propertydetail: React.FC = () => {
                   }
                   placeholder="I'm interested in this property..."
                   rows={4}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-200 resize-none"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-200 resize-none text-black"
                   required
                 />
               </div>
@@ -645,7 +645,7 @@ const Propertydetail: React.FC = () => {
       {/* Schedule Visit Modal */}
       {showScheduleModal && (
         <div className="fixed inset-0 bg-black/10 backdrop-blur-[1px] flex items-center justify-center z-50 p-4">
-          <div className="bg-primary rounded-xl shadow-2xl max-w-md w-full p-6 relative">
+          <div className="bg-primary rounded-xl shadow-2xl max-w-md w-full p-6 relative bg-secondary">
             <button
               onClick={() => setShowScheduleModal(false)}
               className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
@@ -659,7 +659,7 @@ const Propertydetail: React.FC = () => {
 
             <form onSubmit={handleScheduleSubmit} className="space-y-4">
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                <label className="block text-sm font-semibold text-gray-700 mb-2 text-secondary">
                   Preferred Date
                 </label>
                 <input
@@ -668,13 +668,13 @@ const Propertydetail: React.FC = () => {
                   value={scheduleForm.date}
                   onChange={handleInputChange}
                   placeholder="dd/yyyy"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-200"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-200 text-black"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                <label className="block text-sm font-semibold text-gray-700 mb-2 text-secondary">
                   Preferred Time
                 </label>
                 <input
@@ -683,13 +683,13 @@ const Propertydetail: React.FC = () => {
                   value={scheduleForm.time}
                   onChange={handleInputChange}
                   placeholder="--:-- --"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-200"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-200 text-black"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                <label className="block text-sm font-semibold text-gray-700 mb-2 text-secondary">
                   Your Name
                 </label>
                 <input
@@ -698,13 +698,13 @@ const Propertydetail: React.FC = () => {
                   value={scheduleForm.name}
                   onChange={handleInputChange}
                   placeholder="John Doe"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-200"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-200 text-black"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                <label className="block text-sm font-semibold text-gray-700 mb-2 text-secondary">
                   Phone Number
                 </label>
                 <input
@@ -713,7 +713,7 @@ const Propertydetail: React.FC = () => {
                   value={scheduleForm.phone}
                   onChange={handleInputChange}
                   placeholder="+1 (555) 000-0000"
-                  className="w-full px-4 py-3 border  rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-200"
+                  className="w-full px-4 py-3 border  rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-200 text-black"
                   required
                 />
               </div>
