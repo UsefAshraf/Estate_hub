@@ -161,23 +161,23 @@ const UserManagement: React.FC = () => {
   });
 
   return (
-    <div className="min-h-screen bg-gray-50 drak:bg-primary">
+    <div className="min-h-screen bg-gray-50 bg-primary">
       
 
       {/* Page Header */}
-      <div className="bg-primary border-b border-gray-200 px-8 py-6">
+      <div className="bg-primary border-b border-gray-200 px-8 py-6 bg-secondary">
         <div className="flex items-center space-x-3 mb-2">
           <Shield className="w-8 h-8 text-gray-700" />
           <h1 className="text-3xl font-bold text-secondary">Admin Dashboard</h1>
         </div>
-        <p className="text-black ml-11">Manage users, agents, and monitor platform activity</p>
+        <p className="text-black ml-11 text-secondary">Manage users, agents, and monitor platform activity</p>
       </div>
 
-      <div className="max-w-7xl mx-auto px-8 py-8">
+      <div className="max-w-7xl mx-auto px-8 py-8 ">
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           {/* Total Users */}
-          <div className="bg-primary rounded-xl p-6 shadow-sm border border-gray-200">
+          <div className="bg-primary rounded-xl p-6 shadow-sm border border-gray-200 bg-secondary">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-l text-secondary mb-1">Total Users</p>
@@ -190,7 +190,7 @@ const UserManagement: React.FC = () => {
           </div>
 
           {/* Active Users */}
-          <div className="bg-primary rounded-xl p-6 shadow-sm border border-gray-200">
+          <div className="bg-primary rounded-xl p-6 shadow-sm border border-gray-200 bg-secondary">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-l text-secondary mb-1">Active Users</p>
@@ -203,7 +203,7 @@ const UserManagement: React.FC = () => {
           </div>
 
           {/* Total Agents */}
-          <div className="bg-primary rounded-xl p-6 shadow-sm border border-gray-200">
+          <div className="bg-primary rounded-xl p-6 shadow-sm border border-gray-200 bg-secondary">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-l text-secondary mb-1">Total Agents</p>
@@ -216,7 +216,7 @@ const UserManagement: React.FC = () => {
           </div>
 
           {/* Total Properties */}
-          <div className="bg-primary rounded-xl p-6 shadow-sm border border-gray-200">
+          <div className="bg-primary rounded-xl p-6 shadow-sm border border-gray-200 bg-secondary">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-l text-secondary mb-1">Total Properties</p>
@@ -230,7 +230,7 @@ const UserManagement: React.FC = () => {
         </div>
 
         {/* User Management Section */}
-        <div className="bg-primary rounded-xl shadow-sm border border-gray-200">
+        <div className="bg-primary rounded-xl shadow-sm border border-gray-200 bg-secondary">
           {/* Section Header */}
           <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
             <div className="flex items-center space-x-2">
@@ -266,7 +266,7 @@ const UserManagement: React.FC = () => {
             <select
               value={roleFilter}
               onChange={(e) => setRoleFilter(e.target.value)}
-              className=" bg-primary px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-200"
+              className=" bg-primary px-7 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-200"
             >
               <option>All Roles</option>
               <option>User</option>

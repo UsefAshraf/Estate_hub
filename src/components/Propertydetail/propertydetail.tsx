@@ -626,7 +626,7 @@ const Propertydetail: React.FC = () => {
                   }
                   placeholder="I'm interested in this property..."
                   rows={4}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-200 resize-none text-black"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-200 resize-none "
                   required
                 />
               </div>
