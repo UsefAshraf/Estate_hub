@@ -91,8 +91,8 @@ export default function AdminPropertiesPage() {
     <div className="min-h-screen bg-gray-50 p-6">
       {/* PAGE HEADER */}
       <div className="max-w-6xl mx-auto mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Admin - Properties</h1>
-        <p className="text-gray-600">Manage all listed properties</p>
+        <h1 className="text-3xl font-bold text-(--text-primary)">Admin - Properties</h1>
+        <p className="text-(--text-secondary)">Manage all listed properties</p>
       </div>
 
       <div className="max-w-6xl mx-auto bg-white rounded-xl shadow p-6">
@@ -108,8 +108,8 @@ export default function AdminPropertiesPage() {
                 className={`px-4 py-2 rounded-lg text-sm font-medium 
                             ${
                               filter === tab
-                                ? "bg-blue-600 text-white"
-                                : "bg-gray-100 text-gray-700"
+                                ? "bg-(--button-primary) text-(--text-primary)"
+                                : "bg-(--button-secondary) text-(--text-secondary)"
                             }`}
               >
                 {tab}
@@ -118,7 +118,7 @@ export default function AdminPropertiesPage() {
           </div>
 
           <button
-            className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg"
+            className="flex items-center gap-2 bg-(--button-primary) hover:bg-(--button-primary-hover) text-(--text-primary) px-4 py-2 rounded-lg"
           >
             <Plus className="w-4 h-4" /> Add Property
           </button>
@@ -128,7 +128,7 @@ export default function AdminPropertiesPage() {
         <div className="overflow-x-auto mt-6">
           <table className="w-full min-w-[900px] border-collapse">
             <thead>
-              <tr className="bg-gray-100 text-left text-sm text-gray-700">
+              <tr className="bg-(--bg-secondary) text-left text-sm text-(--text-secondary)">
                 <th className="p-3 font-medium">Property</th>
                 <th className="p-3 font-medium">Type</th>
                 <th className="p-3 font-medium">Price</th>
@@ -159,8 +159,8 @@ export default function AdminPropertiesPage() {
                     <span
                       className={`px-2 py-1 rounded text-xs font-medium ${
                         p.status === "For Sale"
-                          ? "bg-blue-100 text-blue-700"
-                          : "bg-green-100 text-green-700"
+                          ? "bg-(--button-primary) text-blue-700"
+                          : "bg-(--button-primary) text-green-700"
                       }`}
                     >
                       {p.status}
