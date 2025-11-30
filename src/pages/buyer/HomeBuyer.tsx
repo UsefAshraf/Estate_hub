@@ -218,6 +218,8 @@ const HomeSellerMergedPage: React.FC = () => {
 
   const handlePropertyClick = (id: number) => {
     console.log("Property:", id);
+    // navigate(`/propertydetail/${id}`);
+    navigate(`/propertydetail`);
   };
   const fadeIn = (direction = "up") => {
     const variants = {

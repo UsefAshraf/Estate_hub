@@ -184,9 +184,9 @@ function FeatureCard({
 function About() {
   return (
     <div
-      className="min-h-screen py-16 bg-primary text-primary" // Use bg-primary and text-primary
+      className="min-h-screen text-primary" // Use bg-primary and text-primary
     >
-      <div className="text-center py-10 max-w-2xl mx-auto px-4">
+      <div className="text-center py-10 max-w-3xl mx-auto px-4">
         <h1
           className="text-4xl md:text-5xl font-extrabold text-primary"
         >
@@ -311,7 +311,7 @@ function About() {
         </div>
       </div>
 
-      <div className="pt-16 pb-20 bg-primary"> {/* Use bg-primary */}
+      <div className="pt-16 pb-20"> {/* Use bg-primary */}
         <h2
           className="text-3xl font-bold text-center mb-16 text-primary"
         >

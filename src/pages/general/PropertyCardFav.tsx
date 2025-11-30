@@ -18,9 +18,10 @@ interface Props {
   property: Property;
   favorites: Set<number>;
   toggleFavorite: (id: number) => void;
+  onPropertyClick: (id: number) => void;
 }
 
-const PropertyCardFav: React.FC<Props> = ({ property, favorites, toggleFavorite }) => {
+const PropertyCardFav: React.FC<Props> = ({ property, favorites, toggleFavorite,onPropertyClick }) => {
   return (
     <div className="bg-secondary rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 group">
       <div className="relative overflow-hidden">
@@ -84,7 +85,7 @@ const PropertyCardFav: React.FC<Props> = ({ property, favorites, toggleFavorite 
             </p>
             <p className="text-xs text-secondary">{property.type}</p>
           </div>
-          <button className="bg-accent text-primary cursor-pointer px-6 py-2 rounded-lg font-medium hover:bg-accent-hover transition-colors">
+          <button onClick={() => onPropertyClick(property.id)} className="bg-accent text-primary cursor-pointer px-6 py-2 rounded-lg font-medium hover:bg-accent-hover transition-colors">
             View Details
           </button>
         </div>

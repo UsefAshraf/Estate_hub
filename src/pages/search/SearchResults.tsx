@@ -4,6 +4,7 @@ import {
   SlidersHorizontal,
 } from "lucide-react";
 import PropertyCardFav from "../general/PropertyCardFav";
+import { useNavigate } from "react-router-dom";
 
 interface Property {
   id: number;
@@ -18,6 +19,7 @@ interface Property {
   featured: boolean;
 }
 const SearchResultsPage: React.FC = () => {
+const navigate = useNavigate();
 const [searchQuery, setSearchQuery] = useState("");
   const [propertyType, setPropertyType] = useState("All");
   const [bedrooms, setBedrooms] = useState("Any");
@@ -634,7 +636,11 @@ const [searchQuery, setSearchQuery] = useState("");
   //     </section>
   //   </div>
   // );
-
+    const handlePropertyClick = (id: number) => {
+    console.log("Property:", id);
+    // navigate(`/propertydetail/${id}`);
+    navigate(`/propertydetail`);
+  };
 
    return (
     <div className="min-h-screen">
@@ -797,6 +803,7 @@ const [searchQuery, setSearchQuery] = useState("");
               property={property}
               favorites={favorites}
               toggleFavorite={toggleFavorite}
+              onPropertyClick={handlePropertyClick}
             />
           ))}
         </div>
