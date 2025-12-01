@@ -15,7 +15,7 @@ const signUpSchema = z.object({
   purpose: z.enum(["Buy/Rent a Property", "Sell a Property", "Both"]),
   password: z.string().min(6, "Password must be at least 6 characters"),
   confirmPassword: z.string().min(6, "Confirm password is required"),
-  agreeToTerms: z.literal(true, { errorMap: () => ({ message: "You must accept the terms" }) }),
+  agreeToTerms: z.boolean().refine((value) => value),
 }).refine((data) => data.password === data.confirmPassword, {
   message: "Passwords must match",
   path: ["confirmPassword"],

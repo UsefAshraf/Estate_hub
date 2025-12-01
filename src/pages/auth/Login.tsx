@@ -29,7 +29,7 @@ const SignInPage: React.FC = () => {
 
   const onSubmit = (data: SignInFormData) => {
     console.log("Form Data:", data);
-    navigate("/home-seller");
+    navigate("/homeBuyer");
   };
 
   return (

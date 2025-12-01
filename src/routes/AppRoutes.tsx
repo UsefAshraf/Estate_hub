@@ -1,6 +1,11 @@
 // src/routes/AppRoutes.tsx
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 
 // Pages
 import SignUpPage from "../pages/auth/Signup";
@@ -9,17 +14,24 @@ import ForgotPasswordPage from "../pages/auth/ForgetPassword";
 import OTPPage from "../pages/auth/OTP";
 import RenewPasswordPage from "../pages/auth/ResetPassword";
 import SuccessPage from "../pages/auth/Success";
-import { PagePaths } from "../types/pages"
+import { PagePaths } from "../types/pages";
 // import HomeSellerPage from "../pages/seller/HomeSeller";
 import HomeBuyerPage from "../pages/buyer/HomeBuyer";
 import FavouritesBuyerPage from "../pages/buyer/FavouritesBuyer";
 import SearchResultsPage from "../pages/search/SearchResults";
 import AuthLayout from "../Layouts/AuthLayout";
-import MainLayout from "../Layouts/SellerLayout";
+
 import BuyerLayout from "../Layouts/BuyerLayout";
-import HomeSellerPage from "../pages/buyer/HomeBuyer";
+import HomeSellerPage from "../pages/seller/HomeSeller";
 import SellerLayout from "../Layouts/SellerLayout";
 import AdminLayout from "@/Layouts/AdminLayout";
+import Propertydetail from "@/components/Propertydetail/propertydetail";
+import UserManagement from "@/pages/admin/usermanagement";
+import PaymentPage from "@/pages/buyer/payment";
+import PaymentSuccessPage from "@/pages/buyer/confirmpayment";
+import About from "@/pages/general/AboutUs";
+import Contact from "@/pages/general/ContactUs";
+import NotFoundPage from "@/pages/general/NotFound";
 import Profile from "../pages/general/profilepages/ProfilePage";         
 import FavoritesPage from "../pages/general/profilepages/FavoritesPage";
 import VisitsPage from "../pages/general/profilepages/VisitsPage";
@@ -41,21 +53,27 @@ const AppRoutes: React.FC = () => {
           <Route path={PagePaths.renew} element={<RenewPasswordPage />} />
           <Route path={PagePaths.success} element={<SuccessPage />} />
         </Route>
-        
+
         <Route element={<BuyerLayout />}>
-          <Route path="/home" element={<HomeBuyerPage />} />
-          <Route path="/search" element={<SearchResultsPage />} />
-          <Route path="/favorites" element={<FavouritesBuyerPage />} />
+          <Route path="/homeBuyer" element={<HomeBuyerPage />} />
+          <Route path="/searchBuyer" element={<SearchResultsPage />} />
+          <Route path="/propertydetailBuyer" element={<Propertydetail />} />
+          <Route path="/aboutBuyer" element={<About />} />
+          <Route path="/contactBuyer" element={<Contact />} />
+          <Route path="/favoritesBuyer" element={<FavouritesBuyerPage />} />
+          <Route path="/paymentBuyer" element={<PaymentPage />} />
+          <Route path="/confirmPayment" element={<PaymentSuccessPage />} />
         </Route>
 
         <Route element={<SellerLayout />}>
           <Route path="/homeSeller" element={<HomeSellerPage />} />
+          <Route path="/aboutSeller" element={<About />} />
+          <Route path="/contactSeller" element={<Contact />} />
         </Route>
-        
-        <Route element={<AdminLayout />}>
-          <Route path="/users" element={<HomeSellerPage />} />
-          <Route path="/departments" element={<HomeSellerPage />} />
 
+        <Route element={<AdminLayout />}>
+          <Route path="/users" element={<UserManagement />} />
+          <Route path="/departments" element={<HomeSellerPage />} />
         </Route>
         
 
@@ -72,10 +90,10 @@ const AppRoutes: React.FC = () => {
   </Route>
 
         {/* Redirect root to home */}
-        <Route path="/" element={<Navigate to="/home" replace />} />
+        <Route path="/" element={<Navigate to="/homeBuyer" replace />} />
 
         {/* Catch all 404 */}
-        <Route path="*" element={<h1>404 - Page Not Found</h1>} />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </Router>
   );

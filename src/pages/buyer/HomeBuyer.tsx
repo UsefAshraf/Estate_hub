@@ -4,15 +4,18 @@ import {
   MapPin,
   Bed,
   Square,
-  Cpu,
-  Monitor,
-  Music,
   Home,
   Calendar,
   Key,
   ArrowRight,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import StepCard from "../general/StepCard";
+import CityCard from "../general/CityCard";
+import CompanyCard from "../general/CompanyCard";
+import PropertyCard from "../general/PropertyCard";
+import MapSearch from "../general/MapSearch";
 
 // Bath icon component
 const Bath: React.FC<{ className?: string }> = ({ className }) => (
@@ -39,6 +42,8 @@ const HomeSellerMergedPage: React.FC = () => {
   const [selectedPropertyType, setSelectedPropertyType] =
     useState("All Properties");
   const [featuredFilter, setFeaturedFilter] = useState("All Properties");
+  //////////
+  const [mapSearchQuery, setMapSearchQuery] = useState("");
 
   // ------- Featured Properties -------
   const featuredProperties = [
@@ -187,6 +192,22 @@ const HomeSellerMergedPage: React.FC = () => {
     if (e.key === "Enter") handleSearchClick();
   };
 
+  // Add this handler function
+  const handleMapAreaClick = (
+    coordinates: [number, number],
+    address: string
+  ) => {
+    console.log("Selected coordinates:", coordinates);
+    console.log("Selected address:", address);
+
+    // Navigate to search with location
+    navigate(
+      `/search?location=${encodeURIComponent(
+        address
+      )}&coords=${coordinates.join(",")}`
+    );
+  };
+
   const handlePropertyTypeClick = (type: string) => {
     setSelectedPropertyType(type);
     const query = searchInput.trim()
@@ -197,7 +218,50 @@ const HomeSellerMergedPage: React.FC = () => {
 
   const handlePropertyClick = (id: number) => {
     console.log("Property:", id);
+    // navigate(`/propertydetail/${id}`);
+    navigate(`/propertydetailBuyer`);
   };
+  const fadeIn = (direction = "up") => {
+    const variants = {
+      hidden: {
+        opacity: 0,
+        x: direction === "left" ? -100 : direction === "right" ? 100 : 0,
+        y: direction === "up" ? 100 : direction === "down" ? -100 : 0,
+      },
+      show: {
+        opacity: 1,
+        x: 0,
+        y: 0,
+        transition: { duration: 0.8, ease: "easeOut" },
+      },
+    };
+    return variants;
+  };
+
+  // Sample properties with coordinates for the map
+  const propertiesWithCoords = [
+    {
+      id: 1,
+      lat: 40.7589,
+      lon: -73.9851,
+      title: "Luxury Family Home",
+      price: "$395,000",
+    },
+    {
+      id: 2,
+      lat: 40.7128,
+      lon: -74.006,
+      title: "Skyper Pool Apartment",
+      price: "$280,000",
+    },
+    {
+      id: 3,
+      lat: 40.7614,
+      lon: -73.9776,
+      title: "North Dillard Street",
+      price: "$250",
+    },
+  ];
 
   // ------- Cities Section Data -------
   const cities = [
@@ -285,69 +349,17 @@ const HomeSellerMergedPage: React.FC = () => {
   const handleViewAllClick = () => {
     console.log("View All Cities clicked");
   };
-
   return (
     <>
-      {/* ================= HERO SEARCH SECTION ================= */}
-      {/* <section
-        className="bg-cover bg-center bg-no-repeat py-20 h-[90vh]"
-        style={{ backgroundImage: "url('./src/assets/homeBuyer.png')" }}
-      >
-        <div className="max-w-7xl mx-auto px-6 text-center rounded-lg p-6 pt-20">
-          <button className="px-4 py-1 border border-custom rounded-full text-sm mb-4 btn-primary hover:bg-accent-hover transition">
-            LET US GUIDE YOUR HOME
-          </button>
-
-          <p className="text-secondary mb-2">
-            We've more than 745,000 apartments, place & plot.
-          </p>
-
-          <h1 className="text-4xl md:text-5xl font-bold text-primary mb-6">
-            Find Your Perfect Home
-          </h1>
-
-          <div className="flex justify-center mb-6">
-            <div className="relative w-full max-w-xl">
-              <input
-                type="text"
-                placeholder="Enter Name, Keywords..."
-                value={searchInput}
-                onChange={(e) => setSearchInput(e.target.value)}
-                onKeyPress={handleKeyPress}
-                className="w-full rounded-full border border-custom py-3 px-6 shadow-sm focus:ring-2 focus:ring-accent bg-secondary text-primary"
-              />
-              <button
-                onClick={handleSearchClick}
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-accent p-3 rounded-full hover:bg-accent-hover transition"
-              >
-                <Search className="w-5 h-5 text-primary" />
-              </button>
-            </div>
-          </div>
-
-          <div className="flex justify-center gap-4">
-            {["All Properties", "For Sale", "For Rent"].map((t) => (
-              <button
-                key={t}
-                onClick={() => handlePropertyTypeClick(t)}
-                className={`px-4 py-2 border cursor-pointer border-custom rounded-full hover:bg-accent-hover transition ${
-                  selectedPropertyType === t ? "bg-accent" : "btn-primary"
-                }`}
-              >
-                {t}
-              </button>
-            ))}
-          </div>
-        </div>
-      </section> */}
-      <section
+      <motion.section
+        variants={fadeIn("up")}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true }}
         className="relative bg-cover bg-center bg-no-repeat py-20 h-[90vh]
-             bg-[url('./src/assets/homebuyer.png')] 
-             dark:bg-[url('./src/assets/darkbg.png')]"
+        bg-[url('./src/assets/homebuyer.png')] 
+        dark:bg-[url('./src/assets/darkbg.png')]"
       >
-        {/* Overlay */}
-        <div className="absolute inset-0 dark:bg-black/70 transition-colors"></div>
-
         <div className="relative max-w-7xl mx-auto px-6 text-center rounded-lg p-6 pt-20">
           <button className="px-4 py-1 border border-custom rounded-full text-sm mb-4 btn-primary hover:bg-accent-hover transition">
             LET US GUIDE YOUR HOME
@@ -394,10 +406,18 @@ const HomeSellerMergedPage: React.FC = () => {
             ))}
           </div>
         </div>
-      </section>
+        {/* </section> */}
+      </motion.section>
 
       {/* ================= STEPS SECTION ================= */}
-      <section className="bg-primary py-20">
+      <motion.section
+        variants={fadeIn("left")}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true }}
+        className="bg-primary py-20"
+      >
+        {/* <section className="bg-primary py-20"> */}
         <div className="max-w-7xl mx-auto px-6 text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">
             Find Your Dream House as Easy as 1,2,3
@@ -407,47 +427,40 @@ const HomeSellerMergedPage: React.FC = () => {
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-16">
-            <div className="flex flex-col items-center">
-              <div className="bg-accent rounded-full p-6 mb-6 w-20 h-20 flex items-center justify-center">
-                <Home className="w-8 h-8 text-primary" />
-              </div>
-              <h3 className="text-lg font-semibold text-primary mb-4">
-                1. Search for your favorite house
-              </h3>
-              <p className="text-secondary text-sm leading-relaxed max-w-xs">
-                Pellentesque egestas elementum.
-              </p>
-            </div>
+            <StepCard
+              icon={<Home className="w-8 h-8 text-primary" />}
+              title="1. Search for your favorite house"
+              description="Pellentesque egestas elementum."
+              direction="left"
+            />
 
-            <div className="flex flex-col items-center">
-              <div className="bg-accent rounded-full p-6 mb-6 w-20 h-20 flex items-center justify-center">
-                <Calendar className="w-8 h-8 text-primary" />
-              </div>
-              <h3 className="text-lg font-semibold text-primary mb-4">
-                2. Make a visit appointment
-              </h3>
-              <p className="text-secondary text-sm leading-relaxed max-w-xs">
-                Pellentesque egestas elementum.
-              </p>
-            </div>
+            <StepCard
+              icon={<Calendar className="w-8 h-8 text-primary" />}
+              title="2. Make a visit appointment"
+              description="Pellentesque egestas elementum."
+              direction="bottom"
+            />
 
-            <div className="flex flex-col items-center">
-              <div className="bg-accent rounded-full p-6 mb-6 w-20 h-20 flex items-center justify-center">
-                <Key className="w-8 h-8 text-primary" />
-              </div>
-              <h3 className="text-lg font-semibold text-primary mb-4">
-                3. Get your dream house quickly
-              </h3>
-              <p className="text-secondary text-sm leading-relaxed max-w-xs">
-                Pellentesque egestas elementum.
-              </p>
-            </div>
+            <StepCard
+              icon={<Key className="w-8 h-8 text-primary" />}
+              title="3. Get your dream house quickly"
+              description="Pellentesque egestas elementum."
+              direction="right"
+            />
           </div>
         </div>
-      </section>
+        {/* </section> */}
+      </motion.section>
 
       {/* ================= CITIES SECTION (MERGED) ================= */}
-      <section className="py-20">
+      <motion.section
+        variants={fadeIn("right")}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true }}
+        className="py-20"
+      >
+        {/* <section className="py-20"> */}
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex justify-between items-start mb-12">
             <div>
@@ -470,38 +483,27 @@ const HomeSellerMergedPage: React.FC = () => {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
             {cities.map((city) => (
-              <div
+              <CityCard
                 key={city.id}
+                name={city.name}
+                image={city.image}
+                properties={city.properties}
                 onClick={() => handleCityClick(city.name)}
-                className="bg-secondary rounded-xl p-4 hover:shadow-lg transition-all cursor-pointer group"
-              >
-                <div className="flex items-center gap-4">
-                  <div className="w-14 h-14 rounded-lg overflow-hidden flex-shrink-0">
-                    <img
-                      src={city.image}
-                      alt={city.name}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                    />
-                  </div>
-
-                  <div className="flex-1 min-w-0">
-                    <h3 className="text-base font-semibold text-primary truncate">
-                      {city.name}
-                    </h3>
-                    <p className="text-sm text-secondary">
-                      {city.properties}{" "}
-                      {city.properties === 1 ? "Property" : "Properties"}
-                    </p>
-                  </div>
-                </div>
-              </div>
+              />
             ))}
           </div>
         </div>
-      </section>
+        {/* </section> */}
+      </motion.section>
       {/* ================= COMPANY LOGOS ================= */}
-
-      <section className="bg-secondary py-16 border-y border-custom">
+      <motion.section
+        variants={fadeIn("up")}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true }}
+        className="bg-secondary py-16 border-y border-custom"
+      >
+        {/* <section className="bg-secondary py-16 border-y border-custom"> */}
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-12">
             <p className="text-2xl text-secondary font-medium tracking-wide">
@@ -511,145 +513,61 @@ const HomeSellerMergedPage: React.FC = () => {
               Thousands of world's leading companies trust our platform
             </p>
           </div>
-
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center">
             {companies.map((company) => (
-              <div
+              <CompanyCard
                 key={company.id}
-                className="flex items-center justify-center p-4 grayscale hover:grayscale-0 opacity-60 hover:opacity-100 transition-all duration-300"
-              >
-                <img
-                  src={company.logo}
-                  alt={`${company.name} logo`}
-                  className="h-8 w-auto object-contain filter dark:invert"
-                  loading="lazy"
-                />
-              </div>
+                logo={company.logo}
+                name={company.name}
+              />
             ))}
           </div>
         </div>
-      </section>
-      {/* <section
-        className="bg-cover bg-center py-16 bg-secondary"
-        style={{
-          backgroundImage:
-            "url('/mnt/data/6e420e8b-f118-48de-b3ae-7f92f6c49269.png')",
-        }}
+      </motion.section>
+
+      <motion.section
+        variants={fadeIn("up")}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true }}
+        className="py-20"
       >
-        <div className="max-w-7xl mx-auto px-6 text-center text-primary">
-          <p className="mb-8 text-sm">
-            Thousands of world's leading companies trust Space
-          </p>
-          <div className="flex flex-wrap justify-center items-center gap-10">
-            <Cpu className="h-10 w-10" />
-            <Monitor className="h-10 w-10" />
-            <Music className="h-10 w-10" />
-          </div>
-        </div>
-      </section> */}
-
-      {/* ================= FEATURED PROPERTIES ================= */}
-      {/* <section className="py-20">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-4">
-            <div>
-              <h2 className="text-3xl md:text-4xl font-bold text-primary mb-2">
-                Featured Properties
-              </h2>
-              <p className="text-secondary">Lorem ipsum dolor sit amet.</p>
-            </div>
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-primary mb-2">
+              Explore Properties by Location
+            </h2>
+            <p className="text-secondary">
+              Click anywhere on the map to search for properties in that area
+            </p>
+          </div>
 
-            <div className="flex gap-2">
-              {["All Properties", "For Sale", "For Rent"].map((t) => (
-                <button
-                  key={t}
-                  onClick={() => setFeaturedFilter(t)}
-                  className={`px-4 py-2 border border-custom rounded-full cursor-pointer text-sm transition ${
-                    featuredFilter === t
-                      ? "bg-accent text-primary"
-                      : "btn-primary hover:bg-accent hover:text-primary"
-                  }`}
-                >
-                  {t}
-                </button>
-              ))}
+          <div className="bg-primary rounded-2xl overflow-hidden shadow-lg p-4">
+            <div className="h-[600px] w-full">
+              <MapSearch
+                onAreaClick={handleMapAreaClick}
+                properties={propertiesWithCoords}
+              />
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredProperties.map((property) => (
-              <div
-                key={property.id}
-                onClick={() => handlePropertyClick(property.id)}
-                className="bg-primary rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-all cursor-pointer"
-              >
-                <div className="relative h-56">
-                  <img
-                    src={property.image}
-                    alt={property.title}
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute top-4 left-4 flex gap-2">
-                    {property.tags.map((tag, idx) => (
-                      <span
-                        key={idx}
-                        className={`px-3 py-1 text-xs font-semibold rounded ${
-                          tag === "FEATURED"
-                            ? "bg-accent text-primary"
-                            : tag === "FOR SALE"
-                            ? "bg-green-600 text-white"
-                            : "bg-blue-600 text-white"
-                        }`}
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="p-6">
-                  <div className="flex justify-between items-start mb-3">
-                    <h3 className="text-lg font-semibold text-primary">
-                      {property.title}
-                    </h3>
-                    <span className="text-xl font-bold text-red-500">
-                      {property.price}
-                      {property.priceType === "rent" && (
-                        <span className="text-sm text-secondary">/month</span>
-                      )}
-                    </span>
-                  </div>
-
-                  <p className="text-secondary text-sm mb-4 flex items-center">
-                    <MapPin className="w-4 h-4 mr-1" />
-                    {property.address}
-                  </p>
-
-                  <div className="flex items-center gap-4 text-sm text-secondary border-t border-custom pt-4">
-                    <div className="flex items-center gap-1">
-                      <Bed className="w-4 h-4" />
-                      <span>{property.beds} Beds</span>
-                    </div>
-
-                    <div className="flex items-center gap-1">
-                      <Bath className="w-4 h-4" />
-                      <span>{property.baths} Baths</span>
-                    </div>
-
-                    <div className="flex items-center gap-1">
-                      <Square className="w-4 h-4" />
-                      <span>{property.sqft} sqft</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
+          <div className="mt-8 text-center">
+            <p className="text-sm text-secondary">
+              💡 Tip: Click on any location to see available properties nearby
+            </p>
           </div>
         </div>
-      </section> */}
+      </motion.section>
 
       {/* ================= FEATURED PROPERTIES ================= */}
-      <section className="py-20">
+      <motion.section
+        variants={fadeIn("up")}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true }}
+        className="py-20"
+      >
+        {/* <section className="py-20"> */}
         <div className="max-w-7xl mx-auto px-6">
           {/* Header */}
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-4">
@@ -680,7 +598,7 @@ const HomeSellerMergedPage: React.FC = () => {
           </div>
 
           {/* Property Cards Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredProperties.map((property) => (
               <div
                 key={property.id}
@@ -748,9 +666,28 @@ const HomeSellerMergedPage: React.FC = () => {
                 </div>
               </div>
             ))}
+          </div> */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredProperties.map((property) => (
+              <PropertyCard
+                key={property.id}
+                id={property.id}
+                image={property.image}
+                title={property.title}
+                price={property.price}
+                priceType={property.priceType}
+                address={property.address}
+                beds={property.beds}
+                baths={property.baths}
+                sqft={property.sqft}
+                tags={property.tags}
+                onClick={() => handlePropertyClick(property.id)}
+              />
+            ))}
           </div>
         </div>
-      </section>
+        {/* </section> */}
+      </motion.section>
     </>
   );
 };

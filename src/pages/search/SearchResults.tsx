@@ -2,169 +2,30 @@ import React, { useState } from "react";
 import {
   Search,
   SlidersHorizontal,
-  MapPin,
-  Bed,
-  Bath,
-  Square,
-  Heart,
 } from "lucide-react";
+import PropertyCardFav from "../general/PropertyCardFav";
+import { useNavigate } from "react-router-dom";
 
+interface Property {
+  id: number;
+  image: string;
+  title: string;
+  location: string;
+  price: number;
+  bedrooms: number;
+  bathrooms: number;
+  sqft: number;
+  type: string;
+  featured: boolean;
+}
 const SearchResultsPage: React.FC = () => {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [priceRange, setPriceRange] = useState([0, 5000000]);
+const navigate = useNavigate();
+const [searchQuery, setSearchQuery] = useState("");
   const [propertyType, setPropertyType] = useState("All");
   const [bedrooms, setBedrooms] = useState("Any");
   const [showFilters, setShowFilters] = useState(false);
   const [viewType, setViewType] = useState<"grid" | "list">("grid");
   const [favorites, setFavorites] = useState<Set<number>>(new Set());
-
-  // Sample property data
-  // const properties = [
-  //   {
-  //     id: 1,
-  //     image: "./property-1.jpg",
-  //     title: "Modern Family Home",
-  //     location: "Beverly Hills, California",
-  //     price: 2500000,
-  //     bedrooms: 4,
-  //     bathrooms: 3,
-  //     sqft: 3500,
-  //     type: "House",
-  //     featured: true
-  //   },
-  //   {
-  //     id: 2,
-  //     image: "./property-2.jpg",
-  //     title: "Luxury Downtown Apartment",
-  //     location: "San Francisco, California",
-  //     price: 1850000,
-  //     bedrooms: 3,
-  //     bathrooms: 2,
-  //     sqft: 2200,
-  //     type: "Apartment",
-  //     featured: false
-  //   },
-  //   {
-  //     id: 3,
-  //     image: "./property-3.jpg",
-  //     title: "Beachfront Villa",
-  //     location: "Miami, Florida",
-  //     price: 4200000,
-  //     bedrooms: 5,
-  //     bathrooms: 4,
-  //     sqft: 4800,
-  //     type: "Villa",
-  //     featured: true
-  //   },
-  //   {
-  //     id: 4,
-  //     image: "./property-4.jpg",
-  //     title: "Cozy Studio Loft",
-  //     location: "New York, New York",
-  //     price: 650000,
-  //     bedrooms: 1,
-  //     bathrooms: 1,
-  //     sqft: 800,
-  //     type: "Apartment",
-  //     featured: false
-  //   },
-  //   {
-  //     id: 5,
-  //     image: "./property-5.jpg",
-  //     title: "Mountain View Retreat",
-  //     location: "Aspen, Colorado",
-  //     price: 3700000,
-  //     bedrooms: 6,
-  //     bathrooms: 5,
-  //     sqft: 5200,
-  //     type: "House",
-  //     featured: true
-  //   },
-  //   {
-  //     id: 6,
-  //     image: "./property-6.jpg",
-  //     title: "Urban Townhouse",
-  //     location: "Chicago, Illinois",
-  //     price: 1200000,
-  //     bedrooms: 3,
-  //     bathrooms: 2.5,
-  //     sqft: 2800,
-  //     type: "Townhouse",
-  //     featured: false
-  //   },
-  //   {
-  //     id: 7,
-  //     image: "./property-7.jpg",
-  //     title: "Contemporary Penthouse",
-  //     location: "Los Angeles, California",
-  //     price: 5800000,
-  //     bedrooms: 4,
-  //     bathrooms: 4,
-  //     sqft: 4200,
-  //     type: "Penthouse",
-  //     featured: true
-  //   },
-  //   {
-  //     id: 8,
-  //     image: "./property-8.jpg",
-  //     title: "Suburban Family Home",
-  //     location: "Austin, Texas",
-  //     price: 850000,
-  //     bedrooms: 4,
-  //     bathrooms: 3,
-  //     sqft: 3200,
-  //     type: "House",
-  //     featured: false
-  //   },
-  //   {
-  //     id: 9,
-  //     image: "./property-9.jpg",
-  //     title: "Waterfront Condo",
-  //     location: "Seattle, Washington",
-  //     price: 1450000,
-  //     bedrooms: 2,
-  //     bathrooms: 2,
-  //     sqft: 1800,
-  //     type: "Condo",
-  //     featured: false
-  //   },
-  //   {
-  //     id: 10,
-  //     image: "./property-10.jpg",
-  //     title: "Historic Brownstone",
-  //     location: "Boston, Massachusetts",
-  //     price: 2100000,
-  //     bedrooms: 5,
-  //     bathrooms: 3,
-  //     sqft: 3800,
-  //     type: "House",
-  //     featured: true
-  //   },
-  //   {
-  //     id: 11,
-  //     image: "./property-11.jpg",
-  //     title: "Desert Oasis Estate",
-  //     location: "Phoenix, Arizona",
-  //     price: 3200000,
-  //     bedrooms: 5,
-  //     bathrooms: 4,
-  //     sqft: 4500,
-  //     type: "Estate",
-  //     featured: false
-  //   },
-  //   {
-  //     id: 12,
-  //     image: "./property-12.jpg",
-  //     title: "Garden View Apartment",
-  //     location: "Portland, Oregon",
-  //     price: 720000,
-  //     bedrooms: 2,
-  //     bathrooms: 2,
-  //     sqft: 1400,
-  //     type: "Apartment",
-  //     featured: false
-  //   }
-  // ];
 
   const properties = [
     {
@@ -336,80 +197,13 @@ const SearchResultsPage: React.FC = () => {
     });
   };
 
-  const PropertyCard = ({ property }: { property: (typeof properties)[0] }) => (
-    <div className="bg-secondary rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 group">
-      <div className="relative overflow-hidden">
-        <div className="w-full h-64 bg-gradient-to-br from-accent/20 to-accent/40 flex items-center justify-center">
-          <img
-            src={property.image}
-            alt={property.title}
-            className="w-full h-64 object-cover"
-          />
-        </div>
+    const handlePropertyClick = (id: number) => {
+    console.log("Property:", id);
+    // navigate(`/propertydetail/${id}`);
+    navigate(`/propertydetailBuyer`);
+  };
 
-        {property.featured && (
-          <div className="absolute top-4 left-4 bg-accent text-primary px-3 py-1 rounded-full text-xs font-semibold">
-            Featured
-          </div>
-        )}
-
-        <button
-          onClick={() => toggleFavorite(property.id)}
-          className="absolute top-4 right-4 bg-primary/10 backdrop-blur-sm p-2 rounded-full cursor-pointer transition-colors"
-        >
-          <Heart
-            className={`w-5 h-5 ${
-              favorites.has(property.id)
-                ? "fill-red-500 text-red-500"
-                : "text-secondary"
-            }`}
-          />
-        </button>
-
-        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4">
-          <div className="flex items-center space-x-1 text-white">
-            <MapPin className="w-4 h-4" />
-            <span className="text-sm font-medium">{property.location}</span>
-          </div>
-        </div>
-      </div>
-
-      <div className="p-6">
-        <h3 className="text-xl font-bold text-primary mb-4 transition-colors">
-          {property.title}
-        </h3>
-
-        <div className="flex items-center justify-between mb-4 text-sm text-secondary">
-          <div className="flex items-center space-x-1">
-            <Bed className="w-4 h-4" />
-            <span>{property.bedrooms} Beds</span>
-          </div>
-          <div className="flex items-center space-x-1">
-            <Bath className="w-4 h-4" />
-            <span>{property.bathrooms} Baths</span>
-          </div>
-          <div className="flex items-center space-x-1">
-            <Square className="w-4 h-4" />
-            <span>{property.sqft.toLocaleString()} sq ft</span>
-          </div>
-        </div>
-
-        <div className="flex items-center justify-between pt-4 border-t border-custom">
-          <div>
-            <p className="text-2xl font-bold text-primary">
-              ${(property.price / 1000000).toFixed(2)}M
-            </p>
-            <p className="text-xs text-secondary">{property.type}</p>
-          </div>
-          <button className="bg-accent text-primary cursor-pointer px-6 py-2 rounded-lg font-medium hover:bg-accent-hover transition-colors">
-            View Details
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-
-  return (
+   return (
     <div className="min-h-screen">
       {/* Header Search Bar */}
       <section className="bg-secondary border-b border-custom sticky top-0 z-50 shadow-sm">
@@ -558,14 +352,20 @@ const SearchResultsPage: React.FC = () => {
 
         {/* Property Grid */}
         <div
-          className={`grid ${
+          className={`grid gap-8 ${
             viewType === "grid"
               ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
               : "grid-cols-1"
-          } gap-8`}
+          }`}
         >
           {properties.map((property) => (
-            <PropertyCard key={property.id} property={property} />
+            <PropertyCardFav
+              key={property.id}
+              property={property}
+              favorites={favorites}
+              toggleFavorite={toggleFavorite}
+              onPropertyClick={handlePropertyClick}
+            />
           ))}
         </div>
 
@@ -582,12 +382,11 @@ const SearchResultsPage: React.FC = () => {
               {[1, 2, 3, 4, 5].map((n) => (
                 <li key={n}>
                   <button
-                    className={`flex items-center justify-center border cursor-pointer border-custom text-sm w-10 h-10 transition 
-              ${
-                n === 3
-                  ? "text-accent bg-secondary font-semibold"
-                  : "text-secondary bg-secondary hover:bg-accent-hover hover:text-primary"
-              }`}
+                    className={`flex items-center justify-center border cursor-pointer border-custom text-sm w-10 h-10 transition ${
+                      n === 3
+                        ? "text-accent bg-secondary font-semibold"
+                        : "text-secondary bg-secondary hover:bg-accent-hover hover:text-primary"
+                    }`}
                   >
                     {n}
                   </button>
