@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import type { RootState } from "src/redux/store";
+import type { RootState } from "@/redux/store/store";
 import { Link } from "react-router-dom";
 
 import { User, Mail, Phone, MapPin, Settings } from "lucide-react";

@@ -27,6 +27,7 @@ import SellerLayout from "../Layouts/SellerLayout";
 import AdminLayout from "@/Layouts/AdminLayout";
 import Propertydetail from "@/components/Propertydetail/propertydetail";
 import UserManagement from "@/pages/admin/usermanagement";
+import AdminPropertiesPage from "@/pages/admin/AdminPropPage";
 import PaymentPage from "@/pages/buyer/payment";
 import PaymentSuccessPage from "@/pages/buyer/confirmpayment";
 import About from "@/pages/general/AboutUs";
@@ -73,6 +74,12 @@ const AppRoutes: React.FC = () => {
 
         <Route element={<AdminLayout />}>
           <Route path="/users" element={<UserManagement />} />
+          <Route path="/departments" element={<HomeSellerPage />} />
+        </Route>
+
+        <Route element={<AdminLayout />}>
+          <Route path="/users" element={<UserManagement />} />
+          <Route path="/properties" element={<AdminPropertiesPage />} />
           <Route path="/departments" element={<HomeSellerPage />} />
         </Route>
         
