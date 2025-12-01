@@ -33,13 +33,12 @@ import PaymentSuccessPage from "@/pages/buyer/confirmpayment";
 import About from "@/pages/general/AboutUs";
 import Contact from "@/pages/general/ContactUs";
 import NotFoundPage from "@/pages/general/NotFound";
-import Profile from "../pages/general/profilepages/ProfilePage";         
+import Profile from "../pages/general/profilepages/ProfilePage";
 import FavoritesPage from "../pages/general/profilepages/FavoritesPage";
 import VisitsPage from "../pages/general/profilepages/VisitsPage";
 import HistoryPage from "../pages/general/profilepages//HistoryPage";
 import EditProfile from "../pages/general/profilepages/EditPage";
 import ProfileLayout from "../pages/general/ProfileLayout";
-
 
 const AppRoutes: React.FC = () => {
   return (
@@ -74,27 +73,20 @@ const AppRoutes: React.FC = () => {
 
         <Route element={<AdminLayout />}>
           <Route path="/users" element={<UserManagement />} />
-          <Route path="/departments" element={<HomeSellerPage />} />
-        </Route>
-
-        <Route element={<AdminLayout />}>
-          <Route path="/users" element={<UserManagement />} />
           <Route path="/properties" element={<AdminPropertiesPage />} />
           <Route path="/departments" element={<HomeSellerPage />} />
+          <Route path="/profile" element={<ProfileLayout />}>
+            <Route index element={<Profile />} />
+            <Route path="favorites" element={<FavoritesPage />} />
+            <Route path="visits" element={<VisitsPage />} />
+            <Route path="history" element={<HistoryPage />} />
+            <Route path="edit" element={<EditProfile />} />
+          </Route>
         </Route>
-        
-
 
         {/* General */}
-  
-  {/* Profile + nested routes */}
-  <Route path="/profile" element={<ProfileLayout/>}>
-    <Route index element={<Profile/>} />
-    <Route path="favorites" element={<FavoritesPage />} />
-    <Route path="visits" element={<VisitsPage />} />
-    <Route path="history" element={<HistoryPage />} />              
-    <Route path="edit" element={<EditProfile />} />     
-  </Route>
+
+        {/* Profile + nested routes */}
 
         {/* Redirect root to home */}
         <Route path="/" element={<Navigate to="/homeBuyer" replace />} />
