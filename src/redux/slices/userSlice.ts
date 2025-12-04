@@ -8,7 +8,7 @@ interface UserState {
   email: string;
   phone: string;
   location: string;
-  avatar: string;
+  imag: string;
 };
 
 const initialState: UserState = {
@@ -16,7 +16,7 @@ const initialState: UserState = {
   email: "",
   phone: "",
   location: "",
-  avatar: "",
+  imag: "",
 };
 
 export const userSlice = createSlice({

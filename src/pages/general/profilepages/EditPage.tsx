@@ -10,7 +10,7 @@ interface FormValues {
   email: string;
   phone: string;
   location: string;
-  avatar?: FileList;
+  imag?: FileList;
 }
 
 const EditProfile: React.FC = () => {
@@ -19,7 +19,7 @@ const EditProfile: React.FC = () => {
 
   const user = useSelector((state: RootState) => state.user);
 
-  const [preview, setPreview] = useState<string | undefined>(user.avatar);
+  const [preview, setPreview] = useState<string | undefined>(user.imag);
 
   const {
     register,
@@ -36,10 +36,10 @@ const EditProfile: React.FC = () => {
     mode: "onSubmit",
   });
 
-  // Avatar preview
+  // imag preview
   useEffect(() => {
     const subscription = watch((values) => {
-      const fileList = values.avatar;
+      const fileList = values.imag;
       if (fileList && fileList.length > 0) {
         const file = fileList[0];
         const reader = new FileReader();
@@ -51,7 +51,7 @@ const EditProfile: React.FC = () => {
   }, [watch]);
 
   const onSubmit = (data: FormValues) => {
-    const updatedData = { ...data, avatar: preview }; // Save base64 string to Redux
+    const updatedData = { ...data, imag: preview }; // Save base64 string to Redux
     dispatch(updateUser(updatedData));
     navigate("/profile");
   };
@@ -63,7 +63,7 @@ const EditProfile: React.FC = () => {
     >
       <h2 className="text-2xl font-semibold mb-6">Edit Profile</h2>
 
-      {/* Avatar */}
+      {/* imag */}
       <div className="flex flex-col items-center mb-6">
         <div
           className="w-32 h-32 rounded-full overflow-hidden flex items-center justify-center shadow-md mb-4"
@@ -82,7 +82,7 @@ const EditProfile: React.FC = () => {
         <input
           type="file"
           accept="image/*"
-          {...register("avatar")}
+          {...register("imag")}
           className="text-sm text-gray-700 hover:cursor-pointer hover:text-blue-500"
         />
       </div>
@@ -196,7 +196,7 @@ export default EditProfile;
 //   email: string;
 //   phone: string;
 //   location: string;
-//   avatar?: FileList;
+//   imag?: FileList;
 // }
 
 // const EditProfile: React.FC = () => {
@@ -204,7 +204,7 @@ export default EditProfile;
 //   const navigate = useNavigate();
 
 //   const user = useSelector((state: RootState) => state.user);
-//   const [preview, setPreview] = useState<string | undefined>(user.avatar);
+//   const [preview, setPreview] = useState<string | undefined>(user.imag);
 //   const {
 //     register,
 //     handleSubmit,
@@ -220,11 +220,11 @@ export default EditProfile;
 //     mode: "onSubmit",
 //   });
 
-//   //const file = watch("avatar") as unknown as FileList;
+//   //const file = watch("imag") as unknown as FileList;
 //   useEffect(() => {
 //     const subscription = watch((values) => {
-//         if (values.avatar && values.avatar.length > 0) {
-//         const file = values.avatar[0]; 
+//         if (values.imag && values.imag.length > 0) {
+//         const file = values.imag[0]; 
 //       const reader = new FileReader();
 //       reader.onloadend = () => {
 //         setPreview(reader.result as string);
@@ -235,8 +235,8 @@ export default EditProfile;
 //     return () => subscription.unsubscribe();
 //   }, [watch]);
 
-//   const onSubmit = (data: FormValues & { avatar?: FileList }) => {
-//     const updatedData = { ...data, avatar: preview }; // save base64 to Redux
+//   const onSubmit = (data: FormValues & { imag?: FileList }) => {
+//     const updatedData = { ...data, imag: preview }; // save base64 to Redux
 //     dispatch(updateUser(updatedData));
 //     navigate("/profile");
 //   };
@@ -258,7 +258,7 @@ export default EditProfile;
 //         <input
 //           type="file"
 //           accept="image/*"
-//           {...register("avatar")}
+//           {...register("imag")}
 //           className="text-sm text-gray-700 hover:cursor-pointer hover:text-blue-500"
 //         />
 //       </div>

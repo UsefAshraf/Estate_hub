@@ -31,7 +31,7 @@ interface Agent {
   title: string;
   phone: string;
   email: string;
-  avatar: string;
+  imag: string;
 }
 
 interface PropertyData {
@@ -105,7 +105,7 @@ const Propertydetail: React.FC = () => {
       title: "Real Estate Agent",
       phone: "+1 (555) 123-4567",
       email: "sarah.johnson@estatehub.com",
-      avatar:
+      imag:
         "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop",
     },
   };
@@ -380,7 +380,7 @@ const Propertydetail: React.FC = () => {
 
               <div className="flex items-center space-x-4 mb-6">
                 <img
-                  src={propertyData.agent.avatar}
+                  src={propertyData.agent.imag}
                   alt={propertyData.agent.name}
                   className="w-16 h-16 rounded-full object-cover"
                 />

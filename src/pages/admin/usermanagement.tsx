@@ -5,7 +5,7 @@ import Swal from 'sweetalert2';
 interface User {
   id: string;
   name: string;
-  avatar: string;
+  imag: string;
   email: string;
   phone: string;
   role: 'user' | 'agent' | 'admin';
@@ -36,7 +36,7 @@ const UserManagement: React.FC = () => {
     {
       id: 'JD',
       name: 'John Doe',
-      avatar: '1',
+      imag: '1',
       email: 'john.doe@example.com',
       phone: '+1 (555) 111-2222',
       role: 'user',
@@ -46,7 +46,7 @@ const UserManagement: React.FC = () => {
     {
       id: 'SJ',
       name: 'Sarah Johnson',
-      avatar: '2',
+      imag: '2',
       email: 'sarah.johnson@estatehub.com',
       phone: '+1 (555) 123-4567',
       role: 'agent',
@@ -56,7 +56,7 @@ const UserManagement: React.FC = () => {
     {
       id: 'MC',
       name: 'Michael Chen',
-      avatar: '3',
+      imag: '3',
       email: 'michael.chen@estatehub.com',
       phone: '+1 (555) 234-5678',
       role: 'agent',
@@ -66,7 +66,7 @@ const UserManagement: React.FC = () => {
     {
       id: 'ER',
       name: 'Emily Rodriguez',
-      avatar: '4',
+      imag: '4',
       email: 'emily.rodriguez@estatehub.com',
       phone: '+1 (555) 345-6789',
       role: 'agent',
@@ -76,7 +76,7 @@ const UserManagement: React.FC = () => {
     {
       id: 'DP',
       name: 'David Park',
-      avatar: '5',
+      imag: '5',
       email: 'david.park@estatehub.com',
       phone: '+1 (555) 456-7890',
       role: 'agent',
@@ -312,7 +312,7 @@ const UserManagement: React.FC = () => {
                           <div className="font-medium text-secondary">{user.name}</div>
                           <div className="text-sm text-gray-500 flex items-center">
                             <span className="mr-1">👤</span>
-                            {user.avatar}
+                            {user.imag}
                           </div>
                         </div>
                       </div>

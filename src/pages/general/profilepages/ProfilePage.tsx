@@ -8,15 +8,15 @@ export default function SimpleProfilePage() {
   const user = useSelector((state: RootState) => state.user);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+   
       <div className="max-w-4xl mx-auto px-4 py-8">
         <div className="bg-(--bg-secondary) rounded-lg shadow-sm p-8">
           <div className="flex flex-col items-center mb-8">
             {/* <div className="animate-in fade-in duration-700 w-32 h-32 rounded-full bg-red-200 flex items-center justify-center shadow-lg"> */}
             <div className=" animate-in fade-in duration-700 w-32 h-32 rounded-full bg-(--bg-primary) flex items-center justify-center shadow-lg overflow-auto">
-            {user.avatar ? (
+            {user.imag ? (
               <img
-                src={user.avatar}
+                src={user.imag}
                 alt="Profile"
                 className="w-full h-full object-center"/>
             ) : (
@@ -65,6 +65,5 @@ export default function SimpleProfilePage() {
           </Link>
         </div>
       </div>
-    </div>
   );
 }
