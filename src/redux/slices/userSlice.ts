@@ -8,7 +8,8 @@ interface UserState {
   email: string;
   phone: string;
   location: string;
-  imag: string;
+  role : "admin"|"buyer"|"seller"|"user";
+  imag?: string;
 };
 
 const initialState: UserState = {
@@ -16,7 +17,8 @@ const initialState: UserState = {
   email: "",
   phone: "",
   location: "",
-  imag: "",
+  role : 'user',
+  imag: undefined,
 };
 
 export const userSlice = createSlice({
@@ -24,7 +26,7 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     updateUser: (state, action: PayloadAction<Partial<UserState>>) => {
-      return { ...state, ...action.payload }; // ⭐ ADDED
+      return { ...state, ...action.payload }; 
     },
   },
 });

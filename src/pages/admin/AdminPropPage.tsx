@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Pencil, Trash2, Plus } from "lucide-react";
+import { Link } from "react-router-dom";
 
 type Property = {
   id: number;
@@ -117,11 +118,12 @@ export default function AdminPropertiesPage() {
             ))}
           </div>
 
-          <button
+          <Link
+          to="/profile"
             className="flex items-center gap-2 bg-(--button-primary) hover:bg-(--button-primary-hover) text-(--text-primary) px-4 py-2 rounded-lg"
           >
             <Plus className="w-4 h-4" /> Add Property
-          </button>
+          </Link>
         </div>
 
         {/* TABLE */}

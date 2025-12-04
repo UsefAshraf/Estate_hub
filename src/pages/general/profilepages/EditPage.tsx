@@ -4,12 +4,15 @@ import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../../../redux/store/store";
 import { updateUser } from "../../../redux/slices/userSlice";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { Settings } from "lucide-react";
 
 interface FormValues {
   fullName: string;
   email: string;
   phone: string;
   location: string;
+  role: "admin" | "buyer" | "seller" | "user";
   imag?: FileList;
 }
 
@@ -32,6 +35,7 @@ const EditProfile: React.FC = () => {
       email: user.email || "",
       phone: user.phone || "",
       location: user.location || "",
+      role: user.role,
     },
     mode: "onSubmit",
   });
@@ -57,18 +61,12 @@ const EditProfile: React.FC = () => {
   };
 
   return (
-    <div
-      className="max-w-xl mx-auto mt-10 shadow p-6 rounded-lg"
-      style={{ backgroundColor: "var(--bg-primary)" }}
-    >
-      <h2 className="text-2xl font-semibold mb-6">Edit Profile</h2>
+    <div className="w-full bg-(--bg-primary) mx-auto mt-10 ml-5 shadow p-6 rounded-lg ">
+      <h2 className="text-2xl font-semibold mb-6">User Information</h2>
 
       {/* imag */}
       <div className="flex flex-col items-center mb-6">
-        <div
-          className="w-32 h-32 rounded-full overflow-hidden flex items-center justify-center shadow-md mb-4"
-          style={{ backgroundColor: "var(--bg-secondary)" }}
-        >
+        <div className="w-32 h-32 bg-(--bg-secondary) rounded-full overflow-hidden flex items-center  justify-center shadow-md mb-4">
           {preview ? (
             <img
               src={preview}
@@ -148,19 +146,34 @@ const EditProfile: React.FC = () => {
             className="w-full border border-gray-300 p-2 rounded-md focus:ring-2 focus:ring-blue-500"
           />
           {errors.location && (
-            <p className="text-red-500 text-sm mt-1">{errors.location.message}</p>
+            <p className="text-red-500 text-sm mt-1">
+              {errors.location.message}
+            </p>
           )}
         </div>
+        <div>
+          <label className="block mb-1 font-medium">Role</label>
+          <select {...register("role", { required: "Please select a role" })}>
+            <option value="buyer">Buyer</option>
+            <option value="seller">Seller</option>
+            <option value="user">User</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
+
+        <Link
+          to="/passwordPage"
+          className="w-fit  flex items-center gap-2 bg-(--button-primary) hover:bg-(--button-primary-hover) text-(--text-primary) px-4 py-2 rounded-lg"
+        >
+          <Settings className="w-4 h-4" /> Change Password
+        </Link>
 
         {/* Buttons */}
         <div className="flex gap-4 pt-4">
           <button
+            title="submit"
             type="submit"
-            className="w-full p-2 rounded-md transition"
-            style={{
-              backgroundColor: "var(--button-primary)",
-              color: "var(--text-primary)",
-            }}
+            className="w-full p-2 rounded-md transition bg-(--button-primary) text-(--text-primary) hover:bg-(--button-primary-hover)"
           >
             Save Changes
           </button>
@@ -168,8 +181,8 @@ const EditProfile: React.FC = () => {
           <button
             type="button"
             onClick={() => navigate("/profile")}
-            className="flex-1 p-2 rounded-md transition border"
-            style={{ color: "var(--text-secondary)" }}
+            className="flex-1 p-2 rounded-md transition border text-(--text-secondary) hover:bg-gray-100"
+            
           >
             Cancel
           </button>
@@ -180,9 +193,6 @@ const EditProfile: React.FC = () => {
 };
 
 export default EditProfile;
-
-
-
 
 // import React, { useState, useEffect } from "react";
 // import { useForm } from "react-hook-form";
@@ -224,7 +234,7 @@ export default EditProfile;
 //   useEffect(() => {
 //     const subscription = watch((values) => {
 //         if (values.imag && values.imag.length > 0) {
-//         const file = values.imag[0]; 
+//         const file = values.imag[0];
 //       const reader = new FileReader();
 //       reader.onloadend = () => {
 //         setPreview(reader.result as string);
@@ -242,7 +252,7 @@ export default EditProfile;
 //   };
 
 //   return (
-    
+
 //     <div className="max-w-xl mx-auto mt-10 bg-(--bg-primary) shadow p-6 rounded-lg">
 //       <h2 className="text-2xl font-semibold mb-4">Edit Profile</h2>
 
@@ -262,7 +272,6 @@ export default EditProfile;
 //           className="text-sm text-gray-700 hover:cursor-pointer hover:text-blue-500"
 //         />
 //       </div>
-
 
 //       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
 //         {/* Full Name */}
@@ -353,53 +362,6 @@ export default EditProfile;
 
 // export default EditProfile;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // // // import React from "react";
 // // // import { useForm } from "react-hook-form";
 // // // import { useDispatch, useSelector } from "react-redux";
@@ -420,7 +382,6 @@ export default EditProfile;
 // // //   const user = useSelector((state: RootState) => state.user);
 // // //   const dispatch = useDispatch();
 // // //   const navigate = useNavigate();
- 
 
 // // //   const {
 // // //     register,
@@ -428,7 +389,7 @@ export default EditProfile;
 // // //     formState: { errors },
 // // //   } = useForm<FormData>({
 // // //     defaultValues: user,
-// // //     mode: "onSubmit", // 
+// // //     mode: "onSubmit", //
 // // //   });
 
 // // //   const onSubmit = (data: FormData) => {
@@ -544,44 +505,22 @@ export default EditProfile;
 
 // // // export default EditProfile;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // // // // import { useState } from "react";
 // // // // import { useSelector, useDispatch } from "react-redux";
 // // // // import type { RootState, AppDispatch } from "../../../redux/store";
 // // // // import { updateUser } from "../../../redux/userSlice";
 // // // // import { useNavigate } from "react-router-dom";
 
-
 // // // // export default function EditProfilePage() {
-// // // //   const user = useSelector((state: RootState) => state.user); 
+// // // //   const user = useSelector((state: RootState) => state.user);
 // // // //   const dispatch = useDispatch<AppDispatch>();
 // // // //   const navigate = useNavigate();
 
-// // // //   const [form, setForm] = useState(user); 
+// // // //   const [form, setForm] = useState(user);
 
 // // // //   const handleSave = () => {
-// // // //     dispatch(updateUser(form)); 
-// // // //     navigate("/profile");       
+// // // //     dispatch(updateUser(form));
+// // // //     navigate("/profile");
 // // // //   };
 
 // // // //   return (
