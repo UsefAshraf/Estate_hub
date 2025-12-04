@@ -2,7 +2,7 @@ import { Outlet, NavLink } from "react-router-dom";
 import { Provider, useSelector } from "react-redux";
 import type {RootState} from "../../redux/store/store";
 import store from "../../redux/store/store";
-import { User, Calendar, HeartPlus } from "lucide-react";
+import { User, Calendar, HeartPlus ,Building2} from "lucide-react";
 
 const ProfileTabs = () => {
   // Get user role from Redux
@@ -12,6 +12,10 @@ const ProfileTabs = () => {
     { id: "Profile", label: "Profile", path: "/profile", icon: User, roles: ["buyer", "seller", "user", "admin"] },
     { id: "Visits", label: "Visits", path: "/visits", icon: Calendar, roles: ["buyer"] },
     { id: "Favourites", label: "Favourites", path: "/favoritesBuyer", icon: HeartPlus, roles: ["buyer","seller"] },
+    { id: "Properties", label: "Properties", path: "/properties", icon:Building2 , roles: ["admin"] },
+    { id: "users", label: "Users", path: "/users", icon:User, roles: ["admin"] },
+    
+
    
   ];
 
