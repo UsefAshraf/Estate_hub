@@ -168,22 +168,8 @@ const Propertydetail: React.FC = () => {
     <div className="min-h-screen bg-gray-50 bg-primary ">
       {/* Header */}
 
-      {/* Breadcrumb */}
-      <div className="max-w-9xl mx-auto px-5 py-4 bg-primary mb-4 shadow-sm bg-secondary">
-        <div className="flex items-center space-x-2 text-sm text-black dark:text-gray-200">
-          <a href="#" className="hover:text-amber-600">
-            Home
-          </a>
-          <span>/</span>
-          <a href="#" className="hover:text-amber-600">
-            Properties
-          </a>
-          <span>/</span>
-          <span className="text-black dark:text-white">{propertyData.title}</span>
-        </div>
-      </div>
-
-      <div className="max-w-7xl mx-auto px-4 pb-12">
+      
+      <div className="max-w-7xl mx-auto px-4 pb-12 mt-4">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-6">
