@@ -318,7 +318,7 @@ const UserManagement: React.FC = () => {
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-black">{user.email}</div>
+                      <div className="text-sm text-secondary">{user.email}</div>
                       <div className="text-sm text-gray-500">{user.phone}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
@@ -335,7 +335,7 @@ const UserManagement: React.FC = () => {
                         {user.status.charAt(0).toUpperCase() + user.status.slice(1)}
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-secondary">
                       {user.joinedDate}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
@@ -378,7 +378,7 @@ const UserManagement: React.FC = () => {
                   value={newUserForm.fullName}
                   onChange={handleNewUserInputChange}
                   placeholder="John Doe"
-                  className="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-200"
+                  className="w-full px-4 py-3 bg-gray-50 border text-black border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-200"
                   required
                 />
               </div>
