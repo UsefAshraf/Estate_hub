@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { CreditCard, Lock, Shield, CheckCircle2 } from 'lucide-react';
+import Swal from "sweetalert2";
+import { useNavigate } from 'react-router-dom';
 
 export default function PaymentPage() {
+  const navigate = useNavigate();
   // Mock data to match the screenshot
   const property = {
     title: "Luxury Beachfront Villa",
@@ -62,13 +65,42 @@ export default function PaymentPage() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setProcessing(true);
-    // Simulate payment processing
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    alert("Payment Successful!");
-    setProcessing(false);
-  };
+  e.preventDefault();
+  setProcessing(true);
+  // Swal.fire({
+  //   title: "Payment Successful!",
+  //   text: "Thank you for your purchase. Redirecting in a moment...",
+  //   icon: "success",
+  //   position: "middle",
+  //   toast: true,
+  //   timer: 3000, 
+  //   timerProgressBar: true,
+  //   showConfirmButton: false,
+  // });
+
+  Swal.fire({
+  title: "Payment Successful!",
+  text: "Thank you for your purchase. Your property documents are being processed.",
+  icon: "success",
+  position: "center", // Use 'center' for a big popup
+  // Remove: toast: true 
+  // Add: Explicit width/size if needed, otherwise it defaults to a large size
+  width: 600, // Optional: Set a specific width (default is ~310px wide for normal popups)
+  timer: 5000, // Increased timer for better visibility of the large popup
+  timerProgressBar: true,
+  showConfirmButton: false, // Keep this if you want it to close automatically
+  
+  // Optional: You can also add custom classes for styling
+  customClass: {
+      popup: 'my-big-success-popup',
+      title: 'text-3xl font-bold',
+      htmlContainer: 'text-xl'
+  }
+  });
+  setProcessing(false);
+  await new Promise(resolve => setTimeout(resolve, 3000)); 
+  navigate("/confirmPayment");
+};
 
   const isFormValid = cardNumber.replace(/\s/g, '').length === 16 && 
                       expiry.length === 5 && 

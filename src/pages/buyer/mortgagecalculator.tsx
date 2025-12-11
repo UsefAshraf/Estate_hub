@@ -46,7 +46,7 @@ const MortgageCalculator: React.FC<MortgageCalculatorProps> = ({ propertyPrice =
     };
 
     return (
-        <div className="max-w-7xl mx-auto mb-4 px-4 pb-12 bg-primary rounded-xl shadow-sm border border-gray-200 p-6 bg-secondary">
+        <div className="max-w-7xl mx-auto px-4 pb-12 bg-primary rounded-xl shadow-sm border border-gray-200 p-6 bg-secondary">
             <div className="flex items-center space-x-2 mb-6">
                 <Calculator className="w-5 h-5 text-gray-secondary" />
                 <h2 className="text-xl font-bold text-secondary">Mortgage Calculator</h2>

@@ -1,7 +1,9 @@
 import React from 'react';
 import { CheckCircle2, Download, Home, ArrowRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 export default function PaymentSuccessPage() {
+  const navigate = useNavigate();
   const property = {
     title: "Luxury Beachfront Villa",
     location: "Malibu, California",
@@ -16,15 +18,15 @@ export default function PaymentSuccessPage() {
   });
 
   const handleDownloadReceipt = () => {
-    alert('Receipt download started...');
+    //navigate('/downloadReceipt');
   };
 
   const onViewBookings = () => {
-    alert('Navigating to bookings...');
+    //navigate('/bookings');
   };
 
   const onBackToHome = () => {
-    alert('Navigating home...');
+    navigate('/HomeBuyer');
   };
 
   return (

@@ -46,7 +46,7 @@ const SellerNavbar: React.FC = () => {
           
           {/* Add Property Button */}
           <Link
-            to="/seller/add-property"
+            to="/createProperty"
             className="hidden md:flex items-center gap-2 px-4 py-2 bg-brand rounded-lg hover:bg-brand-hover transition-colors font-medium"
           >
             <Plus className="w-4 h-4" />
@@ -74,7 +74,7 @@ const SellerNavbar: React.FC = () => {
                 <ul className="p-2 text-sm text-body font-medium">
                   <li>
                     <Link 
-                      to="/seller/profile" 
+                      to="/profile" 
                       className="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded"
                       onClick={() => setIsUserMenuOpen(false)}
                     >
@@ -83,20 +83,11 @@ const SellerNavbar: React.FC = () => {
                   </li>
                   <li>
                     <Link 
-                      to="/seller/my-properties" 
+                      to="/myProperties" 
                       className="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded"
                       onClick={() => setIsUserMenuOpen(false)}
                     >
                       My Properties
-                    </Link>
-                  </li>
-                  <li>
-                    <Link 
-                      to="/seller/settings" 
-                      className="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded"
-                      onClick={() => setIsUserMenuOpen(false)}
-                    >
-                      Settings
                     </Link>
                   </li>
                   <li>
@@ -134,7 +125,7 @@ const SellerNavbar: React.FC = () => {
               </Link>
             </li>
             <li>
-              <Link to="/seller-addproperty" className={getLinkClassName('/seller-addproperty')}>
+              <Link to="/createProperty" className={getLinkClassName('/createProperty')}>
                 Add Property
               </Link>
             </li>

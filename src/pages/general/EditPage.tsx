@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import type { RootState } from "../../../redux/store/store";
-import { updateUser } from "../../../redux/slices/userSlice";
+import type { RootState } from "../../redux/store/store";
+import { updateUser } from "../../redux/slices/userSlice";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { Settings } from "lucide-react";
@@ -182,7 +182,6 @@ const EditProfile: React.FC = () => {
             type="button"
             onClick={() => navigate("/profile")}
             className="flex-1 p-2 rounded-md transition border text-(--text-secondary) hover:bg-gray-100"
-            
           >
             Cancel
           </button>

@@ -13,11 +13,11 @@ import {
   CalendarDays,
   X,
   MapPin,
+  ShoppingCart,
 } from "lucide-react";
 import Swal from "sweetalert2";
 import { motion } from "motion/react";
 import MortgageCalculator from "./mortgagecalculator";
-import MapSearch from "@/pages/general/MapSearch";
 import PropertyLocationMap from "@/pages/general/PropertyLocationMap";
 
 // Type definitions
@@ -50,9 +50,11 @@ interface PropertyData {
   features: Feature[];
   agent: Agent;
 }
+import { useNavigate } from "react-router-dom";
 
 const Propertydetail: React.FC = () => {
   const [mainImage, setMainImage] = useState<number>(0);
+  const navigate = useNavigate();
   const [isFavorite, setIsFavorite] = useState<boolean>(false);
   const [showScheduleModal, setShowScheduleModal] = useState<boolean>(false);
   //const [zoomedImage, setZoomedImage] = useState<string | null>(null);
@@ -163,9 +165,21 @@ const Propertydetail: React.FC = () => {
       [e.target.name]: e.target.value,
     });
   };
-
+const handleBuyProperty = () => {
+    navigate("/paymentBuyer");
+        Swal.fire({
+      title: "Redirecting to Payment!",
+      text: "Please complete your purchase.",
+      icon: "info",
+      position: "bottom",
+      toast: true,
+      timer: 3000,
+      timerProgressBar: true,
+      showConfirmButton: false,
+    });
+  };
   return (
-    <div className="min-h-screen bg-gray-50 bg-primary ">
+    <div className="min-h-screen bg-gray-50 bg-primary pb-4">
       {/* Header */}
 
       {/* Breadcrumb */}
@@ -407,9 +421,10 @@ const Propertydetail: React.FC = () => {
 
               <button
                 onClick={() => setShowContactModal(true)}
-                className="w-full rounded-3xl p-4 text-xl btn-primary hover:hover:bg-linear-to-r from-white to-orange-300 "
+                className="w-full border border-gray-300 text-black py-3 rounded-lg font-semibold btn-primary flex items-center justify-center space-x-2 hover:bg-linear-to-r from-white to-orange-300 "
               >
-                📧 Send Message
+                <Mail className="w-5 h-5" />
+                <span>Send Message</span>
               </button>
 
               <div className="mt-6 pt-6 border-t border-gray-200">
@@ -426,6 +441,14 @@ const Propertydetail: React.FC = () => {
                   <CalendarDays className="w-5 h-5" />
                   <span>Schedule Visit</span>
                 </button>
+                <button
+                  onClick={() => handleBuyProperty()}
+                  className="w-full border mt-2 border-gray-300 text-black py-3 rounded-lg font-semibold btn-primary flex items-center justify-center space-x-2 hover:bg-linear-to-r from-white to-orange-300"
+                >
+                  <ShoppingCart className="w-5 h-5" />
+                  <span>Buy Property</span>
+                </button>
+
               </div>
             </div>
           </div>

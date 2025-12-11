@@ -25,7 +25,7 @@ import BuyerLayout from "../Layouts/BuyerLayout";
 import HomeSellerPage from "../pages/seller/HomeSeller";
 import SellerLayout from "../Layouts/SellerLayout";
 import AdminLayout from "@/Layouts/AdminLayout";
-import Propertydetail from "@/components/Propertydetail/propertydetail";
+import Propertydetail from "@/pages/buyer/propertydetail";
 import UserManagement from "@/pages/admin/usermanagement";
 import AdminPropertiesPage from "@/pages/admin/AdminPropPage";
 import PaymentPage from "@/pages/buyer/payment";
@@ -33,10 +33,11 @@ import PaymentSuccessPage from "@/pages/buyer/confirmpayment";
 import About from "@/pages/general/AboutUs";
 import Contact from "@/pages/general/ContactUs";
 import NotFoundPage from "@/pages/general/NotFound";
-import Profile from "../pages/general/profilepages/ProfilePage";
-import VisitsPage from "../pages/general/profilepages/VisitsPage";
-import EditProfile from "../pages/general/profilepages/EditPage";
+import Profile from "../pages/general/ProfilePage";
+import VisitsPage from "../pages/general/VisitsPage";
+import EditProfile from "../pages/general/EditPage";
 import ProfileLayout from "../pages/general/ProfileLayout";
+import CreateProperty from "@/pages/seller/createproperty";
 
 const AppRoutes: React.FC = () => {
   return (
@@ -65,6 +66,7 @@ const AppRoutes: React.FC = () => {
 
         <Route element={<SellerLayout />}>
           <Route path="/homeSeller" element={<HomeSellerPage />} />
+          <Route path="/createProperty" element={<CreateProperty />} />
           <Route path="/aboutSeller" element={<About />} />
           <Route path="/contactSeller" element={<Contact />} />
         </Route>
