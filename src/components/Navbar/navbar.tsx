@@ -16,7 +16,10 @@ const Navbar: React.FC = () => {
   const isActive = (path: string) => {
     return location.pathname === path;
   };
-
+  const handleLogout = () => {
+    // Add your logout logic here
+    navigate('/signup')
+  };
   const getLinkClassName = (path: string) => {
     if (isActive(path)) {
       return "block py-2 px-3 text-[#DDC7BB] bg-brand rounded md:bg-transparent md:text-fg-brand md:p-0";
@@ -68,18 +71,39 @@ const Navbar: React.FC = () => {
 
           {/* User Dropdown Menu */}
           {isUserMenuOpen && (
-            <div className="absolute right-0 top-16 z-50 bg-neutral-primary-medium border border-default-medium rounded-base shadow-lg w-44">
+            <div className="absolute right-0 top-12 z-50 bg-neutral-primary-medium border border-default-medium rounded-base shadow-lg w-44">
               <div className="px-4 py-3 text-sm border-b border-default">
                 <span className="block text-heading font-medium">
-                  Youssef Ashraf
+                  John Seller
                 </span>
                 <span className="block text-body truncate">
-                  Youssef_ashraf@gmail.com
+                  seller@estatehub.com
                 </span>
               </div>
               <ul className="p-2 text-sm text-body font-medium">
                 <li>
-                  <button className="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded text-left">
+                  <Link
+                    to="/profileBuyer"
+                    className="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded"
+                    onClick={() => setIsUserMenuOpen(false)}
+                  >
+                    Profile
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/visitsBuyer"
+                    className="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded"
+                    onClick={() => setIsUserMenuOpen(false)}
+                  >
+                    Visits
+                  </Link>
+                </li>
+                <li>
+                  <button
+                    onClick={handleLogout}
+                    className="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded text-left"
+                  >
                     Logout
                   </button>
                 </li>

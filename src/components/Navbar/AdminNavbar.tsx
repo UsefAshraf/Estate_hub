@@ -22,7 +22,8 @@ const AdminNavbar: React.FC = () => {
 
   const handleLogout = () => {
     // Add your logout logic here
-    console.log("Logging out...");
+    // console.log("Logging out...");
+    navigate('/signup')
   };
 
   return (
@@ -73,7 +74,7 @@ const AdminNavbar: React.FC = () => {
                 <ul className="p-2 text-sm text-body font-medium">
                   <li>
                     <Link
-                      to="/seller/profile"
+                      to="/profileAdmin"
                       className="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded"
                       onClick={() => setIsUserMenuOpen(false)}
                     >
@@ -82,20 +83,20 @@ const AdminNavbar: React.FC = () => {
                   </li>
                   <li>
                     <Link
-                      to="/seller/my-properties"
+                      to="/visitsAdmin"
                       className="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded"
                       onClick={() => setIsUserMenuOpen(false)}
                     >
-                      My Properties
+                      visits
                     </Link>
                   </li>
                   <li>
                     <Link
-                      to="/seller/settings"
+                      to="/properties"
                       className="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded"
                       onClick={() => setIsUserMenuOpen(false)}
                     >
-                      Settings
+                      My Properties
                     </Link>
                   </li>
                   <li>
@@ -146,20 +147,18 @@ const AdminNavbar: React.FC = () => {
           <ul className="font-medium flex flex-col p-4 md:p-0 mt-4 border border-default rounded-base bg-neutral-secondary-soft md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-neutral-primary">
             <li>
               <Link
-            to="/seller/add-property"
-            className="hidden md:flex items-center gap-2 px-4 py-2 bg-brand rounded-lg hover:bg-brand-hover transition-colors font-medium"
+            to="/usersAdmin"
+            className={getLinkClassName('/usersAdmin')}
           >
-            <Plus className="w-4 h-4" />
-            Add Users
+            Users
           </Link>
             </li>
             <li>
               <Link
-                to="/seller/add-property"
-                className="hidden md:flex items-center gap-2 px-4 py-2 bg-brand rounded-lg hover:bg-brand-hover transition-colors font-medium"
+                to="/properties"
+                className={getLinkClassName('/properties')}
               >
-                <Plus className="w-4 h-4" />
-                Add Department
+                Properties
               </Link>
             </li>
           </ul>

@@ -1,4 +1,3 @@
-// src/routes/AppRoutes.tsx
 import React from "react";
 import {
   BrowserRouter as Router,
@@ -35,7 +34,8 @@ import Contact from "@/pages/general/ContactUs";
 import NotFoundPage from "@/pages/general/NotFound";
 import Profile from "../pages/general/ProfilePage";
 import VisitsPage from "../pages/general/VisitsPage";
-import CreateProperty from "@/pages/seller/createproperty";
+import CreateProperty from "@/pages/seller/CreateProperty";
+import SellerPropeties from "@/pages/seller/SellerPropeties";
 
 const AppRoutes: React.FC = () => {
   return (
@@ -59,22 +59,28 @@ const AppRoutes: React.FC = () => {
           <Route path="/contactBuyer" element={<Contact />} />
           <Route path="/favoritesBuyer" element={<FavouritesBuyerPage />} />
           <Route path="/paymentBuyer" element={<PaymentPage />} />
+          <Route path="/profileBuyer" element={<Profile />}/>
+          <Route path="/visitsBuyer" element={<VisitsPage />} />
           <Route path="/confirmPayment" element={<PaymentSuccessPage />} />
         </Route>
 
         <Route element={<SellerLayout />}>
           <Route path="/homeSeller" element={<HomeSellerPage />} />
           <Route path="/createProperty" element={<CreateProperty />} />
+          <Route path="/sellerProperties" element={<SellerPropeties />} />
           <Route path="/aboutSeller" element={<About />} />
+          <Route path="/profileSeller" element={<Profile />}/>
+          <Route path="/visitsSeller" element={<VisitsPage />} />
           <Route path="/contactSeller" element={<Contact />} />
         </Route>
 
         <Route element={<AdminLayout />}>
           <Route path="/users" element={<UserManagement />} />
           <Route path="/properties" element={<AdminPropertiesPage />} />
+          <Route path="/admincreateProperty" element={<CreateProperty />} />
           <Route path="/departments" element={<HomeSellerPage />} />
-          <Route path="/visits" element={<VisitsPage />} />
-          <Route path="/profile" element={<Profile />}/>
+          <Route path="/visitsAdmin" element={<VisitsPage />} />
+          <Route path="/profileAdmin" element={<Profile />}/>
         </Route>
 
         {/* General */}

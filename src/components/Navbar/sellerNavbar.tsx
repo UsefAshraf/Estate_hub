@@ -23,7 +23,8 @@ const SellerNavbar: React.FC = () => {
 
   const handleLogout = () => {
     // Add your logout logic here
-    console.log("Logging out...");
+    // console.log("Logging out...");
+    navigate('/signup');
   };
 
   return (
@@ -74,7 +75,7 @@ const SellerNavbar: React.FC = () => {
                 <ul className="p-2 text-sm text-body font-medium">
                   <li>
                     <Link 
-                      to="/profile" 
+                      to="/profileSeller" 
                       className="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded"
                       onClick={() => setIsUserMenuOpen(false)}
                     >
@@ -83,7 +84,16 @@ const SellerNavbar: React.FC = () => {
                   </li>
                   <li>
                     <Link 
-                      to="/myProperties" 
+                      to="/visitsSeller" 
+                      className="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded"
+                      onClick={() => setIsUserMenuOpen(false)}
+                    >
+                      Visits
+                    </Link>
+                  </li>
+                  <li>
+                    <Link 
+                      to="/sellerProperties" 
                       className="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded"
                       onClick={() => setIsUserMenuOpen(false)}
                     >

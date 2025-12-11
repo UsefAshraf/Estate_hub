@@ -280,7 +280,7 @@ const HomeSeller: React.FC = () => {
   };
   const handleAddProperty = () => {
     // Navigate or open modal — your choice
-    navigate("/add-property");
+    navigate("/CreateProperty");
   };
 
   return (
