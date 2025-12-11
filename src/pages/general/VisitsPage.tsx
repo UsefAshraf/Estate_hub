@@ -5,7 +5,7 @@ type Visit = {
   propertyName: string;
   date: string;
   time: string;
-  status: "upcoming" | "completed" | "cancelled";
+  status: "pending"|"upcoming" | "completed" | "cancelled";
 };
 
 const VisitsPage = () => {
@@ -50,6 +50,13 @@ const VisitsPage = () => {
       propertyName: "Efilo Office Space",
       date: "2026-03-15",
       time: "1:00 PM",
+      status: "pending",
+    },
+    {
+      id: 6,
+      propertyName: "Efilo Office Space",
+      date: "2026-03-15",
+      time: "1:00 PM",
       status: "upcoming",
     },
     {
@@ -69,6 +76,8 @@ const VisitsPage = () => {
         return "text-green-600 bg-green-100";
       case "cancelled":
         return "text-red-600 bg-red-300";
+      case "pending":
+        return "text-gray-600 bg-gray-100"
       default:
         return "text-gray-600 bg-gray-100";
     }

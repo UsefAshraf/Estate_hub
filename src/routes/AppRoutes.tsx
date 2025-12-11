@@ -35,8 +35,6 @@ import Contact from "@/pages/general/ContactUs";
 import NotFoundPage from "@/pages/general/NotFound";
 import Profile from "../pages/general/ProfilePage";
 import VisitsPage from "../pages/general/VisitsPage";
-import EditProfile from "../pages/general/EditPage";
-import ProfileLayout from "../pages/general/ProfileLayout";
 import CreateProperty from "@/pages/seller/createproperty";
 
 const AppRoutes: React.FC = () => {
@@ -76,10 +74,7 @@ const AppRoutes: React.FC = () => {
           <Route path="/properties" element={<AdminPropertiesPage />} />
           <Route path="/departments" element={<HomeSellerPage />} />
           <Route path="/visits" element={<VisitsPage />} />
-          <Route path="/profile" element={<ProfileLayout />}>
-            <Route index element={<Profile />} />
-            <Route path="edit" element={<EditProfile />} />
-          </Route>
+          <Route path="/profile" element={<Profile />}/>
         </Route>
 
         {/* General */}
