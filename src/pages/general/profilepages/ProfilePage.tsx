@@ -14,7 +14,7 @@ export default function SimpleProfilePage() {
           <div className="flex flex-col items-center mb-8">
             {/* <div className="animate-in fade-in duration-700 w-32 h-32 rounded-full bg-red-200 flex items-center justify-center shadow-lg"> */}
             <div className=" animate-in fade-in duration-700 w-32 h-32 rounded-full bg-(--bg-primary) flex items-center justify-center shadow-lg overflow-auto">
-            {user.avatar ? (
+            {user?.avatar ? (
               <img
                 src={user.avatar}
                 alt="Profile"

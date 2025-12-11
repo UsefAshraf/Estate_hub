@@ -75,6 +75,7 @@ const AppRoutes: React.FC = () => {
           <Route path="/users" element={<UserManagement />} />
           <Route path="/properties" element={<AdminPropertiesPage />} />
           <Route path="/departments" element={<HomeSellerPage />} />
+          <Route path="/profilePage" element={<Profile />} />
           <Route path="/profile" element={<ProfileLayout />}>
             <Route index element={<Profile />} />
             <Route path="favorites" element={<FavoritesPage />} />
