@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 import type { RootState } from "@/redux/store/store";
 import { Link } from "react-router-dom";
 
-import { User, Mail, Phone, MapPin, Settings,Briefcase} from "lucide-react";
+import { User, Mail, Phone, MapPin, Settings, Briefcase } from "lucide-react";
 
 export default function ProfilePage() {
   const user = useSelector((state: RootState) => state.user);
@@ -10,7 +10,6 @@ export default function ProfilePage() {
   return (
     <div className="max-w-3xl mx-auto px-4 py-10 bg-(--bg-primary)">
       <div className="bg-(--bg-secondary) rounded-xl shadow p-8">
-
         {/* Profile Header */}
         <div className="flex flex-col items-center mb-8">
           <div className="w-32 h-32 rounded-full bg-(--bg-primary) flex items-center justify-center shadow overflow-hidden">
@@ -50,9 +49,8 @@ export default function ProfilePage() {
           </div>
 
           <div className="flex gap-4 items-center">
-            <Briefcase className="w-6 h-6 text-(--text-primary)"/>
+            <Briefcase className="w-6 h-6 text-(--text-primary)" />
             <span className="text-(--text-primary)">{user.role}</span>
-            
           </div>
         </div>
 
@@ -64,9 +62,7 @@ export default function ProfilePage() {
           <Settings className="w-5 h-5" />
           Edit Profile
         </Link>
-
       </div>
     </div>
   );
 }
-

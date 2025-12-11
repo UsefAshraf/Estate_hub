@@ -119,7 +119,7 @@ export default function AdminPropertiesPage() {
           </div>
 
           <Link
-          to="/profile"
+          to="/admincreateProperty"
             className="flex items-center gap-2 bg-(--button-primary) hover:bg-(--button-primary-hover) text-(--text-primary) px-4 py-2 rounded-lg"
           >
             <Plus className="w-4 h-4" /> Add Property

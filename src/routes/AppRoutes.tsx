@@ -37,7 +37,8 @@ import Profile from "../pages/general/ProfilePage";
 import VisitsPage from "../pages/general/VisitsPage";
 import EditProfile from "../pages/general/EditPage";
 import ProfileLayout from "../pages/general/ProfileLayout";
-import CreateProperty from "@/pages/seller/createproperty";
+import CreateProperty from "@/pages/seller/CreateProperty";
+import SellerPropeties from "@/pages/seller/SellerPropeties";
 
 const AppRoutes: React.FC = () => {
   return (
@@ -67,6 +68,7 @@ const AppRoutes: React.FC = () => {
         <Route element={<SellerLayout />}>
           <Route path="/homeSeller" element={<HomeSellerPage />} />
           <Route path="/createProperty" element={<CreateProperty />} />
+          <Route path="/sellerProperties" element={<SellerPropeties />} />
           <Route path="/aboutSeller" element={<About />} />
           <Route path="/contactSeller" element={<Contact />} />
         </Route>
@@ -74,6 +76,7 @@ const AppRoutes: React.FC = () => {
         <Route element={<AdminLayout />}>
           <Route path="/users" element={<UserManagement />} />
           <Route path="/properties" element={<AdminPropertiesPage />} />
+          <Route path="/admincreateProperty" element={<CreateProperty />} />
           <Route path="/departments" element={<HomeSellerPage />} />
           <Route path="/visits" element={<VisitsPage />} />
           <Route path="/profile" element={<ProfileLayout />}>

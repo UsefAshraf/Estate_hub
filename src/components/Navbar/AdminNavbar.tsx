@@ -146,20 +146,18 @@ const AdminNavbar: React.FC = () => {
           <ul className="font-medium flex flex-col p-4 md:p-0 mt-4 border border-default rounded-base bg-neutral-secondary-soft md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-neutral-primary">
             <li>
               <Link
-            to="/seller/add-property"
-            className="hidden md:flex items-center gap-2 px-4 py-2 bg-brand rounded-lg hover:bg-brand-hover transition-colors font-medium"
+            to="/users"
+            className={getLinkClassName('/users')}
           >
-            <Plus className="w-4 h-4" />
-            Add Users
+            Users
           </Link>
             </li>
             <li>
               <Link
-                to="/seller/add-property"
-                className="hidden md:flex items-center gap-2 px-4 py-2 bg-brand rounded-lg hover:bg-brand-hover transition-colors font-medium"
+                to="/properties"
+                className={getLinkClassName('/properties')}
               >
-                <Plus className="w-4 h-4" />
-                Add Department
+                Properties
               </Link>
             </li>
           </ul>
