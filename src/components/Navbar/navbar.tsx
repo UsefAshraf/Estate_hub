@@ -166,12 +166,12 @@ const Navbar: React.FC = () => {
               </Link>
             </li>
             <li>
-              <Link to="/aboutBuyer" className={getLinkClassName("/about")}>
+              <Link to="/aboutBuyer" className={getLinkClassName("/aboutBuyer")}>
                 About
               </Link>
             </li>
             <li>
-              <Link to="/contactBuyer" className={getLinkClassName("/contact")}>
+              <Link to="/contactBuyer" className={getLinkClassName("/contactBuyer")}>
                 Contact
               </Link>
             </li>

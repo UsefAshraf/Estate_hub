@@ -29,8 +29,8 @@ const AccountInfo: React.FC = () => {
   const [profileImage, setProfileImage] = useState<string>("");
 
   const defaultValues: AccountForm = {
-    name: "Rachel Green",
-    company: "Wise Agent Realty",
+    name: "Youssef ashraf",
+    company: "NTI Agent",
     phone: "4808675309",
     mobile: "4805551212",
     email: "help@wiseagent.com",
