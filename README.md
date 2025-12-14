@@ -1,4 +1,5 @@
-# 🏡 Estate Hub - Real Estate Platform
+# [EstateHubv3.pdf](https://github.com/user-attachments/files/24149366/EstateHubv3.pdf)
+🏡 Estate Hub - Real Estate Platform
 
 A modern, full-featured real estate platform built with React, TypeScript, and Vite. Estate Hub provides a comprehensive solution for buyers, sellers, and administrators to manage property listings, searches, and transactions.
 
