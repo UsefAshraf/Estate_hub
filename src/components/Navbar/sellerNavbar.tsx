@@ -83,7 +83,7 @@ const SellerNavbar: React.FC = () => {
                   </li>
                   <li>
                     <Link 
-                      to="/myProperties" 
+                       to="/my-properties"
                       className="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded"
                       onClick={() => setIsUserMenuOpen(false)}
                     >

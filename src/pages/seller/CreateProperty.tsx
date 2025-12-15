@@ -14,8 +14,6 @@ import {
   Trash2,
   User,
 } from "lucide-react";
-import Swal from "sweetalert2";
-import { useNavigate } from "react-router-dom";
 
 interface PropertyForm {
   status: string;
@@ -51,7 +49,6 @@ const CreateProperty = () => {
     features: [],
     agentName: "",
   });
-  const navigate = useNavigate();
 
   const [images, setImages] = useState<string[]>([]);
   const [newFeature, setNewFeature] = useState("");
@@ -118,12 +115,10 @@ const CreateProperty = () => {
     }
   };
 
-  const handleSubmit = async() => {
+  const handleSubmit = () => {
     console.log("Property Form Submitted:", propertyForm);
     console.log("Images:", images);
     setShowSuccessModal(true);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    navigate("/homeSeller");
   };
 
   return (
