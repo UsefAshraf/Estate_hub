@@ -13,6 +13,7 @@ import ForgotPasswordPage from "../pages/auth/ForgetPassword";
 import OTPPage from "../pages/auth/OTP";
 import RenewPasswordPage from "../pages/auth/ResetPassword";
 import SuccessPage from "../pages/auth/Success";
+import VerifyEmail from "../pages/auth/VerifyEmail";
 import { PagePaths } from "../types/pages";
 // import HomeSellerPage from "../pages/seller/HomeSeller";
 import HomeBuyerPage from "../pages/buyer/HomeBuyer";
@@ -36,12 +37,13 @@ import Profile from "../pages/general/ProfilePage";
 import VisitsPage from "../pages/general/VisitsPage";
 import CreateProperty from "@/pages/seller/CreateProperty";
 import SellerPropeties from "@/pages/seller/SellerPropeties";
+import RequireRole from "./RequireRole";
 
 const AppRoutes: React.FC = () => {
   return (
     <Router>
       <Routes>
-        {/* Auth Routes */}
+        {/* Auth + Public */}
         <Route element={<AuthLayout />}>
           <Route path={PagePaths.signup} element={<SignUpPage />} />
           <Route path={PagePaths.signin} element={<SignInPage />} />
@@ -49,48 +51,50 @@ const AppRoutes: React.FC = () => {
           <Route path={PagePaths.otp} element={<OTPPage />} />
           <Route path={PagePaths.renew} element={<RenewPasswordPage />} />
           <Route path={PagePaths.success} element={<SuccessPage />} />
+          <Route path="/verify-email" element={<VerifyEmail />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
         </Route>
 
-        <Route element={<BuyerLayout />}>
-          <Route path="/homeBuyer" element={<HomeBuyerPage />} />
-          <Route path="/searchBuyer" element={<SearchResultsPage />} />
-          <Route path="/propertydetailBuyer" element={<Propertydetail />} />
-          <Route path="/aboutBuyer" element={<About />} />
-          <Route path="/contactBuyer" element={<Contact />} />
-          <Route path="/favoritesBuyer" element={<FavouritesBuyerPage />} />
-          <Route path="/paymentBuyer" element={<PaymentPage />} />
-          <Route path="/profileBuyer" element={<Profile />}/>
-          <Route path="/visitsBuyer" element={<VisitsPage />} />
-          <Route path="/confirmPayment" element={<PaymentSuccessPage />} />
+        {/* Buyer Routes — only buyer role */}
+        <Route element={<RequireRole allowedRoles={["buyer"]} />}>
+          <Route element={<BuyerLayout />}>
+            <Route path="/homeBuyer" element={<HomeBuyerPage />} />
+            <Route path="/searchBuyer" element={<SearchResultsPage />} />
+            <Route path="/propertydetailBuyer" element={<Propertydetail />} />
+            <Route path="/favoritesBuyer" element={<FavouritesBuyerPage />} />
+            <Route path="/paymentBuyer" element={<PaymentPage />} />
+            <Route path="/profileBuyer" element={<Profile />} />
+            <Route path="/visitsBuyer" element={<VisitsPage />} />
+            <Route path="/confirmPayment" element={<PaymentSuccessPage />} />
+          </Route>
         </Route>
 
-        <Route element={<SellerLayout />}>
-          <Route path="/homeSeller" element={<HomeSellerPage />} />
-          <Route path="/createProperty" element={<CreateProperty />} />
-          <Route path="/sellerProperties" element={<SellerPropeties />} />
-          <Route path="/aboutSeller" element={<About />} />
-          <Route path="/profileSeller" element={<Profile />}/>
-          <Route path="/visitsSeller" element={<VisitsPage />} />
-          <Route path="/contactSeller" element={<Contact />} />
+        {/* Seller Routes — only seller role */}
+        <Route element={<RequireRole allowedRoles={["seller"]} />}>
+          <Route element={<SellerLayout />}>
+            <Route path="/homeSeller" element={<HomeSellerPage />} />
+            <Route path="/createProperty" element={<CreateProperty />} />
+            <Route path="/sellerProperties" element={<SellerPropeties />} />
+            <Route path="/profileSeller" element={<Profile />} />
+            <Route path="/visitsSeller" element={<VisitsPage />} />
+          </Route>
         </Route>
 
-        <Route element={<AdminLayout />}>
-          <Route path="/users" element={<UserManagement />} />
-          <Route path="/properties" element={<AdminPropertiesPage />} />
-          <Route path="/admincreateProperty" element={<CreateProperty />} />
-          <Route path="/departments" element={<HomeSellerPage />} />
-          <Route path="/visitsAdmin" element={<VisitsPage />} />
-          <Route path="/profileAdmin" element={<Profile />}/>
+        {/* Admin Routes — only admin role */}
+        <Route element={<RequireRole allowedRoles={["admin"]} />}>
+          <Route element={<AdminLayout />}>
+            <Route path="/users" element={<UserManagement />} />
+            <Route path="/properties" element={<AdminPropertiesPage />} />
+            <Route path="/admincreateProperty" element={<CreateProperty />} />
+            <Route path="/departments" element={<HomeSellerPage />} />
+            <Route path="/visitsAdmin" element={<VisitsPage />} />
+            <Route path="/profileAdmin" element={<Profile />} />
+          </Route>
         </Route>
 
-        {/* General */}
-
-        {/* Profile + nested routes */}
-
-        {/* Redirect root to home */}
-        <Route path="/" element={<Navigate to="/homeBuyer" replace />} />
-
-        {/* Catch all 404 */}
+        {/* Fallback */}
+        <Route path="/" element={<Navigate to="/signin" replace />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </Router>
