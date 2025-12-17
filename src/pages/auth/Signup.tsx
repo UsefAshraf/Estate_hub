@@ -648,6 +648,8 @@ const SignUpPage: React.FC = () => {
 
   const handleGoogleResponse = async (response: GoogleCredentialResponse) => {
     setIsLoading(true);
+    console.log(response);
+    
     try {
       const res = await fetch(`${API_URL}/auth/gmail-signup`, {
         method: "POST",
@@ -658,6 +660,8 @@ const SignUpPage: React.FC = () => {
       });
 
       const data = await res.json();
+      console.log(data);
+      
 
       if (res.ok) {
         if (data.token) {
