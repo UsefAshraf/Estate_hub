@@ -40,6 +40,7 @@ const PropertyCardFav: React.FC<Props> = ({ property, favorites, toggleFavorite,
         )}
 
         <button
+        title="toggle"
           onClick={() => toggleFavorite(property.id)}
           className="absolute top-4 right-4 bg-primary/10 backdrop-blur-sm p-2 rounded-full cursor-pointer transition-colors"
         >

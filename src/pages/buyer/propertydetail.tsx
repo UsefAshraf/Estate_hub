@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { addVisit } from "../../services/visits.services.ts";
 import {
   Heart,
   Share2,
@@ -112,9 +113,17 @@ const Propertydetail: React.FC = () => {
     },
   };
 
-  const handleScheduleSubmit = (e: React.FormEvent) => {
+  const handleScheduleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Schedule form submitted:", scheduleForm);
+    try {
+  
+      await addVisit({
+        propertyName: propertyData.title,
+        date: scheduleForm.date,           
+        time: scheduleForm.time,           
+      });
+
     Swal.fire({
       title: "Visit Scheduled!",
       text: "The agent will contact you shortly.",
@@ -130,6 +139,20 @@ const Propertydetail: React.FC = () => {
     });
 
     setShowScheduleModal(false);
+    setScheduleForm({
+      date: "",
+      time: "",
+      name: "",
+      phone: "",
+    });
+  } catch (error: any) {
+    Swal.fire({
+      title: "Error",
+      text: error?.response?.data?.message || "Failed to schedule visit",
+      icon: "error",
+    });
+  }
+
   };
   const handleContactSubmit = (e: React.FormEvent) => {
     e.preventDefault();
