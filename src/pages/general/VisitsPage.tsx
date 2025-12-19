@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { Calendar, Clock} from "lucide-react";
-import { getUserVisits } from "../../services/visits.services.ts";
+import { getUserVisits, updateVisitStatus } from "../../services/visits.services.ts";
 import type { Visit } from "../../types/visits.types.ts";
+
 
 const VisitsPage = () => {
   const [visits, setVisits] = useState<Visit[]>([]);
@@ -14,7 +15,6 @@ const VisitsPage = () => {
       try {
         setLoading(true);
         const res = await getUserVisits();
-        // res.data.data is Visit[]
         setVisits(res.data.data);
       } catch (err: any) {
         setError(err?.response?.data?.message || "Failed to fetch visits");
@@ -38,6 +38,17 @@ const VisitsPage = () => {
         return { color: "text-amber-600 bg-amber-500/10", borderColor: "border-amber-500", dotColor: "bg-amber-500" };
       default:
         return { color: "text-secondary bg-primary/5", borderColor: "border-custom", dotColor: "bg-secondary" };
+    }
+  };
+  const handleCancelVisit = async (visitId: string) => {
+    try {
+      await updateVisitStatus(visitId, "cancelled");
+      // Update local state so UI reflects change
+      setVisits((prev) =>
+        prev.map((v) => (v._id === visitId ? { ...v, status: "cancelled" } : v))
+      );
+    } catch (err: any) {
+      alert(err?.response?.data?.message || "Failed to cancel visit");
     }
   };
 
@@ -120,6 +131,15 @@ const VisitsPage = () => {
                         <span className="text-sm font-medium">{visit.time}</span>
                       </div>
                     </div>
+                    {/* Cancel Button for upcoming visits */}
+                    {visit.status === "upcoming" && (
+                      <button
+                        onClick={() => handleCancelVisit(visit._id)}
+                        className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors font-medium"
+                      >
+                        Cancel Visit
+                      </button>
+                    )}
                   </div>
                 </div>
               );
@@ -133,6 +153,7 @@ const VisitsPage = () => {
             
           </div>
         )}
+        
       </div>
     </div>
   );
