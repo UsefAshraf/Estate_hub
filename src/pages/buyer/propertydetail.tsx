@@ -1,5 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { addVisit } from "../../services/visits.services.ts";
+import {
+  getUserFavorites,
+  addFavorite,
+  removeFavorite,
+} from "../../services/favourites.services.ts";
 import {
   Heart,
   Share2,
@@ -108,8 +113,7 @@ const Propertydetail: React.FC = () => {
       title: "Real Estate Agent",
       phone: "+1 (555) 123-4567",
       email: "sarah.johnson@estatehub.com",
-      imag:
-        "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop",
+      imag: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop",
     },
   };
 
@@ -117,43 +121,96 @@ const Propertydetail: React.FC = () => {
     e.preventDefault();
     console.log("Schedule form submitted:", scheduleForm);
     try {
-  
       await addVisit({
         propertyName: propertyData.title,
-        date: scheduleForm.date,           
-        time: scheduleForm.time,           
+        date: scheduleForm.date,
+        time: scheduleForm.time,
       });
 
-    Swal.fire({
-      title: "Visit Scheduled!",
-      text: "The agent will contact you shortly.",
-      icon: "success",
-      position: "bottom",
-      toast: true,
-      timer: 4000,
-      timerProgressBar: true,
-      showConfirmButton: false,
-      customClass: {
-        popup: "custom-toast",
-      },
-    });
+      Swal.fire({
+        title: "Visit Scheduled!",
+        text: "The agent will contact you shortly.",
+        icon: "success",
+        position: "bottom",
+        toast: true,
+        timer: 4000,
+        timerProgressBar: true,
+        showConfirmButton: false,
+        customClass: {
+          popup: "custom-toast",
+        },
+      });
 
-    setShowScheduleModal(false);
-    setScheduleForm({
-      date: "",
-      time: "",
-      name: "",
-      phone: "",
-    });
-  } catch (error: any) {
-    Swal.fire({
-      title: "Error",
-      text: error?.response?.data?.message || "Failed to schedule visit",
-      icon: "error",
-    });
-  }
-
+      setShowScheduleModal(false);
+      setScheduleForm({
+        date: "",
+        time: "",
+        name: "",
+        phone: "",
+      });
+    } catch (error: any) {
+      Swal.fire({
+        title: "Error",
+        text: error?.response?.data?.message || "Failed to schedule visit",
+        icon: "error",
+      });
+    }
   };
+  const propertyId = "65f123abc456def789012345";
+  useEffect(() => {
+    const checkFavorite = async () => {
+      try {
+        const res = await getUserFavorites();
+
+        const exists = res.data.data.some(
+          (fav: any) => fav.propertyId._id === propertyId
+        );
+
+        setIsFavorite(exists);
+      } catch (error) {
+        console.error("Failed to check favorites", error);
+      }
+    };
+
+    checkFavorite();
+  }, [propertyId]);
+  // 🔴 NEW
+  const handleToggleFavorite = async () => {
+    try {
+      if (isFavorite) {
+        await removeFavorite(propertyId);
+
+        Swal.fire({
+          title: "Removed from Favorites",
+          icon: "success",
+          position: "bottom",
+          toast: true,
+          timer: 3000,
+          showConfirmButton: false,
+        });
+      } else {
+        await addFavorite({ propertyId });
+
+        Swal.fire({
+          title: "Added to Favorites!",
+          icon: "success",
+          position: "bottom",
+          toast: true,
+          timer: 3000,
+          showConfirmButton: false,
+        });
+      }
+
+      setIsFavorite(!isFavorite);
+    } catch (error: any) {
+      Swal.fire({
+        title: "Error",
+        text: error?.response?.data?.message || "Something went wrong",
+        icon: "error",
+      });
+    }
+  };
+
   const handleContactSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Contact form submitted:", contactForm);
@@ -188,9 +245,9 @@ const Propertydetail: React.FC = () => {
       [e.target.name]: e.target.value,
     });
   };
-const handleBuyProperty = () => {
+  const handleBuyProperty = () => {
     navigate("/paymentBuyer");
-        Swal.fire({
+    Swal.fire({
       title: "Redirecting to Payment!",
       text: "Please complete your purchase.",
       icon: "info",
@@ -216,7 +273,9 @@ const handleBuyProperty = () => {
             Properties
           </a>
           <span>/</span>
-          <span className="text-black dark:text-white">{propertyData.title}</span>
+          <span className="text-black dark:text-white">
+            {propertyData.title}
+          </span>
         </div>
       </div>
 
@@ -233,7 +292,7 @@ const handleBuyProperty = () => {
                   className="w-full h-96 object-cover"
                 />
                 <div className="absolute top-4 right-4 flex space-x-2">
-                  <motion.button
+                  {/* <motion.button
                     whileHover={{ scale: 1.4 }}
                     whileTap={{ scale: 0.95 }}
                     transition={{ type: "spring", stiffness: 300 }}
@@ -258,6 +317,21 @@ const handleBuyProperty = () => {
                         },
                       });
                     }}
+                    className="bg-white p-2 rounded-lg shadow-md hover:bg-gray-50"
+                  >
+                    <Heart
+                      className={`w-5 h-5 ${
+                        isFavorite
+                          ? "fill-red-500 text-red-500"
+                          : "text-gray-600"
+                      }`}
+                    />
+                  </motion.button> */}
+                  <motion.button
+                    whileHover={{ scale: 1.4 }}
+                    whileTap={{ scale: 0.95 }}
+                    transition={{ type: "spring", stiffness: 300 }}
+                    onClick={handleToggleFavorite} // 🔴 CHANGED
                     className="bg-white p-2 rounded-lg shadow-md hover:bg-gray-50"
                   >
                     <Heart
@@ -343,7 +417,9 @@ const handleBuyProperty = () => {
                 <div className="flex items-center space-x-3">
                   <Bed className="w-6 h-6 text-cyan-500" />
                   <div>
-                    <div className="text-sm text-gray-500 text-secondary">Bedrooms</div>
+                    <div className="text-sm text-gray-500 text-secondary">
+                      Bedrooms
+                    </div>
                     <div className="font-semibold text-secondary">
                       {propertyData.bedrooms}
                     </div>
@@ -352,7 +428,9 @@ const handleBuyProperty = () => {
                 <div className="flex items-center space-x-3">
                   <Bath className="w-6 h-6 text-cyan-500" />
                   <div>
-                    <div className="text-sm text-gray-500 text-secondary">Bathrooms</div>
+                    <div className="text-sm text-gray-500 text-secondary">
+                      Bathrooms
+                    </div>
                     <div className="font-semibold text-secondary">
                       {propertyData.bathrooms}
                     </div>
@@ -361,7 +439,9 @@ const handleBuyProperty = () => {
                 <div className="flex items-center space-x-3">
                   <Maximize className="w-6 h-6 text-cyan-500" />
                   <div>
-                    <div className="text-sm text-gray-500 text-secondary">Area</div>
+                    <div className="text-sm text-gray-500 text-secondary">
+                      Area
+                    </div>
                     <div className="font-semibold text-secondary">
                       {propertyData.area}
                     </div>
@@ -370,7 +450,9 @@ const handleBuyProperty = () => {
                 <div className="flex items-center space-x-3">
                   <Calendar className="w-6 h-6 text-cyan-500" />
                   <div>
-                    <div className="text-sm text-gray-500 text-secondary">Built</div>
+                    <div className="text-sm text-gray-500 text-secondary">
+                      Built
+                    </div>
                     <div className="font-semibold text-secondary">
                       {propertyData.built}
                     </div>
@@ -398,7 +480,9 @@ const handleBuyProperty = () => {
                     (feature: Feature, idx: number) => (
                       <div key={idx} className="flex items-center space-x-2">
                         <CheckCircle className="w-5 h-5 text-green-500" />
-                        <span className="text-gray-700 text-secondary">{feature.name}</span>
+                        <span className="text-gray-700 text-secondary">
+                          {feature.name}
+                        </span>
                       </div>
                     )
                   )}
@@ -471,7 +555,6 @@ const handleBuyProperty = () => {
                   <ShoppingCart className="w-5 h-5" />
                   <span>Buy Property</span>
                 </button>
-
               </div>
             </div>
           </div>
@@ -522,8 +605,6 @@ const handleBuyProperty = () => {
       </div>
       {/* Mortgage Calculator - Add here for main content area */}
       <MortgageCalculator propertyPrice={1250000} />
-
-      
 
       {zoomedImageIndex !== null && (
         <div className="fixed inset-0 bg-black/80 flex flex-col items-center justify-center z-50 p-4">

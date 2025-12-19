@@ -1,5 +1,3 @@
-// src/services/favorites.service.ts
-
 import axios, { type AxiosResponse } from "axios";
 import type {
   AddFavoriteRequest,
@@ -16,7 +14,7 @@ const API = axios.create({
   },
 });
 
-// 🔐 Attach access token (same as Visits)
+
 API.interceptors.request.use((config) => {
   const token = localStorage.getItem("accessToken");
 
