@@ -15,7 +15,7 @@ import 'ol/ol.css';
 interface MapSearchProps {
   onAreaClick?: (coordinates: [number, number], address: string) => void;
   properties?: Array<{
-    id: number;
+    id: string;
     lat: number;
     lon: number;
     title: string;

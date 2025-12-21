@@ -2,7 +2,7 @@ import React from "react";
 import { MapPin, Bed, Bath, Square } from "lucide-react";
 
 interface PropertyCardProps {
-  id: number;
+  id: string;
   image: string;
   title: string;
   price: string;

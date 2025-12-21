@@ -16,6 +16,8 @@ import {
 } from "lucide-react";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import { createProperty } from "@/services/property.api";
+import type { CreatePropertyRequest } from "@/types/property.types";
 
 interface PropertyForm {
   status: string;
@@ -31,12 +33,13 @@ interface PropertyForm {
   built: string;
   description: string;
   features: string[];
-  agentName: string;
+  agentId: string; // comes from db
 }
+
 
 const CreateProperty = () => {
   const [propertyForm, setPropertyForm] = useState<PropertyForm>({
-    status: "For Sale",
+    status: "sale",
     type: "villa",
     featured: false,
     title: "",
@@ -49,13 +52,18 @@ const CreateProperty = () => {
     built: "",
     description: "",
     features: [],
-    agentName: "",
+    agentId: "", // fill from auth/user
   });
-  const navigate = useNavigate();
-
-  const [images, setImages] = useState<string[]>([]);
+  const [images, setImages] = useState<File[]>([]);
   const [newFeature, setNewFeature] = useState("");
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+
+
+  const navigate = useNavigate();
+
+  // const [images, setImages] = useState<string[]>([]);
+  // const [newFeature, setNewFeature] = useState("");
+  // const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const availableFeatures = [
     "Swimming Pool",
@@ -85,17 +93,12 @@ const CreateProperty = () => {
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (files) {
-      Array.from(files).forEach((file) => {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          setImages((prev) => [...prev, reader.result as string]);
-        };
-        reader.readAsDataURL(file);
-      });
+      setImages((prev) => [...prev, ...Array.from(files)]);
     }
   };
+  const getPreviewUrl = (file: File) => URL.createObjectURL(file);
 
-  const removeImage = (index: number) => {
+   const removeImage = (index: number) => {
     setImages((prev) => prev.filter((_, i) => i !== index));
   };
 
@@ -118,12 +121,38 @@ const CreateProperty = () => {
     }
   };
 
-  const handleSubmit = async() => {
-    console.log("Property Form Submitted:", propertyForm);
-    console.log("Images:", images);
-    setShowSuccessModal(true);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    navigate("/homeSeller");
+  const handleSubmit = async () => {
+    try {
+      // Build CreatePropertyRequest object
+      const data: CreatePropertyRequest = {
+        title: propertyForm.title,
+        description: propertyForm.description,
+        type: propertyForm.type as any, // "villa" | "apartment"...
+        status: propertyForm.status as any, // "sale" | "rent"
+        featured: propertyForm.featured,
+        price: Number(propertyForm.price),
+        priceNote: propertyForm.priceNote || undefined,
+        address: propertyForm.address,
+        bedrooms: Number(propertyForm.bedrooms),
+        bathrooms: Number(propertyForm.bathrooms),
+        area: Number(propertyForm.area),
+        builtYear: Number(propertyForm.built),
+        images: images,
+        features: propertyForm.features.map((f) => ({ name: f })),
+        agentId: propertyForm.agentId,
+      };
+
+      const res = await createProperty(data);
+
+      if (res.data.success) {
+        setShowSuccessModal(true);
+      } else {
+        Swal.fire("Error", res.data.message || "Failed to create property", "error");
+      }
+    } catch (error: any) {
+      console.error(error);
+      Swal.fire("Error", error.message || "Failed to create property", "error");
+    }
   };
 
   return (
@@ -167,7 +196,7 @@ const CreateProperty = () => {
                     {images.map((img, idx) => (
                       <div key={idx} className="relative group">
                         <img
-                          src={img}
+                          src={getPreviewUrl(img)} // convert File to URL
                           alt={`Property ${idx + 1}`}
                           className="w-full h-32 object-cover rounded-lg shadow-sm"
                         />
@@ -490,7 +519,9 @@ const CreateProperty = () => {
             </p>
             {/* CHANGED: Modal Done Button to Beige with Dark Text */}
             <button
-              onClick={() => setShowSuccessModal(false)}
+              onClick={
+                () => setShowSuccessModal(false)}
+              
               className="w-full bg-[#E6D5B8] text-[#4A3B2A] py-3 rounded-lg font-bold hover:bg-[#C19A6B] hover:text-white transition-all"
             >
               Done

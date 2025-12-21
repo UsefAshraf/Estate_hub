@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState } from "react";
 import {
   Search,
   MapPin,
@@ -16,6 +16,9 @@ import CityCard from "../general/CityCard";
 import CompanyCard from "../general/CompanyCard";
 import PropertyCard from "../general/PropertyCard";
 import MapSearch from "../general/MapSearch";
+
+import { getAllProperties } from "@/services/property.api";
+import type { Property } from "@/types/property.types";
 
 // Bath icon component
 const Bath: React.FC<{ className?: string }> = ({ className }) => (
@@ -45,146 +48,49 @@ const HomeSellerMergedPage: React.FC = () => {
   //////////
   const [mapSearchQuery, setMapSearchQuery] = useState("");
 
-  // ------- Featured Properties -------
-  const featuredProperties = [
-    {
-      id: 1,
-      title: "Luxury Family Home",
-      address: "1800-1818 79th St",
-      price: "$395,000",
-      priceType: "sale",
-      beds: 4,
-      baths: 1,
-      sqft: 400,
-      image:
-        "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=400",
-      tags: ["FOR SALE", "FEATURED"],
-      type: "For Sale",
-    },
-    {
-      id: 2,
-      title: "Skyper Pool Apartment",
-      address: "1020 Bloomingdale Ave",
-      price: "$280,000",
-      priceType: "sale",
-      beds: 4,
-      baths: 2,
-      sqft: 450,
-      image: "https://images.unsplash.com/photo-1556912173-3bb406ef7e77?w=400",
-      tags: ["FOR SALE"],
-      type: "For Sale",
-    },
-    {
-      id: 3,
-      title: "North Dillard Street",
-      address: "4330 Bell Shoals Rd",
-      price: "$250",
-      priceType: "rent",
-      beds: 4,
-      baths: 2,
-      sqft: 400,
-      image:
-        "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=400",
-      tags: ["FOR RENT"],
-      type: "For Rent",
-    },
-    {
-      id: 4,
-      title: "Eaton Garth Penthouse",
-      address: "7722 18th Ave, Brooklyn",
-      price: "$180,000",
-      priceType: "sale",
-      beds: 4,
-      baths: 2,
-      sqft: 450,
-      image:
-        "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=400",
-      tags: ["FOR SALE", "FEATURED"],
-      type: "For Sale",
-    },
-    {
-      id: 5,
-      title: "New Apartment Nice View",
-      address: "42 Avenue Q, Brooklyn",
-      price: "$850",
-      priceType: "rent",
-      beds: 4,
-      baths: 1,
-      sqft: 460,
-      image:
-        "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=400",
-      tags: ["FOR RENT", "FEATURED"],
-      type: "For Rent",
-    },
-    {
-      id: 9,
-      title: "Riverside Cottage",
-      address: "12 River Rd, Chicago",
-      price: "$450,000",
-      priceType: "sale",
-      beds: 3,
-      baths: 2,
-      sqft: 350,
-      image:
-        "https://images.unsplash.com/photo-1572120360610-d971b9d7767c?w=400",
-      tags: ["FOR SALE"],
-      type: "For Sale",
-    },
-    {
-      id: 10,
-      title: "Beachfront Condo",
-      address: "500 Ocean Dr, Miami",
-      price: "$2,200",
-      priceType: "rent",
-      beds: 3,
-      baths: 2,
-      sqft: 300,
-      image:
-        "https://images.unsplash.com/photo-1507089947368-19c1da9775ae?w=400",
-      tags: ["FOR RENT", "FEATURED"],
-      type: "For Rent",
-    },
-    {
-      id: 11,
-      title: "Historic Downtown House",
-      address: "99 Market St, San Francisco",
-      price: "$980,000",
-      priceType: "sale",
-      beds: 4,
-      baths: 3,
-      sqft: 550,
-      image:
-        "https://images.unsplash.com/photo-1505691938895-1758d7feb511?w=400",
-      tags: ["FOR SALE"],
-      type: "For Sale",
-    },
-    {
-      id: 12,
-      title: "Luxury Penthouse Suite",
-      address: "88 Park Ave, New York",
-      price: "$5,500",
-      priceType: "rent",
-      beds: 3,
-      baths: 3,
-      sqft: 400,
-      image:
-        "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=400",
-      tags: ["FOR RENT", "FEATURED"],
-      type: "For Rent",
-    },
-  ];
+  // Backend properties
+  const [properties, setProperties] = useState<Property[]>([]);
+  const [loading, setLoading] = useState(false);
 
-  const filteredProperties =
-    featuredFilter === "All Properties"
-      ? featuredProperties
-      : featuredProperties.filter((p) => p.type === featuredFilter);
+ // Fetch properties from backend
+  useEffect(() => {
+    const fetchProperties = async () => {
+      setLoading(true);
+      try {
+        const res = await getAllProperties({});
+        if (res.data.success) {
+          setProperties(res.data.data);
+        }
+      } catch (error:any) {
+         console.error("Error fetching properties:");
+  console.log("message:", error.message);
+  console.log("status:", error.response?.status);
+  console.log("data:", error.response?.data);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  // ------- Search -------
+    fetchProperties();
+  }, []);
+
+   // Filter properties based on featuredFilter
+ const filteredProperties =
+  featuredFilter === "All Properties"
+    ? properties
+    : featuredFilter === "Featured"
+    ? properties.filter((p) => p.featured)
+    : featuredFilter === "For Sale"
+    ? properties.filter((p) => p.status === "sale")
+    : featuredFilter === "For Rent"
+    ? properties.filter((p) => p.status === "rent")
+    : properties;
+
+   // Search handlers
   const handleSearchClick = () => {
     const query = searchInput.trim()
       ? `?q=${encodeURIComponent(searchInput)}&type=${selectedPropertyType}`
       : `?type=${selectedPropertyType}`;
-
     navigate(`/search${query}`);
   };
 
@@ -216,10 +122,15 @@ const HomeSellerMergedPage: React.FC = () => {
     navigate(`/search${query}`);
   };
 
-  const handlePropertyClick = (id: number) => {
-    console.log("Property:", id);
-    // navigate(`/propertydetail/${id}`);
-    navigate(`/propertydetailBuyer`);
+  // const handlePropertyClick = (id: string) => {
+  //   console.log("Property:", id);
+  //   //navigate(`/propertydetail/${id}`);
+  //   navigate(`/propertydetailBuyer`);
+  
+  // };
+  const handlePropertyClick = (propertyId: string) => {
+    console.log("Navigating to property:", propertyId);
+    navigate(`/propertydetailBuyer/${propertyId}`);
   };
   const fadeIn = (direction = "up") => {
     const variants = {
@@ -546,7 +457,13 @@ const HomeSellerMergedPage: React.FC = () => {
             <div className="h-[600px] w-full">
               <MapSearch
                 onAreaClick={handleMapAreaClick}
-                properties={propertiesWithCoords}
+                properties={properties.map((p) => ({
+                  id: p._id,
+                  lat: p.location?.coordinates[1] ?? 0,
+                  lon: p.location?.coordinates[0] ?? 0,
+                  title: p.title,
+                  price: `$${p.price}`,
+                }))}
               />
             </div>
           </div>
@@ -581,7 +498,7 @@ const HomeSellerMergedPage: React.FC = () => {
             </div>
 
             <div className="flex gap-2">
-              {["All Properties", "For Sale", "For Rent"].map((t) => (
+              {["All Properties", "Featured", "For Sale", "For Rent"].map((t) => (
                 <button
                   key={t}
                   onClick={() => setFeaturedFilter(t)}
@@ -667,24 +584,30 @@ const HomeSellerMergedPage: React.FC = () => {
               </div>
             ))}
           </div> */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredProperties.map((property) => (
-              <PropertyCard
-                key={property.id}
-                id={property.id}
-                image={property.image}
-                title={property.title}
-                price={property.price}
-                priceType={property.priceType}
-                address={property.address}
-                beds={property.beds}
-                baths={property.baths}
-                sqft={property.sqft}
-                tags={property.tags}
-                onClick={() => handlePropertyClick(property.id)}
-              />
-            ))}
-          </div>
+          {loading ? (
+            <p className="text-center text-secondary">Loading properties...</p>
+          ) : filteredProperties.length === 0 ? (
+            <p className="text-center text-secondary">No properties found.</p>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredProperties.map((property) => (
+                <PropertyCard
+                  key={property._id}
+                  id={property._id}
+                  image={property.images[0]}
+                  title={property.title}
+                  price={`$${property.price}`}
+                  priceType={property.status}
+                  address={property.address}
+                  beds={property.bedrooms}
+                  baths={property.bathrooms}
+                  sqft={property.area}
+                  tags={property.featured ? ["FEATURED"] : []}
+                  onClick={() => handlePropertyClick(property._id)}
+                />
+              ))}
+            </div>
+          )}
         </div>
         {/* </section> */}
       </motion.section>
