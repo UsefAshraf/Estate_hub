@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect} from "react";
 import { addVisit } from "../../services/visits.services.ts";
+
 import {
   getUserFavorites,
   addFavorite,
@@ -25,6 +26,7 @@ import Swal from "sweetalert2";
 import { motion } from "motion/react";
 import MortgageCalculator from "./mortgagecalculator";
 import PropertyLocationMap from "@/pages/general/PropertyLocationMap";
+
 
 // Type definitions
 interface Feature {
@@ -56,9 +58,11 @@ interface PropertyData {
   features: Feature[];
   agent: Agent;
 }
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const Propertydetail: React.FC = () => {
+  const { id } = useParams();        
+  const propertyId = id as string;
   const [mainImage, setMainImage] = useState<number>(0);
   const navigate = useNavigate();
   const [isFavorite, setIsFavorite] = useState<boolean>(false);
@@ -156,7 +160,7 @@ const Propertydetail: React.FC = () => {
       });
     }
   };
-  const propertyId = "65f123abc456def789012345";
+  //const propertyId = "65f123abc456def789012345";
   useEffect(() => {
     const checkFavorite = async () => {
       try {

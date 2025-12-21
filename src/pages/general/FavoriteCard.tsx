@@ -2,7 +2,7 @@ import React from "react";
 import { Heart, MapPin, Bed, Bath, Square, Trash2, Share2 } from "lucide-react";
 
 interface Property {
-  id: number;
+  _id: string;
   image: string;
   title: string;
   location: string;
@@ -17,9 +17,12 @@ interface Property {
 
 interface FavoriteCardProps {
   property: Property;
-  removeFavorite: (id: number) => void;
+ 
   shareProperty: (property: Property) => void;
-  onPropertyClick: (id: number) => void;
+ 
+  removeFavorite: (id: string) => void;
+onPropertyClick: (id: string) => void;
+
 }
 
 const FavoriteCard: React.FC<FavoriteCardProps> = ({
@@ -55,7 +58,7 @@ const FavoriteCard: React.FC<FavoriteCardProps> = ({
           </button>
 
           <button
-            onClick={() => removeFavorite(property.id)}
+            onClick={() => removeFavorite(property._id)}
             className="bg-primary cursor-pointer backdrop-blur-sm p-2 rounded-full hover:bg-red-500 transition-colors group"
             title="Remove from favorites"
           >
@@ -109,7 +112,7 @@ const FavoriteCard: React.FC<FavoriteCardProps> = ({
           </div>
 
           <div className="flex gap-2">
-            <button onClick={() => onPropertyClick(property.id)} className="bg-accent cursor-pointer text-primary px-2 py-1 rounded-lg font-medium hover:bg-accent-hover transition-colors">
+            <button onClick={() => onPropertyClick(property._id)} className="bg-accent cursor-pointer text-primary px-2 py-1 rounded-lg font-medium hover:bg-accent-hover transition-colors">
               View Details
             </button>
             <button className="border border-custom cursor-pointer text-secondary px-2 py-1 rounded-lg hover:bg-accent/20 transition-colors">
