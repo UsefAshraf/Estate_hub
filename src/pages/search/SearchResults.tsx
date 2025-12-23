@@ -1,191 +1,121 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Search,
   SlidersHorizontal,
 } from "lucide-react";
 import PropertyCardFav from "../general/PropertyCardFav";
 import { useNavigate } from "react-router-dom";
+import { getAllProperties } from "@/services/property.api";
+import type { Property, PropertyFilters, PropertyType } from "@/types/property.types";
 
-interface Property {
-  id: number;
-  image: string;
-  title: string;
-  location: string;
-  price: number;
-  bedrooms: number;
-  bathrooms: number;
-  sqft: number;
-  type: string;
-  featured: boolean;
-}
 const SearchResultsPage: React.FC = () => {
-const navigate = useNavigate();
-const [searchQuery, setSearchQuery] = useState("");
-  const [propertyType, setPropertyType] = useState("All");
-  const [bedrooms, setBedrooms] = useState("Any");
+  const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [propertyType, setPropertyType] = useState<string>("All");
+  const [propertyStatus, setPropertyStatus] = useState<string>("All");
+  const [bedrooms, setBedrooms] = useState<string>("Any");
+  const [minPrice, setMinPrice] = useState<string>("");
+  const [maxPrice, setMaxPrice] = useState<string>("");
   const [showFilters, setShowFilters] = useState(false);
   const [viewType, setViewType] = useState<"grid" | "list">("grid");
-  const [favorites, setFavorites] = useState<Set<number>>(new Set());
+  const [favorites, setFavorites] = useState<Set<string>>(new Set());
+  const [properties, setProperties] = useState<Property[]>([]);
+  const [allProperties, setAllProperties] = useState<Property[]>([]); // Store all properties for client-side filtering
+  const [loading, setLoading] = useState(false);
 
-  const properties = [
-    {
-      id: 1,
-      image:
-        "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=400",
-      title: "Modern Family Home",
-      location: "Beverly Hills, California",
-      price: 2500000,
-      bedrooms: 4,
-      bathrooms: 3,
-      sqft: 3500,
-      type: "House",
-      featured: true,
-    },
-    {
-      id: 2,
-      image: "https://images.unsplash.com/photo-1556912173-3bb406ef7e77?w=400",
-      title: "Luxury Downtown Apartment",
-      location: "San Francisco, California",
-      price: 1850000,
-      bedrooms: 3,
-      bathrooms: 2,
-      sqft: 2200,
-      type: "Apartment",
-      featured: false,
-    },
-    {
-      id: 3,
-      image:
-        "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=400",
-      title: "Beachfront Villa",
-      location: "Miami, Florida",
-      price: 4200000,
-      bedrooms: 5,
-      bathrooms: 4,
-      sqft: 4800,
-      type: "Villa",
-      featured: true,
-    },
-    {
-      id: 4,
-      image:
-        "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=400",
-      title: "Cozy Studio Loft",
-      location: "New York, New York",
-      price: 650000,
-      bedrooms: 1,
-      bathrooms: 1,
-      sqft: 800,
-      type: "Apartment",
-      featured: false,
-    },
-    {
-      id: 5,
-      image:
-        "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=400",
-      title: "Mountain View Retreat",
-      location: "Aspen, Colorado",
-      price: 3700000,
-      bedrooms: 6,
-      bathrooms: 5,
-      sqft: 5200,
-      type: "House",
-      featured: true,
-    },
-    {
-      id: 6,
-      image:
-        "https://images.unsplash.com/photo-1572120360610-d971b9d7767c?w=400",
-      title: "Urban Townhouse",
-      location: "Chicago, Illinois",
-      price: 1200000,
-      bedrooms: 3,
-      bathrooms: 2.5,
-      sqft: 2800,
-      type: "Townhouse",
-      featured: false,
-    },
-    {
-      id: 7,
-      image:
-        "https://images.unsplash.com/photo-1505691938895-1758d7feb511?w=400",
-      title: "Contemporary Penthouse",
-      location: "Los Angeles, California",
-      price: 5800000,
-      bedrooms: 4,
-      bathrooms: 4,
-      sqft: 4200,
-      type: "Penthouse",
-      featured: true,
-    },
-    {
-      id: 8,
-      image:
-        "https://images.unsplash.com/photo-1507089947368-19c1da9775ae?w=400",
-      title: "Suburban Family Home",
-      location: "Austin, Texas",
-      price: 850000,
-      bedrooms: 4,
-      bathrooms: 3,
-      sqft: 3200,
-      type: "House",
-      featured: false,
-    },
-    {
-      id: 9,
-      image:
-        "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=400", // reused URL for example
-      title: "Waterfront Condo",
-      location: "Seattle, Washington",
-      price: 1450000,
-      bedrooms: 2,
-      bathrooms: 2,
-      sqft: 1800,
-      type: "Condo",
-      featured: false,
-    },
-    {
-      id: 10,
-      image:
-        "https://images.unsplash.com/photo-1507089947368-19c1da9775ae?w=400", // reused URL for example
-      title: "Historic Brownstone",
-      location: "Boston, Massachusetts",
-      price: 2100000,
-      bedrooms: 5,
-      bathrooms: 3,
-      sqft: 3800,
-      type: "House",
-      featured: true,
-    },
-    {
-      id: 11,
-      image:
-        "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=400",
-      title: "Desert Oasis Estate",
-      location: "Phoenix, Arizona",
-      price: 3200000,
-      bedrooms: 5,
-      bathrooms: 4,
-      sqft: 4500,
-      type: "Estate",
-      featured: false,
-    },
-    {
-      id: 12,
-      image:
-        "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=400",
-      title: "Garden View Apartment",
-      location: "Portland, Oregon",
-      price: 720000,
-      bedrooms: 2,
-      bathrooms: 2,
-      sqft: 1400,
-      type: "Apartment",
-      featured: false,
-    },
-  ];
+  useEffect(() => {
+    fetchProperties();
+  }, []);
 
-  const toggleFavorite = (id: number) => {
+  const fetchProperties = async () => {
+    setLoading(true);
+    try {
+      const res = await getAllProperties({});
+      if (res.data.success) {
+        setAllProperties(res.data.data);
+        setProperties(res.data.data);
+      }
+    } catch (error: any) {
+      console.error("Error fetching properties:");
+      console.log("message:", error.message);
+      console.log("status:", error.response?.status);
+      console.log("data:", error.response?.data);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Client-side filtering
+  const applyFilters = () => {
+    let filtered = [...allProperties];
+
+    // Search query filter
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter(
+        (property) =>
+          property.title.toLowerCase().includes(query) ||
+          property.address.toLowerCase().includes(query) ||
+          property.description.toLowerCase().includes(query)
+      );
+    }
+
+    // Property type filter
+    if (propertyType !== "All") {
+      filtered = filtered.filter(
+        (property) => property.type.toLowerCase() === propertyType.toLowerCase()
+      );
+    }
+
+    // Property status filter (rent/sale)
+    if (propertyStatus !== "All") {
+      filtered = filtered.filter(
+        (property) => property.status.toLowerCase() === propertyStatus.toLowerCase()
+      );
+    }
+
+    // Bedrooms filter
+    if (bedrooms !== "Any") {
+      const bedroomNum = parseInt(bedrooms.replace("+", ""));
+      if (!isNaN(bedroomNum)) {
+        filtered = filtered.filter((property) => property.bedrooms >= bedroomNum);
+      }
+    }
+
+    // Price range filter
+    if (minPrice) {
+      const min = parseFloat(minPrice);
+      if (!isNaN(min)) {
+        filtered = filtered.filter((property) => property.price >= min);
+      }
+    }
+    if (maxPrice) {
+      const max = parseFloat(maxPrice);
+      if (!isNaN(max)) {
+        filtered = filtered.filter((property) => property.price <= max);
+      }
+    }
+
+    setProperties(filtered);
+  };
+
+  const handleApplyFilters = () => {
+    applyFilters();
+    setShowFilters(false);
+  };
+
+  const handleClearFilters = () => {
+    setSearchQuery("");
+    setPropertyType("All");
+    setPropertyStatus("All");
+    setBedrooms("Any");
+    setMinPrice("");
+    setMaxPrice("");
+    setProperties(allProperties);
+    setShowFilters(false);
+  };
+
+  const toggleFavorite = (id: string) => {
     setFavorites((prev) => {
       const newFavorites = new Set(prev);
       if (newFavorites.has(id)) {
@@ -197,18 +127,29 @@ const [searchQuery, setSearchQuery] = useState("");
     });
   };
 
-    const handlePropertyClick = (id: number) => {
-    console.log("Property:", id);
-    // navigate(`/propertydetail/${id}`);
-    navigate(`/propertydetailBuyer`);
+  const handlePropertyClick = (id: string) => {
+    console.log("Navigating to property:", id);
+    navigate(`/propertydetailBuyer/${id}`); // Navigate with property ID
   };
 
-   return (
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    applyFilters();
+  };
+
+  // Apply filters whenever any filter changes
+  useEffect(() => {
+    if (allProperties.length > 0) {
+      applyFilters();
+    }
+  }, [searchQuery]);
+
+  return (
     <div className="min-h-screen">
       {/* Header Search Bar */}
       <section className="bg-secondary border-b border-custom sticky top-0 z-50 shadow-sm">
         <div className="max-w-7xl mx-auto px-6 py-6">
-          <div className="flex flex-col lg:flex-row gap-4 items-center">
+          <form onSubmit={handleSearch} className="flex flex-col lg:flex-row gap-4 items-center">
             <div className="flex-1 w-full">
               <div className="relative">
                 <input
@@ -218,25 +159,34 @@ const [searchQuery, setSearchQuery] = useState("");
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-full rounded-full border border-custom py-3 px-6 pr-12 shadow-sm focus:outline-none focus:ring-2 focus:ring-accent bg-primary text-primary"
                 />
-                <button className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-accent p-2.5 rounded-full hover:bg-accent-hover transition">
+                <button 
+                  type="submit"
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-accent p-2.5 rounded-full hover:bg-accent-hover transition"
+                >
                   <Search className="w-5 h-5 text-primary" />
                 </button>
               </div>
             </div>
 
             <button
+              type="button"
               onClick={() => setShowFilters(!showFilters)}
               className="flex items-center space-x-2 px-6 py-3 border border-custom rounded-full btn-primary hover:bg-accent-hover transition"
             >
               <SlidersHorizontal className="w-5 h-5" />
               <span>Filters</span>
+              {(propertyType !== "All" || propertyStatus !== "All" || bedrooms !== "Any" || minPrice || maxPrice) && (
+                <span className="ml-1 bg-accent text-primary text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                  !
+                </span>
+              )}
             </button>
-          </div>
+          </form>
 
           {/* Filters Panel */}
           {showFilters && (
             <div className="mt-6 p-6 bg-primary rounded-2xl border border-custom">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
                 <div>
                   <label className="block text-sm font-medium text-primary mb-2">
                     Property Type
@@ -247,11 +197,27 @@ const [searchQuery, setSearchQuery] = useState("");
                     className="w-full rounded-lg border border-custom py-2 px-4 bg-secondary text-primary focus:outline-none focus:ring-2 focus:ring-accent"
                   >
                     <option>All</option>
-                    <option>House</option>
-                    <option>Apartment</option>
-                    <option>Villa</option>
-                    <option>Condo</option>
-                    <option>Townhouse</option>
+                    <option>villa</option>
+                    <option>apartment</option>
+                    <option>house</option>
+                    <option>condo</option>
+                    <option>townhouse</option>
+                    <option>land</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-primary mb-2">
+                    Status
+                  </label>
+                  <select
+                    value={propertyStatus}
+                    onChange={(e) => setPropertyStatus(e.target.value)}
+                    className="w-full rounded-lg border border-custom py-2 px-4 bg-secondary text-primary focus:outline-none focus:ring-2 focus:ring-accent"
+                  >
+                    <option>All</option>
+                    <option>sale</option>
+                    <option>rent</option>
                   </select>
                 </div>
 
@@ -280,6 +246,8 @@ const [searchQuery, setSearchQuery] = useState("");
                   <input
                     type="number"
                     placeholder="$0"
+                    value={minPrice}
+                    onChange={(e) => setMinPrice(e.target.value)}
                     className="w-full rounded-lg border border-custom py-2 px-4 bg-secondary text-primary focus:outline-none focus:ring-2 focus:ring-accent"
                   />
                 </div>
@@ -291,6 +259,8 @@ const [searchQuery, setSearchQuery] = useState("");
                   <input
                     type="number"
                     placeholder="$5,000,000"
+                    value={maxPrice}
+                    onChange={(e) => setMaxPrice(e.target.value)}
                     className="w-full rounded-lg border border-custom py-2 px-4 bg-secondary text-primary focus:outline-none focus:ring-2 focus:ring-accent"
                   />
                 </div>
@@ -298,12 +268,17 @@ const [searchQuery, setSearchQuery] = useState("");
 
               <div className="flex justify-end mt-6 space-x-4">
                 <button
-                  onClick={() => setShowFilters(false)}
+                  type="button"
+                  onClick={handleClearFilters}
                   className="px-6 py-2 border border-custom rounded-lg text-primary hover:bg-secondary transition"
                 >
-                  Cancel
+                  Clear Filters
                 </button>
-                <button className="px-6 py-2 bg-accent text-primary rounded-lg font-medium hover:bg-accent-hover transition">
+                <button 
+                  type="button"
+                  onClick={handleApplyFilters}
+                  className="px-6 py-2 bg-accent text-primary rounded-lg font-medium hover:bg-accent-hover transition"
+                >
                   Apply Filters
                 </button>
               </div>
@@ -320,7 +295,7 @@ const [searchQuery, setSearchQuery] = useState("");
               Search Results
             </h1>
             <p className="text-secondary">
-              Found {properties.length} properties matching your criteria
+              {loading ? "Loading..." : `Found ${properties.length} properties matching your criteria`}
             </p>
           </div>
 
@@ -351,56 +326,70 @@ const [searchQuery, setSearchQuery] = useState("");
         </div>
 
         {/* Property Grid */}
-        <div
-          className={`grid gap-8 ${
-            viewType === "grid"
-              ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
-              : "grid-cols-1"
-          }`}
-        >
-          {properties.map((property) => (
-            <PropertyCardFav
-              key={property.id}
-              property={property}
-              favorites={favorites}
-              toggleFavorite={toggleFavorite}
-              onPropertyClick={handlePropertyClick}
-            />
-          ))}
-        </div>
+        {loading ? (
+          <div className="flex justify-center items-center h-64">
+            <div className="text-xl text-secondary">Loading properties...</div>
+          </div>
+        ) : properties.length === 0 ? (
+          <div className="text-center py-16">
+            <p className="text-xl text-secondary mb-4">No properties found matching your criteria</p>
+            <button
+              onClick={handleClearFilters}
+              className="px-6 py-3 bg-accent text-primary rounded-lg font-medium hover:bg-accent-hover transition"
+            >
+              Clear Filters
+            </button>
+          </div>
+        ) : (
+          <div
+            className={`grid gap-8 ${
+              viewType === "grid"
+                ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
+                : "grid-cols-1"
+            }`}
+          >
+            {properties.map((property) => (
+              <PropertyCardFav
+                key={property._id}
+                property={property}
+                isFavorite={favorites.has(property._id)}
+                onToggleFavorite={() => toggleFavorite(property._id)}
+                onClick={() => handlePropertyClick(property._id)}
+              />
+            ))}
+          </div>
+        )}
 
-        {/* Pagination */}
-        <div className="flex justify-center mt-12">
-          <nav aria-label="Page navigation">
-            <ul className="flex -space-x-px text-sm">
-              <li>
-                <button className="flex items-center justify-center text-secondary bg-secondary border border-custom hover:bg-accent-hover hover:text-primary font-medium rounded-s-lg text-sm px-3 h-10 transition">
-                  Previous
-                </button>
-              </li>
-
-              {[1, 2, 3, 4, 5].map((n) => (
-                <li key={n}>
-                  <button
-                    className={`flex items-center justify-center border cursor-pointer border-custom text-sm w-10 h-10 transition ${
-                      n === 3
-                        ? "text-accent bg-secondary font-semibold"
-                        : "text-secondary bg-secondary hover:bg-accent-hover hover:text-primary"
-                    }`}
-                  >
-                    {n}
+        {/* Pagination - You can implement this later with backend pagination */}
+        {!loading && properties.length > 0 && properties.length > 9 && (
+          <div className="flex justify-center mt-12">
+            <nav aria-label="Page navigation">
+              <ul className="flex -space-x-px text-sm">
+                <li>
+                  <button className="flex items-center justify-center text-secondary bg-secondary border border-custom hover:bg-accent-hover hover:text-primary font-medium rounded-s-lg text-sm px-3 h-10 transition">
+                    Previous
                   </button>
                 </li>
-              ))}
 
-              <li>
-                <button className="flex items-center justify-center text-secondary bg-secondary border border-custom hover:bg-accent-hover hover:text-primary font-medium rounded-e-lg text-sm px-3 h-10 transition">
-                  Next
-                </button>
-              </li>
-            </ul>
-          </nav>
-        </div>
+                {[1].map((n) => (
+                  <li key={n}>
+                    <button
+                      className="flex items-center justify-center border cursor-pointer border-custom text-sm w-10 h-10 transition text-accent bg-secondary font-semibold"
+                    >
+                      {n}
+                    </button>
+                  </li>
+                ))}
+
+                <li>
+                  <button className="flex items-center justify-center text-secondary bg-secondary border border-custom hover:bg-accent-hover hover:text-primary font-medium rounded-e-lg text-sm px-3 h-10 transition">
+                    Next
+                  </button>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        )}
       </section>
 
       {/* Newsletter CTA */}
@@ -421,7 +410,7 @@ const [searchQuery, setSearchQuery] = useState("");
             <button className="bg-accent text-primary px-8 py-3 rounded-lg font-medium hover:bg-accent-hover transition whitespace-nowrap">
               Subscribe
             </button>
-          </div>
+            </div>
         </div>
       </section>
     </div>

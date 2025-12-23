@@ -114,4 +114,6 @@ export const updateProperty = (
 export const deleteProperty = (
   id: string
 ): Promise<AxiosResponse<{ success: boolean; message: string }>> =>
-  API.delete(`/api/properties/${id}`);
+  API.delete(`/api/properties/${id}`,{
+    headers: { accessToken: localStorage.getItem("accessToken") }
+  });
