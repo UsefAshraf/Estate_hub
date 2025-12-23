@@ -1,5 +1,6 @@
 import { useState, useEffect} from "react";
 import { addVisit } from "../../services/visits.services.ts";
+import type { Favorite } from "../../types/favourites.types.ts" 
 
 import {
   getUserFavorites,
@@ -167,7 +168,7 @@ const Propertydetail: React.FC = () => {
         const res = await getUserFavorites();
 
         const exists = res.data.data.some(
-          (fav: any) => fav.propertyId._id === propertyId
+          (fav: Favorite) => fav.propertyId._id === propertyId
         );
 
         setIsFavorite(exists);
@@ -178,42 +179,62 @@ const Propertydetail: React.FC = () => {
 
     checkFavorite();
   }, [propertyId]);
-  // 🔴 NEW
+  
   const handleToggleFavorite = async () => {
     try {
       if (isFavorite) {
         await removeFavorite(propertyId);
-
-        Swal.fire({
-          title: "Removed from Favorites",
-          icon: "success",
-          position: "bottom",
-          toast: true,
-          timer: 3000,
-          showConfirmButton: false,
-        });
+        setIsFavorite(false);
       } else {
         await addFavorite({ propertyId });
-
-        Swal.fire({
-          title: "Added to Favorites!",
-          icon: "success",
-          position: "bottom",
-          toast: true,
-          timer: 3000,
-          showConfirmButton: false,
-        });
+        setIsFavorite(true);
       }
-
-      setIsFavorite(!isFavorite);
     } catch (error: any) {
       Swal.fire({
-        title: "Error",
-        text: error?.response?.data?.message || "Something went wrong",
         icon: "error",
+        title: "Something went wrong",
+        text:
+          error?.response?.data?.message ||
+          "Unable to update favorites. Please try again.",
       });
     }
   };
+ 
+  // const handleToggleFavorite = async () => {
+  //   try {
+  //     if (isFavorite) {
+  //       await removeFavorite(propertyId);
+
+  //       Swal.fire({
+  //         title: "Removed from Favorites",
+  //         icon: "success",
+  //         position: "bottom",
+  //         toast: true,
+  //         timer: 3000,
+  //         showConfirmButton: false,
+  //       });
+  //     } else {
+  //       await addFavorite({ propertyId });
+
+  //       Swal.fire({
+  //         title: "Added to Favorites!",
+  //         icon: "success",
+  //         position: "bottom",
+  //         toast: true,
+  //         timer: 3000,
+  //         showConfirmButton: false,
+  //       });
+  //     }
+
+  //     setIsFavorite(!isFavorite);
+  //   } catch (error: any) {
+  //     Swal.fire({
+  //       title: "Error",
+  //       text: error?.response?.data?.message || "Something went wrong",
+  //       icon: "error",
+  //     });
+  //   }
+  // };
 
   const handleContactSubmit = (e: React.FormEvent) => {
     e.preventDefault();
