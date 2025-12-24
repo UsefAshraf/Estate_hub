@@ -39,6 +39,7 @@ import EditProfile from "../pages/general/EditPage";
 import ProfileLayout from "../pages/general/ProfileLayout";
 import CreateProperty from "../pages/seller/CreateProperty";
 import MyProperties from '../pages/seller/MyProperties';
+import AddUser from "../pages/admin/AddUser";
 
 
 const AppRoutes: React.FC = () => {
@@ -73,10 +74,12 @@ const AppRoutes: React.FC = () => {
           <Route path="/contactSeller" element={<Contact />} />
           <Route path="/my-properties" element={<MyProperties />} />
 
+
         </Route>
 
         <Route element={<AdminLayout />}>
           <Route path="/users" element={<UserManagement />} />
+          <Route path="/addusers" element={<AddUser />} />
           <Route path="/properties" element={<AdminPropertiesPage />} />
           <Route path="/departments" element={<HomeSellerPage />} />
           <Route path="/visits" element={<VisitsPage />} />

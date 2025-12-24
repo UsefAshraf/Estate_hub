@@ -20,11 +20,9 @@ const SuccessPage: React.FC = () => {
         </div>
 
         <h2 className="text-2xl font-bold text-primary mb-2">
-          Password Reset Successful!
-        </h2>
+           Successful!  </h2>
         <p className="text-secondary mb-8">
-          Your password has been successfully reset. You can now sign in with
-          your new password.
+          You can now sign in 
         </p>
 
         <button

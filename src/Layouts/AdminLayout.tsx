@@ -9,7 +9,7 @@ const AdminLayout: React.FC = () => (
     <AdminNavbar />
     <main className="pt-18"> {/* 20 * 4px = 80px, adjust to navbar height */}
       <Outlet />
-    </main>
+    </main> 
     <Footer />
   </div>
 );

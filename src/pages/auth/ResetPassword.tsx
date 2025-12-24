@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Lock, Eye, EyeOff, CheckCircle2 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Lock, Eye, EyeOff, CheckCircle2, Loader2 } from "lucide-react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { authService } from "../../services/authServices";
 
 // -------------------
 // Zod Schema & Types
@@ -32,15 +33,38 @@ type RenewPasswordFormData = z.infer<typeof renewPasswordSchema>;
 const RenewPasswordPage: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [apiError, setApiError] = useState<string | null>(null);
 
   const { register, handleSubmit, formState: { errors } } = useForm<RenewPasswordFormData>({
     resolver: zodResolver(renewPasswordSchema),
   });
+  
   const navigate = useNavigate();
+  const location = useLocation();
+  const { email, otp } = location.state || {};
 
-  const onSubmit = (data: RenewPasswordFormData) => {
-    console.log("New Password:", data.password);
-    navigate("/success");
+  useEffect(() => {
+    if (!email || !otp) {
+      navigate("/forgot");
+    }
+  }, [email, otp, navigate]);
+
+  const onSubmit = async (data: RenewPasswordFormData) => {
+    setLoading(true);
+    setApiError(null);
+    try {
+      await authService.resetPassword({
+        email,
+        otp,
+        password: data.password
+      });
+      navigate("/success");
+    } catch (error: any) {
+      setApiError(error.response?.data?.message || "Failed to reset password.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -60,6 +84,12 @@ const RenewPasswordPage: React.FC = () => {
         <p className="text-secondary text-center mb-6">
           Create a new password for your account
         </p>
+
+        {apiError && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
+            {apiError}
+          </div>
+        )}
 
         <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
           {/* Password */}
@@ -176,15 +206,17 @@ const RenewPasswordPage: React.FC = () => {
           {/* Submit Button */}
           <button 
             type="submit"
+            disabled={loading}
             className="
               w-full btn-primary
               font-semibold py-3 rounded-lg
               transition-colors duration-200
               hover:bg-accent-hover
               cursor-pointer
+              flex justify-center items-center
             "
           >
-            Reset Password
+             {loading ? <Loader2 className="animate-spin mr-2" /> : "Reset Password"}
           </button>
         </form>
       </div>

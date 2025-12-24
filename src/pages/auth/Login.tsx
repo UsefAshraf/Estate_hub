@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Home, Mail, Lock, Eye, EyeOff } from "lucide-react";
+import { Home, Mail, Lock, Eye, EyeOff, Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { authService } from "../../services/authServices";
 
 // -------------------
 // Zod Schema
@@ -21,15 +22,26 @@ type SignInFormData = z.infer<typeof signInSchema>;
 // -------------------
 const SignInPage: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false); // Add loading state
+  const [apiError, setApiError] = useState<string | null>(null); // Add error state
   const navigate = useNavigate();
 
   const { register, handleSubmit, formState: { errors } } = useForm<SignInFormData>({
     resolver: zodResolver(signInSchema),
   });
 
-  const onSubmit = (data: SignInFormData) => {
-    console.log("Form Data:", data);
-    navigate("/homeBuyer");
+  const onSubmit = async (data: SignInFormData) => {
+    setLoading(true);
+    setApiError(null);
+    try {
+      await authService.login(data);
+      // Redirect based on role or default path
+      navigate("/homeBuyer");
+    } catch (error: any) {
+      setApiError(error.response?.data?.message || "Login failed. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -49,6 +61,12 @@ const SignInPage: React.FC = () => {
         <p className="text-secondary text-center mb-6">
           Sign in to your EstateHub account
         </p>
+
+        {apiError && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+            <span className="block sm:inline">{apiError}</span>
+          </div>
+        )}
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           {/* Email */}
@@ -126,21 +144,24 @@ const SignInPage: React.FC = () => {
           {/* Submit */}
           <button
             type="submit"
+            disabled={loading}
             className="
               w-full btn-primary
               font-semibold py-3 rounded-lg
               transition-colors duration-200
               hover:bg-accent-hover
               cursor-pointer
+              flex justify-center items-center
             "
           >
-            Sign In
+            {loading ? <Loader2 className="animate-spin mr-2" /> : "Sign In"}
           </button>
 
           {/* Sign Up */}
           <p className="text-center text-sm text-secondary mt-4">
             Don't have an account?{" "}
             <button
+              type="button"
               onClick={() => navigate("/signup")}
               className="accent hover:text-primary transition-colors duration-200 font-medium"
             >

@@ -2,14 +2,15 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Home, User, Mail, Phone, Lock, Eye, EyeOff } from "lucide-react";
+import { Home, User, Mail, Phone, Lock, Eye, EyeOff, Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { authService } from "../../services/authServices";
 
 // -------------------
 // Zod Schema
 // -------------------
 const signUpSchema = z.object({
-  fullName: z.string().min(2, "Full name is required"),
+  userName: z.string().min(2, "Full name is required"),
   email: z.string().email("Invalid email address"),
   phone: z.string().min(6, "Phone number is required"),
   purpose: z.enum(["Buy/Rent a Property", "Sell a Property", "Both"]),
@@ -29,15 +30,26 @@ type SignUpFormData = z.infer<typeof signUpSchema>;
 const SignUpPage: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [apiError, setApiError] = useState<string | null>(null);
   const navigate = useNavigate();
 
   const { register, handleSubmit, formState: { errors } } = useForm<SignUpFormData>({
     resolver: zodResolver(signUpSchema),
   });
 
-  const onSubmit = (data: SignUpFormData) => {
-    console.log("Form Data:", data);
-    navigate("/success");
+  const onSubmit = async (data: SignUpFormData) => {
+    setLoading(true);
+    setApiError(null);
+    try {
+      await authService.register(data);
+      // Success - Redirect to login or success page
+      navigate("/success");
+    } catch (error: any) {
+      setApiError(error.response?.data?.message || "Registration failed. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const inputClass = "w-full pl-10 pr-12 py-3 bg-bg-secondary dark:bg-bg-tertiary border border-custom rounded-lg focus:outline-none focus:ring-2 focus:ring-accent text-primary transition-colors duration-200 hover:border-accent";
@@ -56,6 +68,12 @@ const SignUpPage: React.FC = () => {
         <h2 className="text-2xl font-bold text-primary text-center mb-2">Create Account</h2>
         <p className="text-secondary text-center mb-6">Join EstateHub and find your dream property</p>
 
+        {apiError && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
+            {apiError}
+          </div>
+        )}
+
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           {/* Full Name */}
           <div className="relative">
@@ -63,10 +81,10 @@ const SignUpPage: React.FC = () => {
             <input
               type="text"
               placeholder="John Doe"
-              {...register("fullName")}
+              {...register("userName")}
               className={inputClass}
             />
-            {errors.fullName && <p className="text-red-500 text-sm mt-1">{errors.fullName.message}</p>}
+            {errors.userName && <p className="text-red-500 text-sm mt-1">{errors.userName.message}</p>}
           </div>
 
           {/* Email */}
@@ -155,8 +173,12 @@ const SignUpPage: React.FC = () => {
           {errors.agreeToTerms && <p className="text-red-500 text-sm mt-1">{errors.agreeToTerms.message}</p>}
 
           {/* Submit */}
-          <button type="submit" className="w-full btn-primary font-semibold py-3 rounded-lg transition-colors duration-200 hover:bg-accent-hover cursor-pointer">
-            Create Account
+          <button 
+            type="submit" 
+            disabled={loading}
+            className="w-full btn-primary font-semibold py-3 rounded-lg transition-colors duration-200 hover:bg-accent-hover cursor-pointer flex justify-center items-center"
+          >
+            {loading ? <Loader2 className="animate-spin mr-2"/> : "Create Account"}
           </button>
         </form>
 

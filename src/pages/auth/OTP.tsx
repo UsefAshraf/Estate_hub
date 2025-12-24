@@ -1,15 +1,25 @@
 import React, { useState, useEffect } from "react";
-import { Mail } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Mail, Loader2 } from "lucide-react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { authService } from "../../services/authServices";
 
 const OTPPage: React.FC = () => {
   const [otpArr, setOtpArr] = useState(Array(6).fill(""));
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  
   const navigate = useNavigate();
+  const location = useLocation();
+  const email = location.state?.email;
 
   useEffect(() => {
+    // If no email is provided (user accessed page directly), redirect to forgot password
+    if (!email) {
+      navigate("/forgot");
+    }
     // Auto-focus the first OTP input on page load
     document.getElementById("otp-0")?.focus();
-  }, []);
+  }, [email, navigate]);
 
   const handleOtpChange = (index: number, value: string) => {
     if (/^\d?$/.test(value)) {
@@ -31,11 +41,26 @@ const OTPPage: React.FC = () => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const otpValue = otpArr.join("");
-    console.log("OTP entered:", otpValue);
-    navigate("/renew");
+    if (otpValue.length !== 6) {
+      setError("Please enter a valid 6-digit code.");
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      await authService.verifyOtp(email, otpValue);
+      // Pass email AND verified OTP to the reset page
+      navigate("/renew", { state: { email, otp: otpValue } });
+    } catch (err: any) {
+      setError(err.response?.data?.message || "Invalid Code");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -53,8 +78,14 @@ const OTPPage: React.FC = () => {
           Enter Verification Code
         </h2>
         <p className="text-secondary text-center mb-6">
-          We've sent a 6-digit code to your email
+          We've sent a 6-digit code to <strong>{email}</strong>
         </p>
+
+        {error && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
+            {error}
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* OTP Input Fields */}
@@ -86,15 +117,17 @@ const OTPPage: React.FC = () => {
           {/* Submit Button */}
           <button
             type="submit"
+            disabled={loading}
             className="
               w-full btn-primary
               font-semibold py-3 rounded-lg
               transition-colors duration-200
               hover:bg-accent-hover
               cursor-pointer
+              flex justify-center items-center
             "
           >
-            Verify Code
+             {loading ? <Loader2 className="animate-spin mr-2" /> : "Verify Code"}
           </button>
 
           {/* Resend Code */}
