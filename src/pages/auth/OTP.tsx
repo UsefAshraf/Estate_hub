@@ -10,12 +10,6 @@ const OTPPage: React.FC = () => {
   const [otpArr, setOtpArr] = useState(Array(6).fill(""));
   const [timer, setTimer] = useState(60);
   const [canResend, setCanResend] = useState(false);
-
-  useEffect(() => {
-    // Auto-focus the first OTP input on page load
-    document.getElementById("otp-0")?.focus();
-  }, []);
-
   useEffect(() => {
     if (timer > 0) {
       const interval = setInterval(() => {

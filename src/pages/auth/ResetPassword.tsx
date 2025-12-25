@@ -14,6 +14,7 @@ const RenewPasswordPage: React.FC = () => {
   const [errors, setErrors] = useState<any>({});
   const location = useLocation();
   const navigate = useNavigate();
+  // const { email, otp } = location.state || {};
 
   const query = new URLSearchParams(location.search);
   const token = query.get("token");
@@ -62,7 +63,7 @@ const RenewPasswordPage: React.FC = () => {
       });
       Swal.fire(
         "Password Reset!",
-        response.data.message,
+        response?.data.message || "Your password has been reset successfully.",
         "success"
       )
 

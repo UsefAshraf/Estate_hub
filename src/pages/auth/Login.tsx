@@ -416,6 +416,7 @@ const SignInPage: React.FC = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [apiError, setApiError] = useState<string | null>(null); // Add error state
   const [formData, setFormData] = useState<SignInFormData>({
     email: "",
     password: "",
