@@ -1,22 +1,39 @@
-import { useState } from 'react';
-import { Shield, Users, UserCheck, TrendingUp, Home, Search, Trash2, UserPlus, X } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Shield, Users, UserCheck, TrendingUp, Home, Search, Trash2, UserPlus, X, Loader2 } from 'lucide-react';
 import Swal from 'sweetalert2';
+import { authService } from '../../services/auth.api';
+import { useNavigate } from 'react-router-dom';
+
 // Type definitions
 interface User {
   id: string;
-  name: string;
-  imag: string;
+  _id?: string;
+  userName: string;
+  name?: string;
   email: string;
-  phone: string;
-  role: 'user' | 'agent' | 'admin';
-  status: 'active' | 'inactive';
-  joinedDate: string;
+  phone?: string;
+  role: 'user' | 'agent' | 'admin' | 'buyer' | 'seller';
+  status?: 'active' | 'inactive';
+  isVerified?: boolean;
+  createdAt?: string;
+  joinedDate?: string;
 }
 
 const UserManagement: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [roleFilter, setRoleFilter] = useState<string>('All Roles');
   const [showAddUserModal, setShowAddUserModal] = useState<boolean>(false);
+  const [users, setUsers] = useState<User[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [stats, setStats] = useState({
+    totalUsers: 0,
+    activeUsers: 0,
+    totalAgents: 0,
+    totalProperties: 0
+  });
+  const navigate = useNavigate();
+
   const [newUserForm, setNewUserForm] = useState({
     fullName: '',
     email: '',
@@ -24,69 +41,61 @@ const UserManagement: React.FC = () => {
     role: 'user'
   });
 
-  // Mock data
-  const stats = {
-    totalUsers: 8,
-    activeUsers: 8,
-    totalAgents: 4,
-    totalProperties: 6
+  // Fetch users on component mount
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  const fetchUsers = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await authService.getAllUsers();
+      const data = response.data;
+
+      if (data.success && data.data) {
+        // Map the API response to our User interface
+        const mappedUsers: User[] = data.data.map((user: any) => ({
+          id: user._id || user.id,
+          _id: user._id,
+          userName: user.userName || user.fullName || 'Unknown',
+          name: user.userName || user.fullName,
+          email: user.email,
+          phone: user.phone || 'N/A',
+          role: user.role || 'user',
+          status: user.isVerified ? 'active' : 'inactive',
+          isVerified: user.isVerified,
+          createdAt: user.createdAt,
+          joinedDate: user.createdAt ? new Date(user.createdAt).toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric'
+          }) : 'N/A'
+        }));
+
+        setUsers(mappedUsers);
+
+        // Calculate stats
+        const totalAgents = mappedUsers.filter(u => u.role === 'agent').length;
+        const activeUsers = mappedUsers.filter(u => u.status === 'active' || u.isVerified).length;
+
+        setStats({
+          totalUsers: data.total || mappedUsers.length,
+          activeUsers: activeUsers,
+          totalAgents: totalAgents,
+          totalProperties: 0 // This would need a separate API call
+        });
+      }
+    } catch (err: any) {
+      console.error('Error fetching users:', err);
+      setError(err.response?.data?.message || 'Failed to load users');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const users: User[] = [
-    {
-      id: 'JD',
-      name: 'John Doe',
-      imag: '1',
-      email: 'john.doe@example.com',
-      phone: '+1 (555) 111-2222',
-      role: 'user',
-      status: 'active',
-      joinedDate: 'Jan 15, 2024'
-    },
-    {
-      id: 'SJ',
-      name: 'Sarah Johnson',
-      imag: '2',
-      email: 'sarah.johnson@estatehub.com',
-      phone: '+1 (555) 123-4567',
-      role: 'agent',
-      status: 'active',
-      joinedDate: 'Jun 20, 2023'
-    },
-    {
-      id: 'MC',
-      name: 'Michael Chen',
-      imag: '3',
-      email: 'michael.chen@estatehub.com',
-      phone: '+1 (555) 234-5678',
-      role: 'agent',
-      status: 'active',
-      joinedDate: 'Aug 10, 2023'
-    },
-    {
-      id: 'ER',
-      name: 'Emily Rodriguez',
-      imag: '4',
-      email: 'emily.rodriguez@estatehub.com',
-      phone: '+1 (555) 345-6789',
-      role: 'agent',
-      status: 'active',
-      joinedDate: 'Sep 5, 2023'
-    },
-    {
-      id: 'DP',
-      name: 'David Park',
-      imag: '5',
-      email: 'david.park@estatehub.com',
-      phone: '+1 (555) 456-7890',
-      role: 'agent',
-      status: 'active',
-      joinedDate: 'Nov 12, 2023'
-    }
-  ];
-
-  const handleDeleteUser = (userId: string, userName: string) => {
-    Swal.fire({
+  const handleDeleteUser = async (userId: string, userName: string) => {
+    const result = await Swal.fire({
       title: 'Are you sure?',
       text: `This will permanently delete the user "${userName}" and cannot be undone.`,
       icon: 'warning',
@@ -102,47 +111,52 @@ const UserManagement: React.FC = () => {
         confirmButton: 'px-6 py-2 rounded-lg font-semibold',
         cancelButton: 'px-6 py-2 rounded-lg font-semibold'
       }
-    }).then((result) => {
-      if (result.isConfirmed) {
-        console.log('Deleting user:', userId);
-        // Add delete logic here
+    });
+
+    if (result.isConfirmed) {
+      try {
+        const response = await authService.deleteUser(userId);
+
+        if (response.data.success) {
+          // Remove user from local state
+          setUsers(prevUsers => prevUsers.filter(user => user.id !== userId && user._id !== userId));
+
+          // Update stats
+          setStats(prev => ({
+            ...prev,
+            totalUsers: prev.totalUsers - 1
+          }));
+
+          Swal.fire({
+            title: 'Deleted!',
+            text: `User "${userName}" has been deleted.`,
+            icon: 'success',
+            confirmButtonColor: '#059669',
+            timer: 2000,
+            customClass: {
+              popup: 'rounded-l'
+            }
+          });
+        }
+      } catch (err: any) {
+        console.error('Error deleting user:', err);
         Swal.fire({
-          title: 'Deleted!',
-          text: `User "${userName}" has been deleted.`,
-          icon: 'success',
-          confirmButtonColor: '#059669',
-          timer: 2000,
+          title: 'Error!',
+          text: err.response?.data?.message || 'Failed to delete user. Please try again.',
+          icon: 'error',
+          confirmButtonColor: '#dc2626',
           customClass: {
-          popup: 'rounded-l'
+            popup: 'rounded-xl'
           }
         });
       }
-    });
+    }
   };
 
   const handleAddUser = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('New user data:', newUserForm);
-    // Add user creation logic here
-    
-    Swal.fire({
-      title: 'Success!',
-      text: 'User added successfully!',
-      icon: 'success',
-      confirmButtonColor: '#059669',
-      timer: 2000,
-      customClass: {
-        popup: 'rounded-l'
-      }
-    });
-    
-    setShowAddUserModal(false);
-    setNewUserForm({
-      fullName: '',
-      email: '',
-      phone: '',
-      role: 'user'
-    });
+    // Navigate to AddUser page instead of modal submission
+    navigate('/adduser');
   };
 
   const handleNewUserInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -153,16 +167,44 @@ const UserManagement: React.FC = () => {
   };
 
   const filteredUsers = users.filter(user => {
-    const matchesSearch = user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         user.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         user.phone.includes(searchQuery);
+    const displayName = user.userName || user.name || '';
+    const matchesSearch = displayName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      user.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (user.phone && user.phone.includes(searchQuery));
     const matchesRole = roleFilter === 'All Roles' || user.role === roleFilter.toLowerCase();
     return matchesSearch && matchesRole;
   });
 
+  // Get initials for avatar
+  const getInitials = (name: string) => {
+    if (!name) return '??';
+    return name
+      .split(' ')
+      .map(word => word[0])
+      .join('')
+      .toUpperCase()
+      .slice(0, 2);
+  };
+
+  // Get role badge color
+  const getRoleBadgeClass = (role: string) => {
+    switch (role) {
+      case 'user':
+      case 'buyer':
+        return 'bg-orange-900';
+      case 'agent':
+      case 'seller':
+        return 'bg-orange-300';
+      case 'admin':
+        return 'bg-purple-500';
+      default:
+        return 'bg-gray-500';
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 bg-primary">
-      
+
 
       {/* Page Header */}
       <div className="bg-primary border-b border-gray-200 px-8 py-6 bg-secondary">
@@ -242,8 +284,8 @@ const UserManagement: React.FC = () => {
           {/* Manage Users Header */}
           <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
             <h3 className="text-base font-semibold text-secondary">Manage Users</h3>
-            <button 
-              onClick={() => setShowAddUserModal(true)}
+            <button
+              onClick={() => navigate('/adduser')}
               className="btn-primary hover:bg-orange-400 text-gray-800 px-4 py-2 rounded-lg font-medium flex items-center space-x-2 transition-colors"
             >
               <UserPlus className="w-4 h-4" />
@@ -275,82 +317,109 @@ const UserManagement: React.FC = () => {
             </select>
           </div>
 
+          {/* Loading State */}
+          {loading && (
+            <div className="flex items-center justify-center py-12">
+              <Loader2 className="w-8 h-8 animate-spin text-orange-500" />
+              <span className="ml-2 text-gray-600">Loading users...</span>
+            </div>
+          )}
+
+          {/* Error State */}
+          {error && !loading && (
+            <div className="px-6 py-8 text-center">
+              <p className="text-red-500 mb-4">{error}</p>
+              <button
+                onClick={fetchUsers}
+                className="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors"
+              >
+                Retry
+              </button>
+            </div>
+          )}
+
           {/* Users Table */}
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-orange-800 border-b border-gray-200">
-                <tr>
-                  <th className="px-6 py-3 text-left text-s font-semibold text-white uppercase tracking-wider">
-                    User
-                  </th>
-                  <th className="px-6 py-3 text-left text-s font-semibold text-white uppercase tracking-wider">
-                    Contact
-                  </th>
-                  <th className="px-6 py-3 text-left text-s font-semibold text-white uppercase tracking-wider">
-                    Role
-                  </th>
-                  <th className="px-6 py-3 text-left text-s font-semibold text-white uppercase tracking-wider">
-                    Status
-                  </th>
-                  <th className="px-6 py-3 text-left text-s font-semibold text-white uppercase tracking-wider">
-                    Joined Date
-                  </th>
-                  <th className="px-6 py-3 text-left text-s font-semibold text-white uppercase tracking-wider">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-primary divide-y divide-gray-200">
-                {filteredUsers.map((user) => (
-                  <tr key={user.id} className="hover:bg-gray-100">
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center space-x-3">
-                        <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center font-semibold text-gray-700">
-                          {user.id}
-                        </div>
-                        <div>
-                          <div className="font-medium text-secondary">{user.name}</div>
-                          <div className="text-sm text-gray-500 flex items-center">
-                            <span className="mr-1">👤</span>
-                            {user.imag}
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-black">{user.email}</div>
-                      <div className="text-sm text-gray-500">{user.phone}</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`px-3 py-1 rounded-full text-xs font-semibold text-white ${
-                        user.role === 'user' ? 'bg-orange-900' :
-                        user.role === 'agent' ? 'bg-orange-300' :
-                        'bg-purple-500'
-                      }`}>
-                        {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="px-3 py-1 bg-green-500 text-white rounded-full text-xs font-semibold">
-                        {user.status.charAt(0).toUpperCase() + user.status.slice(1)}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      {user.joinedDate}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <button
-                        onClick={() => handleDeleteUser(user.id, user.name)}
-                        className="text-red-500 hover:text-red-700 transition-colors"
-                      >
-                        <Trash2 className="w-5 h-5" />
-                      </button>
-                    </td>
+          {!loading && !error && (
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className="bg-orange-800 border-b border-gray-200">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-s font-semibold text-white uppercase tracking-wider">
+                      User
+                    </th>
+                    <th className="px-6 py-3 text-left text-s font-semibold text-white uppercase tracking-wider">
+                      Contact
+                    </th>
+                    <th className="px-6 py-3 text-left text-s font-semibold text-white uppercase tracking-wider">
+                      Role
+                    </th>
+                    <th className="px-6 py-3 text-left text-s font-semibold text-white uppercase tracking-wider">
+                      Status
+                    </th>
+                    <th className="px-6 py-3 text-left text-s font-semibold text-white uppercase tracking-wider">
+                      Joined Date
+                    </th>
+                    <th className="px-6 py-3 text-left text-s font-semibold text-white uppercase tracking-wider">
+                      Actions
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody className="bg-primary divide-y divide-gray-200">
+                  {filteredUsers.length === 0 ? (
+                    <tr>
+                      <td colSpan={6} className="px-6 py-8 text-center text-gray-500">
+                        No users found
+                      </td>
+                    </tr>
+                  ) : (
+                    filteredUsers.map((user) => (
+                      <tr key={user.id} className="hover:bg-gray-100">
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="flex items-center space-x-3">
+                            <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center font-semibold text-gray-700">
+                              {getInitials(user.userName || user.name || '')}
+                            </div>
+                            <div>
+                              <div className="font-medium text-secondary">{user.userName || user.name}</div>
+                              <div className="text-sm text-gray-500 flex items-center">
+                                <span className="mr-1">👤</span>
+                                {user.role}
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="text-sm text-black">{user.email}</div>
+                          <div className="text-sm text-gray-500">{user.phone || 'N/A'}</div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span className={`px-3 py-1 rounded-full text-xs font-semibold text-white ${getRoleBadgeClass(user.role)}`}>
+                            {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span className={`px-3 py-1 rounded-full text-xs font-semibold text-white ${user.status === 'active' || user.isVerified ? 'bg-green-500' : 'bg-gray-400'}`}>
+                            {user.status === 'active' || user.isVerified ? 'Active' : 'Inactive'}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          {user.joinedDate || 'N/A'}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <button
+                            onClick={() => handleDeleteUser(user.id, user.userName || user.name || 'User')}
+                            className="text-red-500 hover:text-red-700 transition-colors"
+                          >
+                            <Trash2 className="w-5 h-5" />
+                          </button>
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
       </div>
 
@@ -358,7 +427,7 @@ const UserManagement: React.FC = () => {
       {showAddUserModal && (
         <div className="fixed inset-0 bg-black/10 backdrop-blur-[1px] flex items-center justify-center z-50 p-4">
           <div className="bg-primary rounded-xl shadow-2xl max-w-md w-full p-6 relative dark:bg-primary">
-            <button 
+            <button
               onClick={() => setShowAddUserModal(false)}
               className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
             >

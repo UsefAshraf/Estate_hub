@@ -38,6 +38,7 @@ import VisitsPage from "../pages/general/VisitsPage";
 import CreateProperty from "@/pages/seller/CreateProperty";
 import SellerPropeties from "@/pages/seller/SellerPropeties";
 import RequireRole from "./RequireRole";
+import AddUser from "@/pages/admin/AddUser";
 
 const AppRoutes: React.FC = () => {
   return (
@@ -85,6 +86,7 @@ const AppRoutes: React.FC = () => {
         <Route element={<RequireRole allowedRoles={["admin"]} />}>
           <Route element={<AdminLayout />}>
             <Route path="/users" element={<UserManagement />} />
+            <Route path="/adduser" element={<AddUser />} />
             <Route path="/properties" element={<AdminPropertiesPage />} />
             <Route path="/admincreateProperty" element={<CreateProperty />} />
             <Route path="/departments" element={<HomeSellerPage />} />
