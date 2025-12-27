@@ -349,13 +349,16 @@ const SearchResultsPage: React.FC = () => {
             }`}
           >
             {properties.map((property) => (
+              
               <PropertyCardFav
-                key={property._id}
-                property={property}
-                isFavorite={favorites.has(property._id)}
-                onToggleFavorite={() => toggleFavorite(property._id)}
-                onClick={() => handlePropertyClick(property._id)}
-              />
+              key={property._id}
+              property={property}
+              isFavorite={favorites.has(property._id)}
+              onFavoriteChange={() => toggleFavorite(property._id)}
+              onClick={() => handlePropertyClick(property._id)}
+            />
+            
+
             ))}
           </div>
         )}
