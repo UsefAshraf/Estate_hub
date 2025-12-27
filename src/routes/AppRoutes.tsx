@@ -38,7 +38,7 @@ import VisitsPage from "../pages/general/VisitsPage";
 import CreateProperty from "@/pages/seller/CreateProperty";
 import SellerPropeties from "@/pages/seller/SellerPropeties";
 import RequireRole from "./RequireRole";
-
+import AddUser from "@/pages/admin/AddUser";
 const AppRoutes: React.FC = () => {
   return (
     <Router>
@@ -90,6 +90,7 @@ const AppRoutes: React.FC = () => {
             <Route path="/departments" element={<HomeSellerPage />} />
             <Route path="/visitsAdmin" element={<VisitsPage />} />
             <Route path="/profileAdmin" element={<Profile />} />
+            <Route path="/addusers" element={<AddUser/>}/>
           </Route>
         </Route>
 

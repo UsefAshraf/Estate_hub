@@ -22,8 +22,7 @@ const AdminNavbar: React.FC = () => {
 
   const handleLogout = () => {
     // Add your logout logic here
-    // console.log("Logging out...");
-    navigate('/signup')
+    console.log("Logging out...");
   };
 
   return (
@@ -74,7 +73,7 @@ const AdminNavbar: React.FC = () => {
                 <ul className="p-2 text-sm text-body font-medium">
                   <li>
                     <Link
-                      to="/profileAdmin"
+                      to="/seller/profile"
                       className="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded"
                       onClick={() => setIsUserMenuOpen(false)}
                     >
@@ -83,20 +82,20 @@ const AdminNavbar: React.FC = () => {
                   </li>
                   <li>
                     <Link
-                      to="/visitsAdmin"
-                      className="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded"
-                      onClick={() => setIsUserMenuOpen(false)}
-                    >
-                      visits
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to="/properties"
+                      to="/seller/my-properties"
                       className="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded"
                       onClick={() => setIsUserMenuOpen(false)}
                     >
                       My Properties
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to="/seller/settings"
+                      className="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded"
+                      onClick={() => setIsUserMenuOpen(false)}
+                    >
+                      Settings
                     </Link>
                   </li>
                   <li>
@@ -147,18 +146,20 @@ const AdminNavbar: React.FC = () => {
           <ul className="font-medium flex flex-col p-4 md:p-0 mt-4 border border-default rounded-base bg-neutral-secondary-soft md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-neutral-primary">
             <li>
               <Link
-            to="/usersAdmin"
-            className={getLinkClassName('/usersAdmin')}
+            to="/addusers"
+            className="hidden md:flex items-center gap-2 px-4 py-2 bg-brand rounded-lg hover:bg-brand-hover transition-colors font-medium"
           >
-            Users
+            <Plus className="w-4 h-4" />
+            Add Users
           </Link>
             </li>
             <li>
               <Link
-                to="/properties"
-                className={getLinkClassName('/properties')}
+                to="/createproperty"
+                className="hidden md:flex items-center gap-2 px-4 py-2 bg-brand rounded-lg hover:bg-brand-hover transition-colors font-medium"
               >
-                Properties
+                <Plus className="w-4 h-4" />
+                Add property
               </Link>
             </li>
           </ul>
