@@ -117,3 +117,7 @@ export const deleteProperty = (
   API.delete(`/api/properties/${id}`,{
     headers: { accessToken: localStorage.getItem("accessToken") }
   });
+
+
+export const getSoldProperties = (): Promise<AxiosResponse<PropertiesResponse>> =>
+  API.get("/api/properties/sold");

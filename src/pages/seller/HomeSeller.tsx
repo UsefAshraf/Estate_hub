@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Search,
   MapPin,
@@ -10,6 +10,8 @@ import {
   ClipboardCheck,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { getSoldProperties } from "@/services/property.api";
+import type { Property } from "@/types/property.types";
 
 // Bath icon component
 const Bath: React.FC<{ className?: string }> = ({ className }) => (
@@ -35,142 +37,42 @@ const HomeSeller: React.FC = () => {
   const [searchInput, setSearchInput] = useState("");
   const [selectedPropertyType, setSelectedPropertyType] = useState("Sell");
   const [featuredFilter, setFeaturedFilter] = useState("All Properties");
+  
+  // State for real properties
+  const [properties, setProperties] = useState<Property[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // ------- Featured Properties (Mock Data for Market Insight) -------
-  const featuredProperties = [
-    {
-      id: 1,
-      title: "Luxury Family Home",
-      address: "1800-1818 79th St",
-      price: "$395,000",
-      priceType: "sale",
-      beds: 4,
-      baths: 1,
-      sqft: 400,
-      image:
-        "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=400",
-      tags: ["SOLD", "FEATURED"],
-      type: "Sold",
-    },
-    {
-      id: 2,
-      title: "Skyper Pool Apartment",
-      address: "1020 Bloomingdale Ave",
-      price: "$280,000",
-      priceType: "sale",
-      beds: 4,
-      baths: 2,
-      sqft: 450,
-      image: "https://images.unsplash.com/photo-1556912173-3bb406ef7e77?w=400",
-      tags: ["SOLD"],
-      type: "Sold",
-    },
-    {
-      id: 3,
-      title: "North Dillard Street",
-      address: "4330 Bell Shoals Rd",
-      price: "$250,000",
-      priceType: "sale",
-      beds: 4,
-      baths: 2,
-      sqft: 400,
-      image:
-        "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=400",
-      tags: ["SOLD"],
-      type: "Sold",
-    },
-    {
-      id: 4,
-      title: "Eaton Garth Penthouse",
-      address: "7722 18th Ave, Brooklyn",
-      price: "$180,000",
-      priceType: "sale",
-      beds: 4,
-      baths: 2,
-      sqft: 450,
-      image:
-        "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=400",
-      tags: ["SOLD", "FEATURED"],
-      type: "Sold",
-    },
-    {
-      id: 5,
-      title: "New Apartment Nice View",
-      address: "42 Avenue Q, Brooklyn",
-      price: "$850,000",
-      priceType: "sale",
-      beds: 4,
-      baths: 1,
-      sqft: 460,
-      image:
-        "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=400",
-      tags: ["SOLD", "FEATURED"],
-      type: "Sold",
-    },
-    {
-      id: 9,
-      title: "Riverside Cottage",
-      address: "12 River Rd, Chicago",
-      price: "$450,000",
-      priceType: "sale",
-      beds: 3,
-      baths: 2,
-      sqft: 350,
-      image:
-        "https://images.unsplash.com/photo-1572120360610-d971b9d7767c?w=400",
-      tags: ["SOLD"],
-      type: "Sold",
-    },
-    {
-      id: 10,
-      title: "Beachfront Condo",
-      address: "500 Ocean Dr, Miami",
-      price: "$2,200,000",
-      priceType: "sale",
-      beds: 3,
-      baths: 2,
-      sqft: 300,
-      image:
-        "https://images.unsplash.com/photo-1507089947368-19c1da9775ae?w=400",
-      tags: ["SOLD", "FEATURED"],
-      type: "Sold",
-    },
-    {
-      id: 11,
-      title: "Historic Downtown House",
-      address: "99 Market St, San Francisco",
-      price: "$980,000",
-      priceType: "sale",
-      beds: 4,
-      baths: 3,
-      sqft: 550,
-      image:
-        "https://images.unsplash.com/photo-1505691938895-1758d7feb511?w=400",
-      tags: ["SOLD"],
-      type: "Sold",
-    },
-    {
-      id: 12,
-      title: "Luxury Penthouse Suite",
-      address: "88 Park Ave, New York",
-      price: "$5,500,000",
-      priceType: "sale",
-      beds: 3,
-      baths: 3,
-      sqft: 400,
-      image:
-        "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=400",
-      tags: ["SOLD", "FEATURED"],
-      type: "Sold",
-    },
-  ];
+  // Fetch sold properties on component mount
+  useEffect(() => {
+    const fetchSoldProperties = async () => {
+      try {
+        setLoading(true);
+        // Use the new dedicated sold properties endpoint
+        const response = await getSoldProperties();
+        
+        if (response.data.success) {
+          setProperties(response.data.data);
+        }
+      } catch (err: any) {
+        console.error("Error fetching sold properties:", err);
+        setError(err.response?.data?.message || "Failed to load properties");
+      } finally {
+        setLoading(false);
+      }
+    };
 
+    fetchSoldProperties();
+  }, []);
+
+  // Filter properties based on featuredFilter
   const filteredProperties =
     featuredFilter === "All Properties"
-      ? featuredProperties
-      : featuredProperties.filter((p) => p.type === featuredFilter);
+      ? properties
+      : featuredFilter === "Featured"
+      ? properties.filter((p) => p.featured)
+      : properties;
 
-  // ------- Search -------
   const handleSearchClick = () => {
     const query = searchInput.trim()
       ? `?q=${encodeURIComponent(searchInput)}&type=${selectedPropertyType}`
@@ -185,14 +87,10 @@ const HomeSeller: React.FC = () => {
 
   const handlePropertyTypeClick = (type: string) => {
     setSelectedPropertyType(type);
-    // Logic to switch between Sell / Rent Out / Valuation could go here
   };
 
-  const handlePropertyClick = (id: number) => {
-    console.log("Property:", id);
-  };
 
-  // ------- Cities Section Data -------
+  // Cities Section Data
   const cities = [
     {
       id: 1,
@@ -278,8 +176,8 @@ const HomeSeller: React.FC = () => {
   const handleViewAllClick = () => {
     console.log("View All Cities clicked");
   };
+
   const handleAddProperty = () => {
-    // Navigate or open modal — your choice
     navigate("/CreateProperty");
   };
 
@@ -314,72 +212,10 @@ const HomeSeller: React.FC = () => {
               </button>
             </div>
           </div>
-
-          {/* <div className="flex justify-center gap-4 relative z-10">
-            {["Sell", "Rent Out"].map((t) => (
-              <button
-                key={t}
-                onClick={() => handlePropertyTypeClick(t)}
-                className={`px-4 py-2 border cursor-pointer border-custom rounded-full hover:bg-accent-hover transition ${
-                  selectedPropertyType === t ? "bg-accent" : "btn-primary"
-                }`}
-              >
-                {t}
-              </button>
-            ))}
-          </div> */}
         </div>
       </section>
 
       {/* ================= STEPS SECTION ================= */}
-      {/* <section className="bg-primary py-20">
-        <div className="max-w-7xl mx-auto px-6 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">
-            Sell Your House as Easy as 1,2,3
-          </h2>
-          <p className="text-secondary mb-16 max-w-md mx-auto">
-            We make the selling process simple and stress-free.
-          </p>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-16">
-            <div className="flex flex-col items-center">
-              <div className="bg-accent rounded-full p-6 mb-6 w-20 h-20 flex items-center justify-center">
-                <DollarSign className="w-8 h-8 text-primary" />
-              </div>
-              <h3 className="text-lg font-semibold text-primary mb-4">
-                1. Get a Free Valuation
-              </h3>
-              <p className="text-secondary text-sm leading-relaxed max-w-xs">
-                Find out how much your property is worth in today's market.
-              </p>
-            </div>
-
-            <div className="flex flex-col items-center">
-              <div className="bg-accent rounded-full p-6 mb-6 w-20 h-20 flex items-center justify-center">
-                <ClipboardCheck className="w-8 h-8 text-primary" />
-              </div>
-              <h3 className="text-lg font-semibold text-primary mb-4">
-                2. List Your Property
-              </h3>
-              <p className="text-secondary text-sm leading-relaxed max-w-xs">
-                We'll showcase your home to thousands of potential buyers.
-              </p>
-            </div>
-
-            <div className="flex flex-col items-center">
-              <div className="bg-accent rounded-full p-6 mb-6 w-20 h-20 flex items-center justify-center">
-                <TrendingUp className="w-8 h-8 text-primary" />
-              </div>
-              <h3 className="text-lg font-semibold text-primary mb-4">
-                3. Close the Deal
-              </h3>
-              <p className="text-secondary text-sm leading-relaxed max-w-xs">
-                Get the best price and close the sale quickly and securely.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section> */}
       <section className="bg-primary py-20">
         <div className="max-w-7xl mx-auto px-6 text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">
@@ -437,7 +273,7 @@ const HomeSeller: React.FC = () => {
         </div>
       </section>
 
-      {/* ================= CITIES SECTION (MERGED) ================= */}
+      {/* ================= CITIES SECTION ================= */}
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex justify-between items-start mb-12">
@@ -490,8 +326,8 @@ const HomeSeller: React.FC = () => {
           </div>
         </div>
       </section>
-      {/* ================= COMPANY LOGOS ================= */}
 
+      {/* ================= COMPANY LOGOS ================= */}
       <section className="bg-secondary py-16 border-y border-custom">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-12">
@@ -521,7 +357,7 @@ const HomeSeller: React.FC = () => {
         </div>
       </section>
 
-      {/* ================= FEATURED PROPERTIES ================= */}
+      {/* ================= SOLD PROPERTIES ================= */}
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-6">
           {/* Header */}
@@ -536,7 +372,7 @@ const HomeSeller: React.FC = () => {
             </div>
 
             <div className="flex gap-2">
-              {["All Properties", "Sold", "Rented"].map((t) => (
+              {["All Properties", "Featured"].map((t) => (
                 <button
                   key={t}
                   onClick={() => setFeaturedFilter(t)}
@@ -552,76 +388,90 @@ const HomeSeller: React.FC = () => {
             </div>
           </div>
 
+          {/* Loading State */}
+          {loading && (
+            <div className="text-center py-12">
+              <p className="text-secondary">Loading sold properties...</p>
+            </div>
+          )}
+
+          {/* Error State */}
+          {error && (
+            <div className="text-center py-12">
+              <p className="text-red-500">{error}</p>
+            </div>
+          )}
+
+          {/* Empty State */}
+          {!loading && !error && filteredProperties.length === 0 && (
+            <div className="text-center py-12">
+              <p className="text-secondary">No sold properties found.</p>
+            </div>
+          )}
+
           {/* Property Cards Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredProperties.map((property) => (
-              <div
-                key={property.id}
-                onClick={() => handlePropertyClick(property.id)}
-                className="bg-primary rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all cursor-pointer group"
-              >
-                <div className="relative h-56">
-                  <img
-                    src={property.image}
-                    alt={property.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
-                  <div className="absolute top-4 left-4 flex gap-2">
-                    {property.tags.map((tag, idx) => (
-                      <span
-                        key={idx}
-                        className={`px-3 py-1 text-xs font-semibold rounded ${
-                          tag === "FEATURED"
-                            ? "bg-accent text-primary"
-                            : tag === "SOLD"
-                            ? "bg-red-600 text-white"
-                            : "bg-blue-600 text-white"
-                        }`}
-                      >
-                        {tag}
+          {!loading && !error && filteredProperties.length > 0 && (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredProperties.map((property) => (
+                <div
+                  key={property._id}
+                  onClick={() => handlePropertyClick(property._id)}
+                  className="bg-primary rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all cursor-pointer group"
+                >
+                  <div className="relative h-56">
+                    <img
+                      src={property.images[0] || "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=400"}
+                      alt={property.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                    <div className="absolute top-4 left-4 flex gap-2">
+                      <span className="px-3 py-1 text-xs font-semibold rounded bg-red-600 text-white">
+                        SOLD
                       </span>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="p-6">
-                  <div className="flex justify-between items-start mb-3">
-                    <h3 className="text-lg font-semibold text-primary">
-                      {property.title}
-                    </h3>
-                    <span className="text-xl font-bold text-red-500">
-                      {property.price}
-                      {property.priceType === "rent" && (
-                        <span className="text-sm text-secondary">/month</span>
+                      {property.featured && (
+                        <span className="px-3 py-1 text-xs font-semibold rounded bg-accent text-primary">
+                          FEATURED
+                        </span>
                       )}
-                    </span>
+                    </div>
                   </div>
 
-                  <p className="text-secondary text-sm mb-4 flex items-center">
-                    <MapPin className="w-4 h-4 mr-1" />
-                    {property.address}
-                  </p>
-
-                  <div className="flex items-center gap-4 text-sm text-secondary border-t border-custom pt-4">
-                    <div className="flex items-center gap-1">
-                      <Bed className="w-4 h-4" />
-                      <span>{property.beds} Beds</span>
+                  <div className="p-6">
+                    <div className="flex justify-between items-start mb-3">
+                      <h3 className="text-lg font-semibold text-primary">
+                        {property.title}
+                      </h3>
+                      <span className="text-xl font-bold text-red-500">
+                        ${property.price.toLocaleString()}
+                      </span>
                     </div>
 
-                    <div className="flex items-center gap-1">
-                      <Bath className="w-4 h-4" />
-                      <span>{property.baths} Baths</span>
-                    </div>
+                    <p className="text-secondary text-sm mb-4 flex items-center">
+                      <MapPin className="w-4 h-4 mr-1" />
+                      {property.address}
+                    </p>
 
-                    <div className="flex items-center gap-1">
-                      <Square className="w-4 h-4" />
-                      <span>{property.sqft} sqft</span>
+                    <div className="flex items-center gap-4 text-sm text-secondary border-t border-custom pt-4">
+                      <div className="flex items-center gap-1">
+                        <Bed className="w-4 h-4" />
+                        <span>{property.bedrooms} Beds</span>
+                      </div>
+
+                      <div className="flex items-center gap-1">
+                        <Bath className="w-4 h-4" />
+                        <span>{property.bathrooms} Baths</span>
+                      </div>
+
+                      <div className="flex items-center gap-1">
+                        <Square className="w-4 h-4" />
+                        <span>{property.area} sqft</span>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
     </>
