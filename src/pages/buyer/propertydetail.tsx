@@ -1,5 +1,13 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { addVisit } from "../../services/visits.services.ts";
+import type { Favorite } from "../../types/favourites.types.ts"
+
+import {
+  getUserFavorites,
+  addFavorite,
+  removeFavorite,
+} from "../../services/favourites.services.ts";
 import {
   Heart,
   Share2,
@@ -59,7 +67,7 @@ interface ContactForm {
 const Propertydetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  
+
   const [property, setProperty] = useState<Property | null>(null);
   const [loading, setLoading] = useState(true);
   const [mainImage, setMainImage] = useState<number>(0);
@@ -91,15 +99,15 @@ const Propertydetail: React.FC = () => {
 
     // Listen for connection events
     socket.on("connect", () => {
-      console.log("✅ Socket connected:", socket.id);
+      console.log("Socket connected:", socket.id);
     });
 
     socket.on("disconnect", () => {
-      console.log("❌ Socket disconnected");
+      console.log("Socket disconnected");
     });
 
     socket.on("connect_error", (error) => {
-      console.error("🚨 Socket connection error:", error);
+      console.error(" Socket connection error:", error);
     });
 
     socket.emit("View-Property", { propertyId: id });
@@ -116,13 +124,13 @@ const Propertydetail: React.FC = () => {
       socket.disconnect();
     }
   }, [id]);
- 
+
 
   const fetchPropertyData = async () => {
     try {
       setLoading(true);
       console.log("Fetching property with ID:", id);
-      
+
       const res = await getPropertyById(id!);
       console.log("API Response:", res.data);
 
@@ -145,33 +153,116 @@ const Propertydetail: React.FC = () => {
     }
   };
 
- 
 
-  const handleScheduleSubmit = (e: React.FormEvent) => {
+
+  const handleScheduleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!property) return;
+    try {
+      await addVisit({
+        propertyName: property.title, 
+        date: scheduleForm.date,
+        time: scheduleForm.time,
+        propertyId: property._id,     
+      });
+      // await addVisit({
+      //   propertyName: property.title,
+      //   date: scheduleForm.date,
+      //   time: scheduleForm.time,
+      // });
 
-    const payload = {
-      ...scheduleForm,
-      propertyId: property._id,
-      agentId: property.agentId,
+      Swal.fire({
+        title: "Visit Scheduled!",
+        text: "The agent will contact you shortly.",
+        icon: "success",
+        position: "bottom",
+        toast: true,
+        timer: 4000,
+        timerProgressBar: true,
+        showConfirmButton: false,
+        customClass: {
+          popup: "custom-toast",
+        },
+      });
+
+      setShowScheduleModal(false);
+      setScheduleForm({
+        date: "",
+        time: "",
+        name: "",
+        phone: "",
+      });
+    } catch (error: any) {
+      Swal.fire({
+        title: "Error",
+        text: error?.response?.data?.message || "Failed to schedule visit",
+        icon: "error",
+      });
+    }
+  };
+  useEffect(() => {
+    const checkFavorite = async () => {
+      if (!property?._id) return;
+
+      try {
+        const res = await getUserFavorites();
+
+        const exists = res.data.data.some(
+          (fav: Favorite) => fav.propertyId._id === property._id
+        );
+
+        setIsFavorite(exists);
+      } catch (error) {
+        console.error("Failed to check favorites", error);
+      }
     };
 
-    console.log("Schedule form submitted:", payload);
-    Swal.fire({
-      title: "Visit Scheduled!",
-      text: "The agent will contact you shortly.",
-      icon: "success",
-      position: "bottom",
-      toast: true,
-      timer: 4000,
-      timerProgressBar: true,
-      showConfirmButton: false,
-    });
+    checkFavorite();
+  }, [property?._id]);
 
-    setShowScheduleModal(false);
-    setScheduleForm({ date: "", time: "", name: "", phone: "" });
+
+  const handleToggleFavorite = async () => {
+    if (!property?._id) return;
+
+    try {
+      if (isFavorite) {
+        await removeFavorite(property._id);
+        setIsFavorite(false);
+        Swal.fire({
+          title: "Removed from Favorites",
+          text: "This property is no longer in your favorites list.",
+          icon: "success",
+          position: "bottom",
+          toast: true,
+          timer: 3000,
+          timerProgressBar: true,
+          showConfirmButton: false,
+        });
+      } else {
+        await addFavorite({ propertyId: property._id });
+        setIsFavorite(true);
+        Swal.fire({
+          title: "Added to Favorites!",
+          text: "This property has been added to your favorites.",
+          icon: "success",
+          position: "bottom",
+          toast: true,
+          timer: 3000,
+          timerProgressBar: true,
+          showConfirmButton: false,
+        });
+      }
+    } catch (error: any) {
+      Swal.fire({
+        icon: "error",
+        title: "Something went wrong",
+        text:
+          error?.response?.data?.message ||
+          "Unable to update favorites. Please try again.",
+      });
+    }
   };
+
 
   const handleContactSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -262,7 +353,7 @@ const Propertydetail: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 bg-primary pb-4">
-     
+
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 pb-12">
@@ -281,27 +372,12 @@ const Propertydetail: React.FC = () => {
                   <motion.button
                     whileHover={{ scale: 1.4 }}
                     whileTap={{ scale: 0.95 }}
-                    onClick={() => {
-                      setIsFavorite(!isFavorite);
-                      Swal.fire({
-                        title: isFavorite ? "Removed from Favorites" : "Added to Favorites!",
-                        text: isFavorite
-                          ? "This property is no longer in your favorites list."
-                          : "This property has been added to your favorites.",
-                        icon: "success",
-                        position: "bottom",
-                        toast: true,
-                        timer: 3000,
-                        timerProgressBar: true,
-                        showConfirmButton: false,
-                      });
-                    }}
+                    onClick={handleToggleFavorite}
                     className="bg-white p-2 rounded-lg shadow-md hover:bg-gray-50"
                   >
                     <Heart
-                      className={`w-5 h-5 ${
-                        isFavorite ? "fill-red-500 text-red-500" : "text-gray-600"
-                      }`}
+                      className={`w-5 h-5 ${isFavorite ? "fill-red-500 text-red-500" : "text-gray-600"
+                        }`}
                     />
                   </motion.button>
                   <motion.button
@@ -328,9 +404,8 @@ const Propertydetail: React.FC = () => {
                     src={img}
                     alt={`Thumbnail ${idx + 1}`}
                     onClick={() => setMainImage(idx)}
-                    className={`w-24 h-20 object-cover rounded-lg cursor-pointer border-2 flex-shrink-0 ${
-                      mainImage === idx ? "border-cyan-500" : "border-transparent"
-                    }`}
+                    className={`w-24 h-20 object-cover rounded-lg cursor-pointer border-2 flex-shrink-0 ${mainImage === idx ? "border-cyan-500" : "border-transparent"
+                      }`}
                   />
                 ))}
               </div>
@@ -549,9 +624,8 @@ const Propertydetail: React.FC = () => {
                 src={img}
                 alt={`Thumbnail ${idx + 1}`}
                 onClick={() => setZoomedImageIndex(idx)}
-                className={`w-20 h-16 object-cover rounded-lg cursor-pointer border-2 ${
-                  zoomedImageIndex === idx ? "border-cyan-500" : "border-transparent"
-                }`}
+                className={`w-20 h-16 object-cover rounded-lg cursor-pointer border-2 ${zoomedImageIndex === idx ? "border-cyan-500" : "border-transparent"
+                  }`}
               />
             ))}
           </div>

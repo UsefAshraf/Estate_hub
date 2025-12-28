@@ -17,7 +17,7 @@ interface Property {
 
 interface FavoriteCardProps {
   property: Property;
-  removeFavorite: (id: number) => void;
+  removeFavorite: () => void
   shareProperty: (property: Property) => void;
   onPropertyClick: (id: number) => void;
 }
@@ -55,7 +55,9 @@ const FavoriteCard: React.FC<FavoriteCardProps> = ({
           </button>
 
           <button
-            onClick={() => removeFavorite(property.id)}
+      
+            onClick={removeFavorite}
+            // onClick={() => removeFavorite(property.id)}
             className="bg-primary cursor-pointer backdrop-blur-sm p-2 rounded-full hover:bg-red-500 transition-colors group"
             title="Remove from favorites"
           >

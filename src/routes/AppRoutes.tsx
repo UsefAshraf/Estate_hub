@@ -43,6 +43,7 @@ import AddUser from "@/pages/admin/AddUser";
 import PublicLayout from "@/Layouts/PublicLayout";
 import ProfileSeller from "@/pages/general/ProfileSeller";
 import EditProperty from "@/pages/seller/EditProperty";
+import AdminVisitsPage  from "@/pages/admin/adminvisitspage";
 
 const AppRoutes: React.FC = () => {
   return (
@@ -111,7 +112,7 @@ const AppRoutes: React.FC = () => {
               <Route path="/properties" element={<AdminPropertiesPage />} />
               <Route path="/admincreateProperty" element={<CreateProperty />} />
               <Route path="/departments" element={<HomeSellerPage />} />
-              <Route path="/visitsAdmin" element={<VisitsPage />} />
+              <Route path="/visitsAdmin" element={<AdminVisitsPage />} />
               <Route path="/profileAdmin" element={<Profile />} />
             </Route>
           </Route>
