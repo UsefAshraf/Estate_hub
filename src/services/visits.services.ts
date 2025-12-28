@@ -14,6 +14,7 @@ const API = axios.create({
     "Content-Type": "application/json",
   },
 });
+
 API.interceptors.request.use((config) => {
       const token = localStorage.getItem("accessToken");
     
@@ -24,17 +25,6 @@ API.interceptors.request.use((config) => {
       return config;
     });
   
-
-// API.interceptors.request.use((config) => {
-//   const token = localStorage.getItem("accessToken");
-
-//   if (token) {
-//     config.headers.Authorization = `Bearer ${token}`;
-//   }
-
-//   return config;
-// });
-
 /* ================= USER VISITS ================= */
 
 export const getUserVisits = (): Promise<AxiosResponse<VisitsResponse>> =>
@@ -65,6 +55,19 @@ export const updateVisitStatusByAgent = (
 
 export const cancelVisitByAgent = (visitId: string): Promise<AxiosResponse<VisitResponse>> =>
   API.patch(`/visits/agent/${visitId}/cancel`);
+
+
+/* ================= ADMIN VISITS ================= */
+
+export const getAllVisits = (): Promise<AxiosResponse<VisitsResponse>> =>
+  API.get("/visits/admin/all");
+
+export const acceptVisit = (visitId: string): Promise<AxiosResponse<VisitResponse>> =>
+  API.patch(`/visits/admin/${visitId}/accept`);
+
+export const cancelVisitByAdmin = (visitId: string): Promise<AxiosResponse<VisitResponse>> =>
+  API.patch(`/visits/admin/${visitId}/cancel`);
+
 
 // import axios, { type AxiosResponse } from "axios";
 // import type {
