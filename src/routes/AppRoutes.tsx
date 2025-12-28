@@ -63,8 +63,8 @@ const AppRoutes: React.FC = () => {
         {/* Public Pages - No Authentication Required */}
         <Route element={<PublicLayout />}>
           <Route path="/home" element={<HomeBuyerPage />} />
-          <Route path="/propertydetailBuyer/:id" element={<Propertydetail />} />
-          <Route path="/searchBuyer" element={<SearchResultsPage />} />
+          {/* <Route path="/propertydetailBuyer/:id" element={<Propertydetail />} />
+          <Route path="/searchBuyer" element={<SearchResultsPage />} /> */}
         </Route>
 
         {/* Protected Buyer Routes - Authentication Required */}
