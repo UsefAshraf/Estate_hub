@@ -130,10 +130,16 @@ const Propertydetail: React.FC = () => {
     if (!property) return;
     try {
       await addVisit({
-        propertyName: property.title,
+        propertyName: property.title, 
         date: scheduleForm.date,
         time: scheduleForm.time,
+        propertyId: property._id,     
       });
+      // await addVisit({
+      //   propertyName: property.title,
+      //   date: scheduleForm.date,
+      //   time: scheduleForm.time,
+      // });
 
       Swal.fire({
         title: "Visit Scheduled!",

@@ -7,7 +7,7 @@ import {
   removeFavorite,
 } from "../../services/favourites.services";
 
-// Bath icon component
+
 const Bath: React.FC<{ className?: string }> = ({ className }) => (
   <svg
     className={className}
@@ -28,7 +28,7 @@ const Bath: React.FC<{ className?: string }> = ({ className }) => (
 interface Props {
   property: Property;
   isFavorite: boolean;
-  onFavoriteChange?: () => void; // ✅ optional
+  onFavoriteChange?: () => void; 
   onClick: () => void;
 }
 
@@ -59,7 +59,7 @@ const PropertyCardFav: React.FC<Props> = ({
         await addFavorite({ propertyId: property._id });
       }
 
-      // ✅ Safe UI update
+     
       onFavoriteChange?.();
 
       Swal.fire({
