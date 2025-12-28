@@ -5,6 +5,8 @@ import { getAllProperties, deleteProperty } from "@/services/property.api";
 
 import type { Property } from "@/types/property.types";
 
+//import  {EditProperty} from "./EditProperty"
+
 // Bath icon component
 const Bath: React.FC<{ className?: string }> = ({ className }) => (
   <svg
@@ -84,7 +86,7 @@ const SellerProperties: React.FC = () => {
 
 
   const handleEditProperty = (id: string) => {
-    navigate(`/edit-property/${id}`);
+    navigate(`/EditProperty/${id}`);
   };
 
   const handleDeleteProperty = async (id: string) => {

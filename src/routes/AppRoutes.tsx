@@ -38,6 +38,7 @@ import VisitsPage from "../pages/general/VisitsPage";
 import CreateProperty from "@/pages/seller/CreateProperty";
 import SellerPropeties from "@/pages/seller/SellerPropeties";
 import RequireRole from "./RequireRole";
+import EditProperty from "@/pages/seller/EditProperty";
 
 const AppRoutes: React.FC = () => {
   return (
@@ -78,6 +79,7 @@ const AppRoutes: React.FC = () => {
             <Route path="/sellerProperties" element={<SellerPropeties />} />
             <Route path="/profileSeller" element={<Profile />} />
             <Route path="/visitsSeller" element={<VisitsPage />} />
+            <Route path="/EditProperty/:id" element={<EditProperty />} />
           </Route>
         </Route>
 

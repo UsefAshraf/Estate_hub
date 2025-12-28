@@ -90,25 +90,65 @@ export const updateProperty = (
   id: string,
   data: UpdatePropertyRequest
 ): Promise<AxiosResponse<PropertyResponse>> => {
-  const formData = new FormData();
+  // Get token
+  const token = localStorage.getItem("accessToken");
+  
+  // Check if we have images to upload
+  const hasImages = data.images && data.images.length > 0;
 
-  Object.entries(data).forEach(([key, value]) => {
-    if (key === "images" && value) {
-      (value as File[]).forEach((file) =>
-        formData.append("images", file)
-      );
-    } else if (key === "features" && value) {
-      (value as any[]).forEach((f, i) =>
-        formData.append(`features[${i}][name]`, f.name)
-      );
-    } else if (value !== undefined) {
-      formData.append(key, String(value));
-    }
-  });
+  if (hasImages) {
+    // If images are included, use FormData
+    const formData = new FormData();
 
-  return API.put(`/api/properties/${id}`, formData, {
-    headers: { "Content-Type": "multipart/form-data" },
-  });
+    Object.entries(data).forEach(([key, value]) => {
+      if (key === "images" && value) {
+        (value as File[]).forEach((file) =>
+          formData.append("images", file)
+        );
+      } else if (key === "features" && value) {
+        (value as any[]).forEach((f, i) => {
+          const featureName = typeof f === 'string' ? f : f.name;
+          formData.append(`features[${i}][name]`, featureName);
+        });
+      } else if (value !== undefined && value !== null) {
+        formData.append(key, String(value));
+      }
+    });
+
+    return API.put(`/api/properties/${id}`, formData, {
+      headers: { 
+        "Content-Type": "multipart/form-data",
+        "Authorization": `Bearer ${token}`,
+        "accessToken": token || "",
+      },
+    });
+  } else {
+    // If no images, send as JSON (simpler and faster)
+    const updateData: any = {};
+
+    Object.entries(data).forEach(([key, value]) => {
+      if (key === "features" && value) {
+        // Format features properly
+        updateData.features = (value as any[]).map((f) => 
+          typeof f === 'string' ? f : f.name
+        );
+      } else if (key !== "images" && value !== undefined && value !== null) {
+        updateData[key] = value;
+      }
+    });
+
+    console.log("Sending PUT request to:", `/api/properties/${id}`);
+    console.log("With data:", updateData);
+    console.log("With token:", token);
+
+    return API.put(`/api/properties/${id}`, updateData, {
+      headers: { 
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+        "accessToken": token || "",
+      },
+    });
+  }
 };
 
 export const deleteProperty = (
