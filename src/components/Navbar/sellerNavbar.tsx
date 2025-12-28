@@ -1,29 +1,75 @@
-import React, { useState } from "react";
+// components/Navbar/SellerNavbar.tsx - Updated with localStorage
+import React, { useState, useEffect } from "react";
 import { Home, Plus } from "lucide-react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import ThemeButton from "../Theme/ButtonTheme";
+
+interface UserData {
+  id: string;
+  email: string;
+  userName: string;
+  role: string;
+  isOnline: boolean;
+  isVerified: boolean;
+}
 
 const SellerNavbar: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [userData, setUserData] = useState<UserData>({
+    id: "",
+    email: "",
+    userName: "Seller",
+    role: "seller",
+    isOnline: false,
+    isVerified: false
+  });
+
+  useEffect(() => {
+    // Fetch user data from localStorage on component mount
+    try {
+      const storedEmail = localStorage.getItem('email');
+      const storedId = localStorage.getItem('id');
+      const storedIsOnline = localStorage.getItem('isOnline');
+      const storedIsVerified = localStorage.getItem('isVerified');
+      const storedRole = localStorage.getItem('role');
+      const storedUserName = localStorage.getItem('userName');
+
+      setUserData({
+        id: storedId || "",
+        email: storedEmail || "",
+        userName: storedUserName || "Seller",
+        role: storedRole || "seller",
+        isOnline: storedIsOnline === "true",
+        isVerified: storedIsVerified === "true"
+      });
+    } catch (error) {
+      console.error("Error reading from localStorage:", error);
+    }
+  }, []);
 
   const isActive = (path: string) => {
     return location.pathname === path;
   };
 
- const getLinkClassName = (path: string) => {
-  if (isActive(path)) {
-    return "block py-2 px-3 text-[#DDC7BB] bg-brand rounded md:bg-transparent md:text-fg-brand md:p-0";
-  }
-  return "block py-2 px-3 text-heading rounded hover:bg-neutral-tertiary md:hover:bg-transparent md:border-0 md:hover:text-fg-brand md:p-0";
-};
-
+  const getLinkClassName = (path: string) => {
+    if (isActive(path)) {
+      return "block py-2 px-3 text-[#DDC7BB] bg-brand rounded md:bg-transparent md:text-fg-brand md:p-0";
+    }
+    return "block py-2 px-3 text-heading rounded hover:bg-neutral-tertiary md:hover:bg-transparent md:border-0 md:hover:text-fg-brand md:p-0";
+  };
 
   const handleLogout = () => {
-    // Add your logout logic here
-    // console.log("Logging out...");
+    // Clear localStorage on logout
+    localStorage.removeItem('email');
+    localStorage.removeItem('id');
+    localStorage.removeItem('isOnline');
+    localStorage.removeItem('isVerified');
+    localStorage.removeItem('role');
+    localStorage.removeItem('userName');
+    
     navigate('/signup');
   };
 
@@ -31,7 +77,7 @@ const SellerNavbar: React.FC = () => {
     <nav className="bg-neutral-primary fixed w-full z-20 top-0 start-0 border-b border-default">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         
-        {/* Logo - Same as buyer */}
+        {/* Logo */}
         <Link to="/seller/main" className="flex items-center space-x-3 rtl:space-x-reverse">
           <div className="bg-accent p-2 rounded-lg">
             <Home className="w-5 h-5 text-primary" />
@@ -69,8 +115,12 @@ const SellerNavbar: React.FC = () => {
             {isUserMenuOpen && (
               <div className="absolute right-0 top-12 z-50 bg-neutral-primary-medium border border-default-medium rounded-base shadow-lg w-44">
                 <div className="px-4 py-3 text-sm border-b border-default">
-                  <span className="block text-heading font-medium">John Seller</span>
-                  <span className="block text-body truncate">seller@estatehub.com</span>
+                  <span className="block text-heading font-medium">
+                    {userData.userName}
+                  </span>
+                  <span className="block text-body truncate">
+                    {userData.email}
+                  </span>
                 </div>
                 <ul className="p-2 text-sm text-body font-medium">
                   <li>
@@ -143,9 +193,6 @@ const SellerNavbar: React.FC = () => {
               <Link to="/aboutSeller" className={getLinkClassName('/aboutSeller')}>
                 About
               </Link>
-              {/* <link>
-
-              </link> */}
             </li>
             <li>
               <Link to="/contactSeller" className={getLinkClassName('/contactSeller')}>

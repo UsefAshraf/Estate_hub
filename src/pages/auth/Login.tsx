@@ -577,8 +577,9 @@ const SignInPage: React.FC = () => {
       console.log(data);
 
       if (res.ok) {
-        if (data.token) {
-          localStorage.setItem("accessToken", data.token);
+        if (data.accessToken) {
+          localStorage.setItem("accessToken", data.accessToken);
+          localStorage.setItem("refreshToken", data.refreshToken);
         }
         if (data.user) {
           localStorage.setItem("user", JSON.stringify(data.user));

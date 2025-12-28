@@ -818,6 +818,7 @@ import MortgageCalculator from "./mortgagecalculator";
 import PropertyLocationMap from "@/pages/general/PropertyLocationMap";
 import { getPropertyById } from "@/services/property.api";
 import type { Property } from "@/types/property.types";
+import { socket } from "../../services/socket";
 
 
 interface Agent {
@@ -878,8 +879,37 @@ const Propertydetail: React.FC = () => {
   });
 
   useEffect(() => {
+    // socket.on("View-Property", (id: any) => {
+    //   console.log("Property viewed:", id);
+    // });
+    console.log("🔌 Connecting socket...");
+    socket.connect();
+
+    // Listen for connection events
+    socket.on("connect", () => {
+      console.log("✅ Socket connected:", socket.id);
+    });
+
+    socket.on("disconnect", () => {
+      console.log("❌ Socket disconnected");
+    });
+
+    socket.on("connect_error", (error) => {
+      console.error("🚨 Socket connection error:", error);
+    });
+
+    socket.emit("View-Property", { propertyId: id });
+    
     if (id) {
       fetchPropertyData();
+    }
+
+    return () => {
+      socket.disconnect();
+      socket.off("connect");
+      socket.off("disconnect");
+      socket.off("connect_error");
+      socket.disconnect();
     }
   }, [id]);
  

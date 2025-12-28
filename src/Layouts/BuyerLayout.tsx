@@ -7,7 +7,7 @@ import { Outlet } from "react-router-dom";
 const BuyerLayout: React.FC = () => (
   <div>
     <Navbar />
-    <main className="pt-18"> {/* 20 * 4px = 80px, adjust to navbar height */}
+    <main className="pt-18">
       <Outlet />
     </main>
     <Footer />
@@ -15,5 +15,3 @@ const BuyerLayout: React.FC = () => (
 );
 
 export default BuyerLayout;
-
-
