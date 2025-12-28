@@ -1,13 +1,63 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Home, Plus } from "lucide-react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import ThemeButton from "../Theme/ButtonTheme";
+import { getUserProfile } from "@/services/profile.api";
 
 const AdminNavbar: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+
+  // User profile state
+  const [userProfile, setUserProfile] = useState<{
+    fullName: string;
+    email: string;
+  } | null>(null);
+  const [isLoadingProfile, setIsLoadingProfile] = useState(true);
+
+  // Fetch user profile on component mount
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      try {
+        // First, try to get user from localStorage (faster)
+        const userStr = localStorage.getItem("user");
+        console.log("🔍 AdminNavbar - localStorage user:", userStr);
+
+        if (userStr) {
+          const user = JSON.parse(userStr);
+          console.log("✅ AdminNavbar - Parsed user from localStorage:", user);
+          setUserProfile({
+            fullName: user.fullName || user.userName || user.name || "User",
+            email: user.email || "user@estatehub.com",
+          });
+          setIsLoadingProfile(false);
+          return; // Use localStorage data, no need to fetch from API
+        }
+
+        // If no user in localStorage, try to fetch from API
+        console.log("⚠️ No user in localStorage, fetching from API...");
+        const response = await getUserProfile();
+        console.log("🔍 AdminNavbar - API response:", response);
+
+        if (response.success && response.data) {
+          setUserProfile({
+            fullName: response.data.fullName,
+            email: response.data.email,
+          });
+          console.log("✅ AdminNavbar - Set profile from API");
+        }
+      } catch (error) {
+        console.error("❌ AdminNavbar - Failed to fetch user profile:", error);
+        // Keep null state to show fallback values
+      } finally {
+        setIsLoadingProfile(false);
+      }
+    };
+
+    fetchUserProfile();
+  }, []);
 
   const isActive = (path: string) => {
     return location.pathname === path;
@@ -65,10 +115,10 @@ const AdminNavbar: React.FC = () => {
               <div className="absolute right-0 top-12 z-50 bg-neutral-primary-medium border border-default-medium rounded-base shadow-lg w-44">
                 <div className="px-4 py-3 text-sm border-b border-default">
                   <span className="block text-heading font-medium">
-                    John Seller
+                    {isLoadingProfile ? "Loading..." : userProfile?.fullName || "User"}
                   </span>
                   <span className="block text-body truncate">
-                    seller@estatehub.com
+                    {isLoadingProfile ? "Loading..." : userProfile?.email || "user@estatehub.com"}
                   </span>
                 </div>
                 <ul className="p-2 text-sm text-body font-medium">
@@ -140,18 +190,17 @@ const AdminNavbar: React.FC = () => {
 
         {/* Navigation Links */}
         <div
-          className={`items-center justify-between ${
-            isMenuOpen ? "block" : "hidden"
-          } w-full md:flex md:w-auto md:order-1`}
+          className={`items-center justify-between ${isMenuOpen ? "block" : "hidden"
+            } w-full md:flex md:w-auto md:order-1`}
         >
           <ul className="font-medium flex flex-col p-4 md:p-0 mt-4 border border-default rounded-base bg-neutral-secondary-soft md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-neutral-primary">
             <li>
               <Link
-            to="/usersAdmin"
-            className={getLinkClassName('/usersAdmin')}
-          >
-            Users
-          </Link>
+                to="/usersAdmin"
+                className={getLinkClassName('/usersAdmin')}
+              >
+                Users
+              </Link>
             </li>
             <li>
               <Link

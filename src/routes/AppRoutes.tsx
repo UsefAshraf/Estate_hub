@@ -79,6 +79,8 @@ const AppRoutes: React.FC = () => {
               <Route path="/profileBuyer" element={<Profile />} />
               <Route path="/visitsBuyer" element={<VisitsPage />} />
               <Route path="/confirmPayment" element={<PaymentSuccessPage />} />
+              <Route path="/aboutBuyer" element={<About />} />
+              <Route path="/contactBuyer" element={<Contact />} />
             </Route>
           </Route>
         </Route>

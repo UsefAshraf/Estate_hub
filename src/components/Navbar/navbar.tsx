@@ -31,6 +31,26 @@ const BuyerNavbar: React.FC = () => {
   useEffect(() => {
     // Fetch user data from localStorage on component mount
     try {
+      // First, try to get user from the 'user' object (set during login)
+      const userStr = localStorage.getItem('user');
+      console.log("🔍 BuyerNavbar - localStorage user:", userStr);
+
+      if (userStr) {
+        const user = JSON.parse(userStr);
+        console.log("✅ BuyerNavbar - Parsed user from localStorage:", user);
+        setUserData({
+          id: user._id || user.id || "",
+          email: user.email || "",
+          userName: user.fullName || user.userName || user.name || "Buyer",
+          role: user.role || "buyer",
+          isOnline: user.isOnline || false,
+          isVerified: user.isVerified || false
+        });
+        return; // Exit early if we successfully got user from the 'user' object
+      }
+
+      // Fallback: try individual localStorage keys (for backwards compatibility)
+      console.log("⚠️ No 'user' object found, trying individual keys...");
       const storedEmail = localStorage.getItem('email');
       const storedId = localStorage.getItem('id');
       const storedIsOnline = localStorage.getItem('isOnline');
@@ -47,7 +67,7 @@ const BuyerNavbar: React.FC = () => {
         isVerified: storedIsVerified === "true"
       });
     } catch (error) {
-      console.error("Error reading from localStorage:", error);
+      console.error("❌ BuyerNavbar - Error reading from localStorage:", error);
     }
   }, []);
 
@@ -60,15 +80,18 @@ const BuyerNavbar: React.FC = () => {
   };
 
   const handleLogout = () => {
-    // Clear localStorage on logout
+    // Clear all authentication data from localStorage
+    localStorage.removeItem('user');
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
     localStorage.removeItem('email');
     localStorage.removeItem('id');
     localStorage.removeItem('isOnline');
     localStorage.removeItem('isVerified');
     localStorage.removeItem('role');
     localStorage.removeItem('userName');
-    
-    navigate('/signup');
+
+    navigate('/signin');
   };
 
   const getLinkClassName = (path: string) => {
@@ -192,9 +215,8 @@ const BuyerNavbar: React.FC = () => {
 
         {/* Navigation Links */}
         <div
-          className={`items-center justify-between ${
-            isMenuOpen ? "block" : "hidden"
-          } w-full md:flex md:w-auto md:order-1`}
+          className={`items-center justify-between ${isMenuOpen ? "block" : "hidden"
+            } w-full md:flex md:w-auto md:order-1`}
         >
           <ul className="font-medium flex flex-col p-4 md:p-0 mt-4 border border-default rounded-base bg-neutral-secondary-soft md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-neutral-primary">
             <li>

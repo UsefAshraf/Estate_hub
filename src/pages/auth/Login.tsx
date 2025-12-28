@@ -508,27 +508,37 @@ const SignInPage: React.FC = () => {
 
       const data = await res.json();
 
+      // DEBUG: Log the response to see what backend is returning
+      console.log("🔍 Backend signin response:", data);
+      console.log("🔍 Has user object?", !!data.user);
+      console.log("🔍 Has token?", !!data.token || !!data.accessToken);
+
       if (res.ok) {
         // Store authentication data
         if (data.token) {
           localStorage.setItem("accessToken", data.token);
+          console.log("✅ Saved token to localStorage");
         }
         if (data.accessToken) {
           localStorage.setItem("accessToken", data.accessToken);
+          console.log("✅ Saved accessToken to localStorage");
         }
         if (data.refreshToken) {
           localStorage.setItem("refreshToken", data.refreshToken);
+          console.log("✅ Saved refreshToken to localStorage");
         }
         if (data.user) {
           localStorage.setItem("user", JSON.stringify(data.user));
+          console.log("✅ Saved user to localStorage:", data.user);
+        } else {
+          console.warn("⚠️ Backend did not return user object!");
         }
 
         await Swal.fire({
           icon: "success",
           title: "Welcome Back!",
-          text: `Signed in successfully as ${
-            data.user?.userName || data.user?.username || "User"
-          }`,
+          text: `Signed in successfully as ${data.user?.userName || data.user?.username || "User"
+            }`,
           timer: 1500,
           showConfirmButton: false,
         });
