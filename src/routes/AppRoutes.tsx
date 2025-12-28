@@ -94,6 +94,8 @@ const AppRoutes: React.FC = () => {
               <Route path="/sellerProperties" element={<SellerPropeties />} />
               <Route path="/profileSeller" element={<Profile />} />
               <Route path="/visitsSeller" element={<VisitsPage />} />
+              <Route path="/aboutSeller" element={<About />} />
+              <Route path="/contactSeller" element={<Contact />} />
             </Route>
           </Route>
         </Route>

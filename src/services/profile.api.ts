@@ -15,14 +15,15 @@ const apiClient = axios.create({
 // Add token to requests
 apiClient.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('accessToken'); // Changed from 'token' to 'accessToken'
     if (token) {
       // Remove 'Bearer ' prefix if it already exists in the token
       const cleanToken = token.startsWith('Bearer ') ? token.substring(7) : token;
       config.headers.Authorization = `Bearer ${cleanToken}`;
-      console.log('Request with token:', cleanToken.substring(0, 20) + '...');
+      console.log('✅ Request with accessToken:', cleanToken.substring(0, 20) + '...');
     } else {
-      console.warn('⚠️ No token found in localStorage');
+      console.warn('⚠️ No accessToken found in localStorage');
+      console.log('📋 Available keys:', Object.keys(localStorage));
     }
     return config;
   },
@@ -40,12 +41,12 @@ apiClient.interceptors.response.use(
   },
   (error) => {
     console.error('❌ API Error:', error.response?.data || error.message);
-    
+
     if (error.response?.status === 401) {
       // Token expired or invalid
       console.warn('Authentication failed - redirecting to login');
       localStorage.clear();
-      window.location.href = '/login';
+      window.location.href = '/signin';
     }
     return Promise.reject(error);
   }
@@ -73,7 +74,7 @@ export const uploadAvatar = async (file: File) => {
   try {
     const formData = new FormData();
     formData.append('avatar', file);
-    
+
     const response = await apiClient.post('/users/avatar', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',

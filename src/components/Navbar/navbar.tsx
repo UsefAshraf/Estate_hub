@@ -160,7 +160,11 @@ const BuyerNavbar: React.FC = () => {
                     <Link
                       to="/profileBuyer"
                       className="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded"
-                      onClick={() => setIsUserMenuOpen(false)}
+                      onClick={() => {
+                        console.log("🔍 Navigating to /profileBuyer");
+                        console.log("🔍 User data:", userData);
+                        setIsUserMenuOpen(false);
+                      }}
                     >
                       Profile
                     </Link>

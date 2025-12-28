@@ -59,50 +59,86 @@ const Profile: React.FC = () => {
   const fetchProfile = async () => {
     try {
       setLoading(true);
-      
-      // Check if token exists
-      const token = localStorage.getItem('token');
-      if (!token) {
+
+      // Check if token and user exist
+      const token = localStorage.getItem('accessToken'); // Changed from 'token' to 'accessToken'
+      const userStr = localStorage.getItem('user');
+
+      console.log('🔍 ProfilePage - Checking auth...');
+      console.log('🔍 Has accessToken:', !!token);
+      console.log('🔍 Has user:', !!userStr);
+
+      if (!token || !userStr) {
+        console.warn('⚠️ Missing authentication data');
         Swal.fire({
           icon: "warning",
           title: "Not Authenticated",
           text: "Please login to view your profile",
         }).then(() => {
-          window.location.href = '/login';
+          window.location.href = '/signin';
         });
         return;
       }
 
-      console.log('Fetching profile with token:', token ? 'Token exists' : 'No token');
-      
+      console.log('✅ Fetching profile from API...');
+
       const response = await getUserProfile();
-      
-      if (response.success) {
+
+      console.log('✅ API Response:', response);
+      console.log('✅ Response data:', response.data);
+      console.log('✅ Data fields:', Object.keys(response.data || {}));
+
+      if (response.success && response.data) {
         const data = response.data;
-        setUserData(data);
-        setProfileImage(data.avatar || "");
-        
-        // Reset form with fetched data
-        reset({
+        console.log('✅ Setting user data:', {
           fullName: data.fullName,
-          phone: data.phone || "",
-          location: data.location || "",
+          userName: data.userName,
+          name: data.name,
+          email: data.email
         });
 
-        // Update localStorage
-        localStorage.setItem('id', data.id);
-        localStorage.setItem('userName', data.fullName);
-        localStorage.setItem('email', data.email);
-        localStorage.setItem('role', data.role);
-        localStorage.setItem('phone', data.phone || '');
-        localStorage.setItem('location', data.location || '');
-        localStorage.setItem('avatar', data.avatar || '');
+        // Get user data from localStorage to fill in missing fields
+        const localUser = userStr ? JSON.parse(userStr) : {};
+        console.log('🔍 LocalStorage user data:', localUser);
+
+        // Merge API data with localStorage data (API takes priority)
+        const mappedData = {
+          id: data.id || data._id || localUser.id,
+          fullName: data.fullName || data.userName || data.name || localUser.userName || localUser.fullName || localUser.name || "",
+          email: data.email || localUser.email || "",
+          phone: data.phone || localUser.phone || "",
+          location: data.location || localUser.location || "",
+          avatar: data.avatar || localUser.avatar || "",
+          role: data.role || localUser.role || "",
+          createdAt: data.createdAt || localUser.createdAt || new Date().toISOString(),
+        };
+
+        console.log('✅ Final mapped data:', mappedData);
+
+        setUserData(mappedData);
+        setProfileImage(mappedData.avatar);
+
+        // Reset form with fetched data
+        reset({
+          fullName: mappedData.fullName,
+          phone: mappedData.phone,
+          location: mappedData.location,
+        });
+
+        // Update localStorage with merged data
+        localStorage.setItem('id', mappedData.id);
+        localStorage.setItem('userName', mappedData.fullName);
+        localStorage.setItem('email', mappedData.email);
+        localStorage.setItem('role', mappedData.role);
+        localStorage.setItem('phone', mappedData.phone);
+        localStorage.setItem('location', mappedData.location);
+        localStorage.setItem('avatar', mappedData.avatar);
       }
     } catch (error: any) {
       console.error('Profile fetch error:', error);
-      
+
       const errorMessage = error.message || error.error || "Please try again later";
-      
+
       Swal.fire({
         icon: "error",
         title: "Failed to load profile",
@@ -122,7 +158,7 @@ const Profile: React.FC = () => {
   const onSubmit = async (data: ProfileForm) => {
     try {
       const response = await updateUserProfile(data);
-      
+
       if (response.success) {
         Swal.fire({
           icon: "success",
@@ -130,7 +166,7 @@ const Profile: React.FC = () => {
           showConfirmButton: false,
           timer: 1500,
         });
-        
+
         setIsEditing(false);
         fetchProfile(); // Refresh profile data
       }
@@ -182,20 +218,20 @@ const Profile: React.FC = () => {
 
     try {
       setUploadingImage(true);
-      
+
       // Upload to server
       const response = await uploadAvatar(file);
-      
+
       if (response.success) {
         setProfileImage(response.data.avatar);
-        
+
         Swal.fire({
           icon: "success",
           title: "Avatar uploaded successfully!",
           showConfirmButton: false,
           timer: 1500,
         });
-        
+
         // Refresh profile to get updated data
         fetchProfile();
       }
@@ -233,8 +269,7 @@ const Profile: React.FC = () => {
   };
 
   const inputClass = (hasError: boolean) =>
-    `w-full pl-12 pr-4 py-3 bg-neutral-secondary border ${
-      hasError ? "border-red-500" : "border-default"
+    `w-full pl-12 pr-4 py-3 bg-neutral-secondary border ${hasError ? "border-red-500" : "border-default"
     } rounded-xl focus:outline-none focus:ring-2 focus:ring-brand text-heading transition-all duration-300 hover:border-brand disabled:opacity-60 disabled:cursor-not-allowed`;
 
   if (loading) {
@@ -313,7 +348,7 @@ const Profile: React.FC = () => {
                     ) : (
                       <div className="w-full h-full bg-brand flex items-center justify-center">
                         <span className="text-5xl font-bold text-primary">
-                          {userData.fullName.charAt(0).toUpperCase()}
+                          {(userData?.fullName || "U").charAt(0).toUpperCase()}
                         </span>
                       </div>
                     )}
@@ -355,7 +390,7 @@ const Profile: React.FC = () => {
                   <h3 className="text-xl font-bold text-heading mb-2">
                     {userData.fullName}
                   </h3>
-                  
+
                   {/* Role Badge */}
                   <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full border ${getRoleBadgeColor(userData.role)} font-medium text-sm mb-4`}>
                     <Shield size={16} />

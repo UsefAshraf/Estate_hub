@@ -30,6 +30,26 @@ const SellerNavbar: React.FC = () => {
   useEffect(() => {
     // Fetch user data from localStorage on component mount
     try {
+      // First, try to get user from the 'user' object (set during login)
+      const userStr = localStorage.getItem('user');
+      console.log("🔍 SellerNavbar - localStorage user:", userStr);
+
+      if (userStr) {
+        const user = JSON.parse(userStr);
+        console.log("✅ SellerNavbar - Parsed user from localStorage:", user);
+        setUserData({
+          id: user._id || user.id || "",
+          email: user.email || "",
+          userName: user.fullName || user.userName || user.name || "Seller",
+          role: user.role || "seller",
+          isOnline: user.isOnline || false,
+          isVerified: user.isVerified || false
+        });
+        return; // Exit early if we successfully got user from the 'user' object
+      }
+
+      // Fallback: try individual localStorage keys (for backwards compatibility)
+      console.log("⚠️ No 'user' object found, trying individual keys...");
       const storedEmail = localStorage.getItem('email');
       const storedId = localStorage.getItem('id');
       const storedIsOnline = localStorage.getItem('isOnline');
@@ -46,7 +66,7 @@ const SellerNavbar: React.FC = () => {
         isVerified: storedIsVerified === "true"
       });
     } catch (error) {
-      console.error("Error reading from localStorage:", error);
+      console.error("❌ SellerNavbar - Error reading from localStorage:", error);
     }
   }, []);
 
@@ -62,21 +82,24 @@ const SellerNavbar: React.FC = () => {
   };
 
   const handleLogout = () => {
-    // Clear localStorage on logout
+    // Clear all authentication data from localStorage
+    localStorage.removeItem('user');
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
     localStorage.removeItem('email');
     localStorage.removeItem('id');
     localStorage.removeItem('isOnline');
     localStorage.removeItem('isVerified');
     localStorage.removeItem('role');
     localStorage.removeItem('userName');
-    
-    navigate('/signup');
+
+    navigate('/signin');
   };
 
   return (
     <nav className="bg-neutral-primary fixed w-full z-20 top-0 start-0 border-b border-default">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-        
+
         {/* Logo */}
         <Link to="/seller/main" className="flex items-center space-x-3 rtl:space-x-reverse">
           <div className="bg-accent p-2 rounded-lg">
@@ -90,7 +113,7 @@ const SellerNavbar: React.FC = () => {
         {/* Right Actions */}
         <div className="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
           <ThemeButton />
-          
+
           {/* Add Property Button */}
           <Link
             to="/createProperty"
@@ -102,8 +125,8 @@ const SellerNavbar: React.FC = () => {
 
           {/* User Menu Button */}
           <div className="relative">
-            <button 
-              type="button" 
+            <button
+              type="button"
               className="flex text-sm bg-neutral-primary rounded-full md:me-0 focus:ring-4 focus:ring-neutral-tertiary"
               onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
             >
@@ -124,8 +147,8 @@ const SellerNavbar: React.FC = () => {
                 </div>
                 <ul className="p-2 text-sm text-body font-medium">
                   <li>
-                    <Link 
-                      to="/profileSeller" 
+                    <Link
+                      to="/profileSeller"
                       className="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded"
                       onClick={() => setIsUserMenuOpen(false)}
                     >
@@ -133,8 +156,8 @@ const SellerNavbar: React.FC = () => {
                     </Link>
                   </li>
                   <li>
-                    <Link 
-                      to="/visitsSeller" 
+                    <Link
+                      to="/visitsSeller"
                       className="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded"
                       onClick={() => setIsUserMenuOpen(false)}
                     >
@@ -142,8 +165,8 @@ const SellerNavbar: React.FC = () => {
                     </Link>
                   </li>
                   <li>
-                    <Link 
-                      to="/sellerProperties" 
+                    <Link
+                      to="/sellerProperties"
                       className="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded"
                       onClick={() => setIsUserMenuOpen(false)}
                     >
@@ -151,7 +174,7 @@ const SellerNavbar: React.FC = () => {
                     </Link>
                   </li>
                   <li>
-                    <button 
+                    <button
                       onClick={handleLogout}
                       className="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded text-left"
                     >
@@ -164,14 +187,14 @@ const SellerNavbar: React.FC = () => {
           </div>
 
           {/* Mobile Menu Toggle */}
-          <button 
+          <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            type="button" 
+            type="button"
             className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-body rounded-base md:hidden hover:bg-neutral-secondary-soft hover:text-heading focus:outline-none focus:ring-2 focus:ring-neutral-tertiary"
           >
             <span className="sr-only">Open main menu</span>
             <svg className="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-              <path stroke="currentColor" strokeLinecap="round" strokeWidth="2" d="M5 7h14M5 12h14M5 17h14"/>
+              <path stroke="currentColor" strokeLinecap="round" strokeWidth="2" d="M5 7h14M5 12h14M5 17h14" />
             </svg>
           </button>
         </div>

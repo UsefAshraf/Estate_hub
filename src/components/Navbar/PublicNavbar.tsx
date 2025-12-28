@@ -108,7 +108,7 @@ const PublicNavbar: React.FC = () => {
             {/* Mobile Auth Links */}
             <li className="md:hidden">
               <Link
-                to="/login"
+                to="/signin"
                 className="block py-2 px-3 text-heading rounded hover:bg-neutral-tertiary"
               >
                 Login
