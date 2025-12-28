@@ -121,40 +121,105 @@ const CreateProperty = () => {
     }
   };
 
-  const handleSubmit = async () => {
-    try {
-      // Build CreatePropertyRequest object
-      const data: CreatePropertyRequest = {
-        title: propertyForm.title,
-        description: propertyForm.description,
-        type: propertyForm.type as any, // "villa" | "apartment"...
-        status: propertyForm.status as any, // "sale" | "rent"
-        featured: propertyForm.featured,
-        price: Number(propertyForm.price),
-        priceNote: propertyForm.priceNote || undefined,
-        address: propertyForm.address,
-        bedrooms: Number(propertyForm.bedrooms),
-        bathrooms: Number(propertyForm.bathrooms),
-        area: Number(propertyForm.area),
-        builtYear: Number(propertyForm.built),
-        images: images,
-        features: propertyForm.features.map((f) => ({ name: f })),
-        agentId: propertyForm.agentId,
-      };
-
-      const res = await createProperty(data);
-
-      if (res.data.success) {
-        setShowSuccessModal(true);
-      } else {
-        Swal.fire("Error", res.data.message || "Failed to create property", "error");
-      }
-    } catch (error: any) {
-      console.error(error);
-      Swal.fire("Error", error.message || "Failed to create property", "error");
+ const handleSubmit = async () => {
+  try {
+    // Validate required fields
+    if (!propertyForm.title || !propertyForm.address || !propertyForm.price) {
+      Swal.fire("Error", "Please fill in all required fields", "error");
+      return;
     }
-  };
 
+    if (!propertyForm.bedrooms || !propertyForm.bathrooms || !propertyForm.area || !propertyForm.built) {
+      Swal.fire("Error", "Please fill in all property details", "error");
+      return;
+    }
+
+    if (images.length === 0) {
+      Swal.fire("Error", "Please upload at least one image", "error");
+      return;
+    }
+
+    // Get user data from localStorage
+    const userDataStr = localStorage.getItem("user");
+    
+    if (!userDataStr) {
+      Swal.fire("Error", "You must be logged in to create a property", "error");
+      navigate("/login");
+      return;
+    }
+
+    let userData;
+    try {
+      userData = JSON.parse(userDataStr);
+    } catch (e) {
+      Swal.fire("Error", "Invalid user data. Please log in again.", "error");
+      navigate("/login");
+      return;
+    }
+
+    const userId = userData.id;
+
+    if (!userId) {
+      Swal.fire("Error", "User ID not found. Please log in again.", "error");
+      navigate("/login");
+      return;
+    }
+
+    console.log("User ID:", userId);
+    console.log("User role:", userData.role);
+
+    // Build CreatePropertyRequest object
+    const data: CreatePropertyRequest = {
+      title: propertyForm.title,
+      description: propertyForm.description,
+      type: propertyForm.type as any,
+      status: propertyForm.status as any,
+      featured: propertyForm.featured,
+      price: Number(propertyForm.price),
+      priceNote: propertyForm.priceNote || undefined,
+      address: propertyForm.address,
+      bedrooms: Number(propertyForm.bedrooms),
+      bathrooms: Number(propertyForm.bathrooms),
+      area: Number(propertyForm.area),
+      builtYear: Number(propertyForm.built),
+      images: images,
+      features: propertyForm.features.map((f) => ({ name: f })),
+      agentId: userId, // Use the user ID from localStorage
+    };
+
+    console.log("Creating property with data:", {
+      ...data,
+      images: `${images.length} images`,
+    });
+
+    const res = await createProperty(data);
+
+    console.log("Create property response:", res.data);
+
+    if (res.data.success) {
+      setShowSuccessModal(true);
+      // Navigate after showing success
+      setTimeout(() => {
+        navigate("/sellerProperties");
+      }, 2000);
+    } else {
+      Swal.fire("Error", res.data.message || "Failed to create property", "error");
+    }
+  } catch (error: any) {
+    console.error("Create property error:", error);
+    console.error("Error response:", error.response?.data);
+    
+    let errorMessage = "Failed to create property";
+    
+    if (error.response?.data?.message) {
+      errorMessage = error.response.data.message;
+    } else if (error.message) {
+      errorMessage = error.message;
+    }
+    
+    Swal.fire("Error", errorMessage, "error");
+  }
+};
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 font-sans">
       <div className="max-w-7xl mx-auto">
@@ -258,9 +323,9 @@ const CreateProperty = () => {
                     onChange={handleInputChange}
                     className="block w-full px-4 py-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#C19A6B] focus:border-transparent transition-all"
                   >
-                    <option value="For Sale">For Sale</option>
-                    <option value="For Rent">For Rent</option>
-                    <option value="Sold">Sold</option>
+                    <option value="sale">For Sale</option>
+                    <option value="rent">For Rent</option>
+                    <option value="sold">Sold</option>
                   </select>
                 </div>
 

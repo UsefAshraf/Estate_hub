@@ -42,6 +42,7 @@ import RequireAuth from "./RequireAuth";
 import AddUser from "@/pages/admin/AddUser";
 import PublicLayout from "@/Layouts/PublicLayout";
 import ProfileSeller from "@/pages/general/ProfileSeller";
+import EditProperty from "@/pages/seller/EditProperty";
 
 const AppRoutes: React.FC = () => {
   return (
@@ -96,10 +97,11 @@ const AppRoutes: React.FC = () => {
               <Route path="/visitsSeller" element={<VisitsPage />} />
               <Route path="/aboutSeller" element={<About />} />
               <Route path="/contactSeller" element={<Contact />} />
+              <Route path="/EditProperty/:id" element={<EditProperty />} />
+
             </Route>
           </Route>
-        </Route>
-
+          </Route>
         {/* Admin Routes — only admin role */}
         <Route element={<RequireAuth />}>
           <Route element={<RequireRole allowedRoles={["admin"]} />}>
