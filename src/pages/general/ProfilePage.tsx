@@ -288,10 +288,10 @@ const Profile: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-neutral-primary py-12 px-4 sm:px-6 lg:px-8 pt-20">
+    <div className="min-h-screen bg-primary py-12 px-4 sm:px-6 lg:px-8 pt-20">
       {/* Header Section */}
       <div className="max-w-6xl mx-auto mb-8">
-        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-brand to-brand-hover p-8 shadow-2xl">
+        <div className="relative overflow-hidden rounded-2xl bg-accent p-8 shadow-2xl border border-custom">
           <div className="absolute inset-0 bg-black/5"></div>
           <div className="relative z-10 flex flex-wrap justify-between items-center gap-4">
             <div>
@@ -306,7 +306,7 @@ const Profile: React.FC = () => {
             {!isEditing ? (
               <button
                 onClick={() => setIsEditing(true)}
-                className="flex items-center gap-2 px-6 py-3 bg-primary text-heading rounded-xl font-semibold shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 border-2 border-default"
+                className="flex items-center gap-2 px-6 py-3 btn-primary rounded-xl font-semibold shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 border border-custom"
               >
                 <Pencil size={18} /> Edit Profile
               </button>
@@ -332,7 +332,7 @@ const Profile: React.FC = () => {
 
       {/* Main Content */}
       <div className="max-w-6xl mx-auto">
-        <div className="bg-neutral-secondary rounded-2xl shadow-2xl overflow-hidden border border-default">
+        <div className="bg-secondary rounded-2xl shadow-2xl overflow-hidden border border-custom">
           <div className="p-8 md:p-12">
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
               {/* Profile Image Section */}

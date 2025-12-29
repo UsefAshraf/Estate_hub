@@ -3,6 +3,7 @@ import { User, Mail, Phone, MapPin, Calendar, Loader2 } from "lucide-react";
 import { getUserProfile } from "../../services/profile.api";
 
 interface UserProfileData {
+  id: string;
   _id: string;
   fullName: string;
   email: string;
@@ -26,13 +27,13 @@ const ProfileSeller: React.FC = () => {
     try {
       setLoading(true);
       setError(null);
-      
+
       const response = await getUserProfile();
-      
+
       if (response.success) {
         const userData = response.data;
         setProfile(userData);
-        
+
         // Update localStorage with fresh data
         localStorage.setItem('id', userData.id);
         localStorage.setItem('userName', userData.fullName);
@@ -75,7 +76,7 @@ const ProfileSeller: React.FC = () => {
         <div className="text-center">
           <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-6 max-w-md">
             <p className="text-red-500 font-medium mb-4">{error}</p>
-            <button 
+            <button
               onClick={fetchProfile}
               className="px-4 py-2 bg-brand text-primary rounded-lg hover:bg-brand-hover transition-colors"
             >
@@ -92,16 +93,16 @@ const ProfileSeller: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-neutral-primary pt-20 pb-12">
+    <div className="min-h-screen bg-primary pt-20 pb-12">
       <div className="max-w-4xl mx-auto px-4">
         {/* Profile Header */}
-        <div className="bg-neutral-secondary border border-default rounded-xl p-8 mb-6">
+        <div className="bg-secondary border border-custom rounded-xl p-8 mb-6">
           <div className="flex items-center gap-6">
             {/* Avatar */}
             <div className="relative">
               {profile.avatar ? (
-                <img 
-                  src={profile.avatar} 
+                <img
+                  src={profile.avatar}
                   alt={profile.fullName}
                   className="w-24 h-24 rounded-full object-cover border-4 border-brand"
                 />
@@ -131,7 +132,7 @@ const ProfileSeller: React.FC = () => {
         </div>
 
         {/* Profile Details */}
-        <div className="bg-neutral-secondary border border-default rounded-xl p-8">
+        <div className="bg-secondary border border-custom rounded-xl p-8">
           <h2 className="text-2xl font-bold text-heading mb-6">
             Profile Information
           </h2>
@@ -187,15 +188,15 @@ const ProfileSeller: React.FC = () => {
           </div>
 
           {/* Action Buttons */}
-          <div className="mt-8 pt-6 border-t border-default flex gap-4">
-            <button 
+          <div className="mt-8 pt-6 border-t border-custom flex gap-4">
+            <button
               onClick={fetchProfile}
-              className="px-6 py-2 bg-brand text-primary rounded-lg hover:bg-brand-hover transition-colors font-medium"
+              className="px-6 py-2 btn-primary rounded-lg hover:bg-accent-hover transition-colors font-medium border border-custom"
             >
               Refresh Profile
             </button>
-            <button 
-              className="px-6 py-2 bg-neutral-tertiary text-heading rounded-lg hover:bg-neutral-tertiary-medium transition-colors font-medium"
+            <button
+              className="px-6 py-2 btn-primary rounded-lg hover:bg-accent-hover transition-colors font-medium border border-custom"
             >
               Edit Profile
             </button>
