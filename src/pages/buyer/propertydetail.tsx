@@ -111,7 +111,7 @@ const Propertydetail: React.FC = () => {
     });
 
     socket.emit("View-Property", { propertyId: id });
-    
+
     if (id) {
       fetchPropertyData();
     }
@@ -160,10 +160,10 @@ const Propertydetail: React.FC = () => {
     if (!property) return;
     try {
       await addVisit({
-        propertyName: property.title, 
+        propertyName: property.title,
         date: scheduleForm.date,
         time: scheduleForm.time,
-        propertyId: property._id,     
+        propertyId: property._id,
       });
       // await addVisit({
       //   propertyName: property.title,
@@ -307,7 +307,7 @@ const Propertydetail: React.FC = () => {
   };
 
   const handleBuyProperty = () => {
-    navigate("/paymentBuyer");
+    navigate(`/paymentBuyer/${property?._id}`);
     Swal.fire({
       title: "Redirecting to Payment!",
       text: "Please complete your purchase.",

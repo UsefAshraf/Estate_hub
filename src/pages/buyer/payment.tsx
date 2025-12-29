@@ -1,19 +1,18 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { CreditCard, Lock, Shield, CheckCircle2 } from 'lucide-react';
 import Swal from "sweetalert2";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { getPropertyById } from '@/services/property.api';
+import type { Property } from '@/types/property.types';
 
 export default function PaymentPage() {
   const navigate = useNavigate();
-  // Mock data to match the screenshot
-  const property = {
-    title: "Luxury Beachfront Villa",
-    location: "Malibu, California",
-    price: 2500000,
-    image: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?q=80&w=2671&auto=format&fit=crop" // Representative luxury villa image
-  };
+  const { id } = useParams<{ id: string }>();
 
-  const bookingType = 'full'; // Defaulting to full payment to match screenshot totals
+  // Property state - fetched from backend
+  const [property, setProperty] = useState<Property | null>(null);
+  const [loading, setLoading] = useState(true);
+
   const [cardNumber, setCardNumber] = useState('');
   const [expiry, setExpiry] = useState('');
   const [cvc, setCvc] = useState('');
@@ -21,10 +20,48 @@ export default function PaymentPage() {
   const [processing, setProcessing] = useState(false);
 
   const serviceFee = 99;
-  const totalAmount = property.price + serviceFee;
+  const totalAmount = (property?.price || 0) + serviceFee;
+
+  // Fetch property data from backend
+  useEffect(() => {
+    const fetchProperty = async () => {
+      if (!id) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'No property ID provided',
+          confirmButtonColor: '#dc2626',
+        }).then(() => navigate('/homeBuyer'));
+        return;
+      }
+
+      try {
+        setLoading(true);
+        const res = await getPropertyById(id);
+
+        if (res.data.success && res.data.data) {
+          setProperty(res.data.data);
+        } else {
+          throw new Error('Failed to load property');
+        }
+      } catch (error: any) {
+        console.error('Error fetching property:', error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: error.response?.data?.message || 'Failed to load property details',
+          confirmButtonColor: '#dc2626',
+        }).then(() => navigate('/homeBuyer'));
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProperty();
+  }, [id, navigate]);
 
   // --- Formatting Logic ---
-  const formatCardNumber = (value) => {
+  const formatCardNumber = (value: string): string => {
     const v = value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
     const matches = v.match(/\d{4,16}/g);
     const match = (matches && matches[0]) || '';
@@ -35,7 +72,7 @@ export default function PaymentPage() {
     return parts.length ? parts.join(' ') : value;
   };
 
-  const formatExpiry = (value) => {
+  const formatExpiry = (value: string): string => {
     const v = value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
     if (v.length >= 2) {
       return v.substring(0, 2) + '/' + v.substring(2, 4);
@@ -43,74 +80,105 @@ export default function PaymentPage() {
     return v;
   };
 
-  const handleCardNumberChange = (e) => {
+  const handleCardNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const formatted = formatCardNumber(e.target.value);
     if (formatted.replace(/\s/g, '').length <= 16) {
       setCardNumber(formatted);
     }
   };
 
-  const handleExpiryChange = (e) => {
+  const handleExpiryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const formatted = formatExpiry(e.target.value);
     if (formatted.replace(/\//g, '').length <= 4) {
       setExpiry(formatted);
     }
   };
 
-  const handleCvcChange = (e) => {
+  const handleCvcChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.replace(/[^0-9]/gi, '');
     if (value.length <= 4) {
       setCvc(value);
     }
   };
 
-  const handleSubmit = async (e) => {
-  e.preventDefault();
-  setProcessing(true);
-  // Swal.fire({
-  //   title: "Payment Successful!",
-  //   text: "Thank you for your purchase. Redirecting in a moment...",
-  //   icon: "success",
-  //   position: "middle",
-  //   toast: true,
-  //   timer: 3000, 
-  //   timerProgressBar: true,
-  //   showConfirmButton: false,
-  // });
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setProcessing(true);
+    // Swal.fire({
+    //   title: "Payment Successful!",
+    //   text: "Thank you for your purchase. Redirecting in a moment...",
+    //   icon: "success",
+    //   position: "middle",
+    //   toast: true,
+    //   timer: 3000, 
+    //   timerProgressBar: true,
+    //   showConfirmButton: false,
+    // });
 
-  Swal.fire({
-  title: "Payment Successful!",
-  text: "Thank you for your purchase. Your property documents are being processed.",
-  icon: "success",
-  position: "center", // Use 'center' for a big popup
-  // Remove: toast: true 
-  // Add: Explicit width/size if needed, otherwise it defaults to a large size
-  width: 600, // Optional: Set a specific width (default is ~310px wide for normal popups)
-  timer: 5000, // Increased timer for better visibility of the large popup
-  timerProgressBar: true,
-  showConfirmButton: false, // Keep this if you want it to close automatically
-  
-  // Optional: You can also add custom classes for styling
-  customClass: {
-      popup: 'my-big-success-popup',
-      title: 'text-3xl font-bold',
-      htmlContainer: 'text-xl'
+    Swal.fire({
+      title: "Payment Successful!",
+      text: "Thank you for your purchase. Your property documents are being processed.",
+      icon: "success",
+      position: "center", // Use 'center' for a big popup
+      // Remove: toast: true 
+      // Add: Explicit width/size if needed, otherwise it defaults to a large size
+      width: 600, // Optional: Set a specific width (default is ~310px wide for normal popups)
+      timer: 5000, // Increased timer for better visibility of the large popup
+      timerProgressBar: true,
+      showConfirmButton: false, // Keep this if you want it to close automatically
+
+      // Optional: You can also add custom classes for styling
+      customClass: {
+        popup: 'my-big-success-popup',
+        title: 'text-3xl font-bold',
+        htmlContainer: 'text-xl'
+      }
+    });
+    setProcessing(false);
+    await new Promise(resolve => setTimeout(resolve, 3000));
+    navigate("/confirmPayment");
+  };
+
+  const isFormValid = cardNumber.replace(/\s/g, '').length === 16 &&
+    expiry.length === 5 &&
+    cvc.length >= 3 &&
+    name.length > 0;
+
+  // Loading State
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading payment details...</p>
+        </div>
+      </div>
+    );
   }
-  });
-  setProcessing(false);
-  await new Promise(resolve => setTimeout(resolve, 3000)); 
-  navigate("/confirmPayment");
-};
 
-  const isFormValid = cardNumber.replace(/\s/g, '').length === 16 && 
-                      expiry.length === 5 && 
-                      cvc.length >= 3 && 
-                      name.length > 0;
+  // No Property Found
+  if (!property) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">
+            Property Not Found
+          </h2>
+          <button
+            onClick={() => navigate("/homeBuyer")}
+            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+          >
+            Back to Properties
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 font-sans">
       <div className="max-w-6xl mx-auto">
-        
+
         {/* Page Title Section */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Complete Your Payment</h1>
@@ -118,7 +186,7 @@ export default function PaymentPage() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          
+
           {/* LEFT COLUMN: Payment Form */}
           <div className="lg:col-span-7 space-y-6">
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
@@ -221,8 +289,8 @@ export default function PaymentPage() {
                     type="submit"
                     disabled={!isFormValid || processing}
                     className={`w-full py-4 px-6 rounded-lg text-white font-bold text-lg shadow-md transition-all duration-200 
-                      ${!isFormValid || processing 
-                        ? 'bg-[#e0d0b8] cursor-not-allowed' 
+                      ${!isFormValid || processing
+                        ? 'bg-[#e0d0b8] cursor-not-allowed'
                         : 'bg-[#e0d0b8] xhover:bg-[#a68256] hover:shadow-lg transform hover:-translate-y-0.5'
                       }`}
                   >
@@ -237,15 +305,15 @@ export default function PaymentPage() {
             </div>
 
             {/* Additional Security Info */}
-           <div className="p-5 bg-[#FDFBF7] rounded-xl border border-[#E8DCC6] flex gap-4 items-start">
-  <Shield className="w-6 h-6 text-[#C19A6B] flex-shrink-0 mt-0.5" />
-  <div>
-    <h4 className="text-[#4A3B2A] font-semibold mb-1">Your payment is secure</h4>
-    <p className="text-sm text-[#8C7A63] leading-relaxed">
-      We use bank-level encryption to protect your card information. Your data is never stored on our servers.
-    </p>
-  </div>
-</div>
+            <div className="p-5 bg-[#FDFBF7] rounded-xl border border-[#E8DCC6] flex gap-4 items-start">
+              <Shield className="w-6 h-6 text-[#C19A6B] flex-shrink-0 mt-0.5" />
+              <div>
+                <h4 className="text-[#4A3B2A] font-semibold mb-1">Your payment is secure</h4>
+                <p className="text-sm text-[#8C7A63] leading-relaxed">
+                  We use bank-level encryption to protect your card information. Your data is never stored on our servers.
+                </p>
+              </div>
+            </div>
           </div>
 
           {/* RIGHT COLUMN: Order Summary */}
@@ -257,14 +325,14 @@ export default function PaymentPage() {
                 {/* Property Card */}
                 <div className="mb-8">
                   <div className="relative h-56 w-full rounded-xl overflow-hidden mb-5 shadow-sm">
-                    <img 
-                      src={property.image} 
+                    <img
+                      src={property.images[0]}
                       alt={property.title}
                       className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500"
                     />
                   </div>
                   <h3 className="text-xl font-bold text-gray-900 mb-1">{property.title}</h3>
-                  <p className="text-gray-500 font-medium">{property.location}</p>
+                  <p className="text-gray-500 font-medium">{property.address}</p>
                 </div>
 
                 {/* Cost Breakdown */}

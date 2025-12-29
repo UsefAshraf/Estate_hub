@@ -43,7 +43,7 @@ import AddUser from "@/pages/admin/AddUser";
 import PublicLayout from "@/Layouts/PublicLayout";
 import ProfileSeller from "@/pages/general/ProfileSeller";
 import EditProperty from "@/pages/seller/EditProperty";
-import AdminVisitsPage  from "@/pages/admin/adminvisitspage";
+import AdminVisitsPage from "@/pages/admin/adminvisitspage";
 
 const AppRoutes: React.FC = () => {
   return (
@@ -77,7 +77,7 @@ const AppRoutes: React.FC = () => {
               <Route path="/propertydetailBuyer/:id" element={<Propertydetail />} />
               <Route path="/searchBuyer" element={<SearchResultsPage />} />
               <Route path="/favoritesBuyer" element={<FavouritesBuyerPage />} />
-              <Route path="/paymentBuyer" element={<PaymentPage />} />
+              <Route path="/paymentBuyer/:id" element={<PaymentPage />} />
               <Route path="/profileBuyer" element={<Profile />} />
               <Route path="/visitsBuyer" element={<VisitsPage />} />
               <Route path="/confirmPayment" element={<PaymentSuccessPage />} />
@@ -102,7 +102,7 @@ const AppRoutes: React.FC = () => {
 
             </Route>
           </Route>
-          </Route>
+        </Route>
         {/* Admin Routes — only admin role */}
         <Route element={<RequireAuth />}>
           <Route element={<RequireRole allowedRoles={["admin"]} />}>
