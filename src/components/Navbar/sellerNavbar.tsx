@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Home, Plus } from "lucide-react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import ThemeButton from "../Theme/ButtonTheme";
+import Swal from "sweetalert2";
 
 interface UserData {
   id: string;
@@ -81,19 +82,32 @@ const SellerNavbar: React.FC = () => {
     return "block py-2 px-3 text-heading rounded hover:bg-neutral-tertiary md:hover:bg-transparent md:border-0 md:hover:text-fg-brand md:p-0";
   };
 
-  const handleLogout = () => {
-    // Clear all authentication data from localStorage
-    localStorage.removeItem('user');
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
-    localStorage.removeItem('email');
-    localStorage.removeItem('id');
-    localStorage.removeItem('isOnline');
-    localStorage.removeItem('isVerified');
-    localStorage.removeItem('role');
-    localStorage.removeItem('userName');
-
-    navigate('/signin');
+  
+  const handleLogout = async () => {
+    const result = await Swal.fire({
+      icon: "question",
+      title: "Logout",
+      text: "Are you sure you want to logout?",
+      showCancelButton: true,
+      confirmButtonColor: "#dc2626",
+      cancelButtonColor: "#6b7280",
+      confirmButtonText: "Yes, logout",
+      cancelButtonText: "Cancel",
+    });
+    if (result.isConfirmed) {
+      // Clear all authentication data from localStorage
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+      localStorage.removeItem("user");
+      localStorage.removeItem("email");
+      localStorage.removeItem("id");
+      localStorage.removeItem("role");
+      localStorage.removeItem("userName");
+      // Close the user menu
+      setIsUserMenuOpen(false);
+      // Navigate to sign-in page
+      navigate('/signin');
+    }
   };
 
   return (
@@ -155,15 +169,7 @@ const SellerNavbar: React.FC = () => {
                       Profile
                     </Link>
                   </li>
-                  <li>
-                    <Link
-                      to="/visitsSeller"
-                      className="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded"
-                      onClick={() => setIsUserMenuOpen(false)}
-                    >
-                      Visits
-                    </Link>
-                  </li>
+
                   <li>
                     <Link
                       to="/sellerProperties"

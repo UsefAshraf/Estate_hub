@@ -3,7 +3,7 @@ import { Home, Plus } from "lucide-react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import ThemeButton from "../Theme/ButtonTheme";
 import { getUserProfile } from "@/services/profile.api";
-
+import Swal from "sweetalert2";
 const AdminNavbar: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -70,9 +70,54 @@ const AdminNavbar: React.FC = () => {
     return "block py-2 px-3 text-heading rounded hover:bg-neutral-tertiary md:hover:bg-transparent md:border-0 md:hover:text-fg-brand md:p-0";
   };
 
-  const handleLogout = () => {
-    navigate('/signin')
-  };
+  // const handleLogout = async() => {
+  //   const result = await Swal.fire({    
+  //     icon: "question",    
+  //     title: "Logout",    
+  //     text: "Are you sure you want to logout?",    
+  //     showCancelButton: true,   
+  //      confirmButtonColor: "#dc2626",    
+  //      cancelButtonColor: "#6b7280",    
+  //      confirmButtonText: "Yes, logout",    
+  //      cancelButtonText: "Cancel",  });  
+  //   if (result.isConfirmed) {    
+  //     // Clear all authentication data from localStorage    
+  //     localStorage.removeItem("accessToken");    
+  //     localStorage.removeItem("refreshToken");    
+  //     localStorage.removeItem("user");        
+  //     // Close the user menu   
+  //    setIsUserMenuOpen(false);       
+  //  // Navigate to sign-in page    
+  //   navigate('/signin');
+  // };
+
+const handleLogout = async () => {
+  const result = await Swal.fire({
+    icon: "question",
+    title: "Logout",
+    text: "Are you sure you want to logout?",
+    showCancelButton: true,
+    confirmButtonColor: "#dc2626",
+    cancelButtonColor: "#6b7280",
+    confirmButtonText: "Yes, logout",
+    cancelButtonText: "Cancel",
+  });
+  if (result.isConfirmed) {
+    // Clear all authentication data from localStorage
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    localStorage.removeItem("user");
+    localStorage.removeItem("email");
+    localStorage.removeItem("id");
+    localStorage.removeItem("role");
+    localStorage.removeItem("userName");
+    // Close the user menu
+    setIsUserMenuOpen(false);
+    // Navigate to sign-in page
+    navigate('/signin');
+  }
+};
+
 
   return (
     <nav className="bg-neutral-primary fixed w-full z-20 top-0 start-0 border-b border-default">

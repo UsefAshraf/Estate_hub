@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Home, Heart } from "lucide-react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import ThemeButton from "../Theme/ButtonTheme";
+import Swal from "sweetalert2";
 
 interface UserData {
   id: string;
@@ -79,20 +80,33 @@ const BuyerNavbar: React.FC = () => {
     return location.pathname === path;
   };
 
-  const handleLogout = () => {
-    // Clear all authentication data from localStorage
-    localStorage.removeItem('user');
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
-    localStorage.removeItem('email');
-    localStorage.removeItem('id');
-    localStorage.removeItem('isOnline');
-    localStorage.removeItem('isVerified');
-    localStorage.removeItem('role');
-    localStorage.removeItem('userName');
 
+const handleLogout = async () => {
+  const result = await Swal.fire({
+    icon: "question",
+    title: "Logout",
+    text: "Are you sure you want to logout?",
+    showCancelButton: true,
+    confirmButtonColor: "#dc2626",
+    cancelButtonColor: "#6b7280",
+    confirmButtonText: "Yes, logout",
+    cancelButtonText: "Cancel",
+  });
+  if (result.isConfirmed) {
+    // Clear all authentication data from localStorage
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    localStorage.removeItem("user");
+    localStorage.removeItem("email");
+    localStorage.removeItem("id");
+    localStorage.removeItem("role");
+    localStorage.removeItem("userName");
+    // Close the user menu
+    setIsUserMenuOpen(false);
+    // Navigate to sign-in page
     navigate('/signin');
-  };
+  }
+};
 
   const getLinkClassName = (path: string) => {
     if (isActive(path)) {

@@ -200,7 +200,7 @@ const CreateProperty = () => {
       setShowSuccessModal(true);
       // Navigate after showing success
       setTimeout(() => {
-        navigate("/sellerProperties");
+        navigate("/properties");
       }, 2000);
     } else {
       Swal.fire("Error", res.data.message || "Failed to create property", "error");

@@ -127,3 +127,6 @@ export const deleteProperty = (
 
 export const getSoldProperties = (): Promise<AxiosResponse<PropertiesResponse>> =>
   API.get("/api/properties/sold");
+
+
+export const markPropertyAsSold = (id: string) => {  return API.patch(`/api/properties/${id}/sold`);};

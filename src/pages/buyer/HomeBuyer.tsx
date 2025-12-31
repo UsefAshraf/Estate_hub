@@ -63,9 +63,9 @@ const HomeSellerMergedPage: React.FC = () => {
         }
       } catch (error:any) {
          console.error("Error fetching properties:");
-  console.log("message:", error.message);
-  console.log("status:", error.response?.status);
-  console.log("data:", error.response?.data);
+          console.log("message:", error.message);
+          console.log("status:", error.response?.status);
+          console.log("data:", error.response?.data);
       } finally {
         setLoading(false);
       }
@@ -91,7 +91,7 @@ const HomeSellerMergedPage: React.FC = () => {
     const query = searchInput.trim()
       ? `?q=${encodeURIComponent(searchInput)}&type=${selectedPropertyType}`
       : `?type=${selectedPropertyType}`;
-    navigate(`/search${query}`);
+    navigate(`/searchBuyer${query}`);
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
