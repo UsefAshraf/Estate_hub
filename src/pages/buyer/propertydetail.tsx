@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { addVisit } from "../../services/visits.services.ts";
-import type { Favorite } from "../../types/favourites.types.ts"
+import type { Favorite } from "../../types/favourites.types.ts";
 
 import {
   getUserFavorites,
@@ -32,7 +32,6 @@ import { getPropertyById } from "@/services/property.api";
 import type { Property } from "@/types/property.types";
 import { socket } from "../../services/socket";
 
-
 interface Agent {
   name: string;
   title: string;
@@ -46,7 +45,8 @@ const agent: Agent = {
   title: "Real Estate Agent",
   phone: "+201143148742",
   email: "usefmoez@gmail.com",
-  avatar: "https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg?auto=compress&cs=tinysrgb&w=200&h=200&fit=crop",
+  avatar:
+    "https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg?auto=compress&cs=tinysrgb&w=200&h=200&fit=crop",
 };
 
 interface ScheduleForm {
@@ -62,7 +62,6 @@ interface ContactForm {
   phone: string;
   message: string;
 }
-
 
 const Propertydetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -122,9 +121,8 @@ const Propertydetail: React.FC = () => {
       socket.off("disconnect");
       socket.off("connect_error");
       socket.disconnect();
-    }
+    };
   }, [id]);
-
 
   const fetchPropertyData = async () => {
     try {
@@ -145,15 +143,14 @@ const Propertydetail: React.FC = () => {
       Swal.fire({
         icon: "error",
         title: "Error",
-        text: error.response?.data?.message || "Failed to load property details",
+        text:
+          error.response?.data?.message || "Failed to load property details",
         confirmButtonColor: "#dc2626",
       }).then(() => navigate("/homeBuyer"));
     } finally {
       setLoading(false);
     }
   };
-
-
 
   const handleScheduleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -220,7 +217,6 @@ const Propertydetail: React.FC = () => {
     checkFavorite();
   }, [property?._id]);
 
-
   const handleToggleFavorite = async () => {
     if (!property?._id) return;
 
@@ -262,7 +258,6 @@ const Propertydetail: React.FC = () => {
       });
     }
   };
-
 
   const handleContactSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -326,7 +321,9 @@ const Propertydetail: React.FC = () => {
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600 dark:text-gray-400">Loading property details...</p>
+          <p className="text-gray-600 dark:text-gray-400">
+            Loading property details...
+          </p>
         </div>
       </div>
     );
@@ -353,8 +350,6 @@ const Propertydetail: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 bg-primary pb-4">
-
-
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 pb-12">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -376,8 +371,11 @@ const Propertydetail: React.FC = () => {
                     className="bg-white p-2 rounded-lg shadow-md hover:bg-gray-50"
                   >
                     <Heart
-                      className={`w-5 h-5 ${isFavorite ? "fill-red-500 text-red-500" : "text-gray-600"
-                        }`}
+                      className={`w-5 h-5 ${
+                        isFavorite
+                          ? "fill-red-500 text-red-500"
+                          : "text-gray-600"
+                      }`}
                     />
                   </motion.button>
                   <motion.button
@@ -404,8 +402,11 @@ const Propertydetail: React.FC = () => {
                     src={img}
                     alt={`Thumbnail ${idx + 1}`}
                     onClick={() => setMainImage(idx)}
-                    className={`w-24 h-20 object-cover rounded-lg cursor-pointer border-2 flex-shrink-0 ${mainImage === idx ? "border-cyan-500" : "border-transparent"
-                      }`}
+                    className={`w-24 h-20 object-cover rounded-lg cursor-pointer border-2 flex-shrink-0 ${
+                      mainImage === idx
+                        ? "border-cyan-500"
+                        : "border-transparent"
+                    }`}
                   />
                 ))}
               </div>
@@ -441,7 +442,9 @@ const Propertydetail: React.FC = () => {
                     ${property.price.toLocaleString()}
                   </div>
                   {property.priceNote && (
-                    <div className="text-sm text-gray-500">{property.priceNote}</div>
+                    <div className="text-sm text-gray-500">
+                      {property.priceNote}
+                    </div>
                   )}
                   {property.status === "rent" && (
                     <div className="text-sm text-gray-500">/month</div>
@@ -454,29 +457,45 @@ const Propertydetail: React.FC = () => {
                 <div className="flex items-center space-x-3">
                   <Bed className="w-6 h-6 text-cyan-500" />
                   <div>
-                    <div className="text-sm text-gray-500 text-secondary">Bedrooms</div>
-                    <div className="font-semibold text-secondary">{property.bedrooms}</div>
+                    <div className="text-sm text-gray-500 text-secondary">
+                      Bedrooms
+                    </div>
+                    <div className="font-semibold text-secondary">
+                      {property.bedrooms}
+                    </div>
                   </div>
                 </div>
                 <div className="flex items-center space-x-3">
                   <Bath className="w-6 h-6 text-cyan-500" />
                   <div>
-                    <div className="text-sm text-gray-500 text-secondary">Bathrooms</div>
-                    <div className="font-semibold text-secondary">{property.bathrooms}</div>
+                    <div className="text-sm text-gray-500 text-secondary">
+                      Bathrooms
+                    </div>
+                    <div className="font-semibold text-secondary">
+                      {property.bathrooms}
+                    </div>
                   </div>
                 </div>
                 <div className="flex items-center space-x-3">
                   <Maximize className="w-6 h-6 text-cyan-500" />
                   <div>
-                    <div className="text-sm text-gray-500 text-secondary">Area</div>
-                    <div className="font-semibold text-secondary">{property.area} sqft</div>
+                    <div className="text-sm text-gray-500 text-secondary">
+                      Area
+                    </div>
+                    <div className="font-semibold text-secondary">
+                      {property.area} sqft
+                    </div>
                   </div>
                 </div>
                 <div className="flex items-center space-x-3">
                   <Calendar className="w-6 h-6 text-cyan-500" />
                   <div>
-                    <div className="text-sm text-gray-500 text-secondary">Built</div>
-                    <div className="font-semibold text-secondary">{property.builtYear}</div>
+                    <div className="text-sm text-gray-500 text-secondary">
+                      Built
+                    </div>
+                    <div className="font-semibold text-secondary">
+                      {property.builtYear}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -513,7 +532,9 @@ const Propertydetail: React.FC = () => {
           {/* Right Sidebar */}
           <div className="space-y-6">
             <div className="bg-primary rounded-xl p-6 shadow-sm sticky top-24 bg-secondary">
-              <h3 className="text-lg font-bold text-secondary mb-4">Contact Agent</h3>
+              <h3 className="text-lg font-bold text-secondary mb-4">
+                Contact Agent
+              </h3>
               <div className="flex items-center space-x-4 mb-6">
                 <img
                   src={agent.avatar}
@@ -521,8 +542,12 @@ const Propertydetail: React.FC = () => {
                   className="w-16 h-16 rounded-full object-cover"
                 />
                 <div>
-                  <div className="font-bold text-gray-900 text-secondary">{agent.name}</div>
-                  <div className="text-sm text-gray-500 text-secondary">{agent.title}</div>
+                  <div className="font-bold text-gray-900 text-secondary">
+                    {agent.name}
+                  </div>
+                  <div className="text-sm text-gray-500 text-secondary">
+                    {agent.title}
+                  </div>
                 </div>
               </div>
               <div className="space-y-3 mb-6">
@@ -575,7 +600,9 @@ const Propertydetail: React.FC = () => {
       {property.location && (
         <div className="max-w-7xl mx-auto px-4 pb-12">
           <div className="bg-primary rounded-xl p-6 shadow-sm bg-secondary">
-            <h2 className="text-2xl font-bold text-secondary mb-2">Property Location</h2>
+            <h2 className="text-2xl font-bold text-secondary mb-2">
+              Property Location
+            </h2>
             <p className="text-gray-600 flex items-center text-secondary mb-6">
               <MapPin className="w-4 h-4 mr-2" />
               {property.address}
@@ -586,6 +613,9 @@ const Propertydetail: React.FC = () => {
                 lon={property.location.coordinates[0]}
                 propertyTitle={property.title}
                 propertyAddress={property.address}
+                circleRadius={500} // Optional: area circle radius in meters
+                showCircle={true} // Optional: show/hide circle
+                zoom={15} // Optional: initial zoom level
               />
             </div>
           </div>
@@ -624,15 +654,20 @@ const Propertydetail: React.FC = () => {
                 src={img}
                 alt={`Thumbnail ${idx + 1}`}
                 onClick={() => setZoomedImageIndex(idx)}
-                className={`w-20 h-16 object-cover rounded-lg cursor-pointer border-2 ${zoomedImageIndex === idx ? "border-cyan-500" : "border-transparent"
-                  }`}
+                className={`w-20 h-16 object-cover rounded-lg cursor-pointer border-2 ${
+                  zoomedImageIndex === idx
+                    ? "border-cyan-500"
+                    : "border-transparent"
+                }`}
               />
             ))}
           </div>
           <button
             onClick={() =>
               setZoomedImageIndex((prev) =>
-                prev !== null ? (prev - 1 + property.images.length) % property.images.length : 0
+                prev !== null
+                  ? (prev - 1 + property.images.length) % property.images.length
+                  : 0
               )
             }
             className="absolute top-1/2 left-4 transform -translate-y-1/2 text-white p-2 bg-white/20 rounded-full hover:bg-white/40"
@@ -662,10 +697,14 @@ const Propertydetail: React.FC = () => {
             >
               <X className="w-6 h-6" />
             </button>
-            <h2 className="text-xl font-bold text-secondary mb-6">Contact {agent.name}</h2>
+            <h2 className="text-xl font-bold text-secondary mb-6">
+              Contact {agent.name}
+            </h2>
             <form onSubmit={handleContactSubmit} className="space-y-4">
               <div>
-                <label className="block text-sm font-semibold text-secondary mb-2">Your Name</label>
+                <label className="block text-sm font-semibold text-secondary mb-2">
+                  Your Name
+                </label>
                 <input
                   type="text"
                   name="name"
@@ -677,7 +716,9 @@ const Propertydetail: React.FC = () => {
                 />
               </div>
               <div>
-                <label className="block text-sm font-semibold text-secondary mb-2">Email</label>
+                <label className="block text-sm font-semibold text-secondary mb-2">
+                  Email
+                </label>
                 <input
                   type="email"
                   name="email"
@@ -689,7 +730,9 @@ const Propertydetail: React.FC = () => {
                 />
               </div>
               <div>
-                <label className="block text-sm font-semibold text-secondary mb-2">Phone</label>
+                <label className="block text-sm font-semibold text-secondary mb-2">
+                  Phone
+                </label>
                 <input
                   type="tel"
                   name="phone"
@@ -701,7 +744,9 @@ const Propertydetail: React.FC = () => {
                 />
               </div>
               <div>
-                <label className="block text-sm font-semibold text-secondary mb-2">Message</label>
+                <label className="block text-sm font-semibold text-secondary mb-2">
+                  Message
+                </label>
                 <textarea
                   name="message"
                   value={contactForm.message}
@@ -733,22 +778,28 @@ const Propertydetail: React.FC = () => {
             >
               <X className="w-6 h-6" />
             </button>
-            <h2 className="text-2xl font-bold text-secondary mb-6">Schedule a Property Visit</h2>
+            <h2 className="text-2xl font-bold text-secondary mb-6">
+              Schedule a Property Visit
+            </h2>
             <form onSubmit={handleScheduleSubmit} className="space-y-4">
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2 text-secondary">Preferred Date</label>
+                <label className="block text-sm font-semibold text-gray-700 mb-2 text-secondary">
+                  Preferred Date
+                </label>
                 <input
                   type="date"
                   name="date"
                   value={scheduleForm.date}
                   onChange={handleInputChange}
-                  min={new Date().toISOString().split('T')[0]}
+                  min={new Date().toISOString().split("T")[0]}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-200 text-black"
                   required
                 />
               </div>
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2 text-secondary">Preferred Time</label>
+                <label className="block text-sm font-semibold text-gray-700 mb-2 text-secondary">
+                  Preferred Time
+                </label>
                 <input
                   type="time"
                   name="time"
@@ -759,7 +810,9 @@ const Propertydetail: React.FC = () => {
                 />
               </div>
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2 text-secondary">Your Name</label>
+                <label className="block text-sm font-semibold text-gray-700 mb-2 text-secondary">
+                  Your Name
+                </label>
                 <input
                   type="text"
                   name="name"
@@ -771,7 +824,9 @@ const Propertydetail: React.FC = () => {
                 />
               </div>
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2 text-secondary">Phone Number</label>
+                <label className="block text-sm font-semibold text-gray-700 mb-2 text-secondary">
+                  Phone Number
+                </label>
                 <input
                   type="tel"
                   name="phone"
