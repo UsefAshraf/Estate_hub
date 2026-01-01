@@ -221,20 +221,20 @@ const CreateProperty = () => {
   }
 };
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 font-sans">
+    <div className="min-h-screen bg-gray-50 bg-primary py-12 px-4 sm:px-6 lg:px-8 font-sans">
       <div className="max-w-7xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+          <h1 className="text-3xl font-bold text-gray-900 text-primary mb-2">
             Create New Property
           </h1>
-          <p className="text-gray-500 text-lg">Fill out the form below to list a new property.</p>
+          <p className="text-gray-500 text-secondary text-lg">Fill out the form below to list a new property.</p>
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
+        <div className="bg-white bg-secondary rounded-xl shadow-sm border border-gray-200 border-custom p-8">
           <div className="space-y-10">
             {/* Property Images */}
             <div>
-              <h2 className="text-xl font-bold text-gray-900 mb-4">
+              <h2 className="text-xl font-bold text-gray-900 text-primary mb-4">
                 Property Images
               </h2>
               <div className="border-2 border-dashed border-gray-200 rounded-lg p-6">
@@ -242,7 +242,7 @@ const CreateProperty = () => {
                   <Upload className="w-12 h-12 text-gray-400" />
                   {/* CHANGED: Upload Button to Beige with Dark Text */}
                   <label className="cursor-pointer bg-[#E6D5B8] text-[#4A3B2A] px-6 py-3 rounded-lg hover:bg-[#C19A6B] hover:text-white transition-colors shadow-sm">
-                    <span className="font-semibold">Upload Images</span>
+                    <span className="font-semibold text-secondary">Upload Images</span>
                     <input
                       type="file"
                       multiple
@@ -251,7 +251,7 @@ const CreateProperty = () => {
                       className="hidden"
                     />
                   </label>
-                  <p className="text-sm text-gray-500">
+                  <p className="text-sm text-gray-500 text-secondary">
                     Upload up to 10 images (JPG, PNG)
                   </p>
                 </div>
@@ -281,12 +281,12 @@ const CreateProperty = () => {
 
             {/* Basic Information */}
             <div>
-              <h2 className="text-xl font-bold text-gray-900 mb-6">
+              <h2 className="text-xl font-bold text-gray-900 text-primary mb-6">
                 Basic Information
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-gray-700 text-secondary mb-2">
                     Property Title *
                   </label>
                   <input
@@ -300,7 +300,7 @@ const CreateProperty = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-gray-700 text-secondary mb-2">
                     Price *
                   </label>
                   <input
@@ -314,7 +314,7 @@ const CreateProperty = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-gray-700 text-secondary mb-2">
                     Status *
                   </label>
                   <select
@@ -330,7 +330,7 @@ const CreateProperty = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-gray-700 text-secondary mb-2">
                     Property Type *
                   </label>
                   <select
@@ -348,7 +348,7 @@ const CreateProperty = () => {
                 </div>
 
                 <div className="md:col-span-2">
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-gray-700 text-secondary mb-2">
                     Address *
                   </label>
                   <input
@@ -362,7 +362,7 @@ const CreateProperty = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-gray-700 text-secondary mb-2">
                     Price Note
                   </label>
                   <input
@@ -384,7 +384,7 @@ const CreateProperty = () => {
                     onChange={handleInputChange}
                     className="w-5 h-5 text-[#C19A6B] focus:ring-[#C19A6B] rounded border-gray-300"
                   />
-                  <label htmlFor="featured" className="text-sm font-semibold text-gray-700">
+                  <label htmlFor="featured" className="text-sm font-semibold text-gray-700 text-secondary">
                     Mark as Featured Property
                   </label>
                 </div>
@@ -393,13 +393,13 @@ const CreateProperty = () => {
 
             {/* Property Details */}
             <div>
-              <h2 className="text-xl font-bold text-gray-900 mb-6">
+              <h2 className="text-xl font-bold text-gray-900 text-primary mb-6">
                 Property Details
               </h2>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                 <div>
-                  <label className="flex items-center text-sm font-semibold text-gray-700 mb-2">
-                    <Bed className="w-4 h-4 mr-2 text-gray-500" />
+                  <label className="flex items-center text-sm font-semibold text-gray-700 text-secondary mb-2">
+                    <Bed className="w-4 h-4 mr-2 text-gray-500 text-secondary" />
                     Bedrooms *
                   </label>
                   <input
@@ -414,8 +414,8 @@ const CreateProperty = () => {
                 </div>
 
                 <div>
-                  <label className="flex items-center text-sm font-semibold text-gray-700 mb-2">
-                    <Bath className="w-4 h-4 mr-2 text-gray-500" />
+                  <label className="flex items-center text-sm font-semibold text-gray-700 text-secondary mb-2">
+                    <Bath className="w-4 h-4 mr-2 text-gray-500 text-secondary" />
                     Bathrooms *
                   </label>
                   <input
@@ -430,8 +430,8 @@ const CreateProperty = () => {
                 </div>
 
                 <div>
-                  <label className="flex items-center text-sm font-semibold text-gray-700 mb-2">
-                    <Maximize className="w-4 h-4 mr-2 text-gray-500" />
+                  <label className="flex items-center text-sm font-semibold text-gray-700 text-secondary mb-2">
+                    <Maximize className="w-4 h-4 mr-2 text-gray-500 text-secondary" />
                     Area (sqft) *
                   </label>
                   <input
@@ -445,8 +445,8 @@ const CreateProperty = () => {
                 </div>
 
                 <div>
-                  <label className="flex items-center text-sm font-semibold text-gray-700 mb-2">
-                    <Calendar className="w-4 h-4 mr-2 text-gray-500" />
+                  <label className="flex items-center text-sm font-semibold text-gray-700 text-secondary mb-2">
+                    <Calendar className="w-4 h-4 mr-2 text-gray-500 text-secondary" />
                     Year Built *
                   </label>
                   <input
@@ -465,7 +465,7 @@ const CreateProperty = () => {
 
             {/* Description */}
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
+              <label className="block text-sm font-semibold text-gray-700 text-secondary mb-2">
                 Property Description *
               </label>
               <textarea
@@ -480,7 +480,7 @@ const CreateProperty = () => {
 
             {/* Features */}
             <div>
-              <h2 className="text-xl font-bold text-gray-900 mb-4">
+              <h2 className="text-xl font-bold text-gray-900 text-primary mb-4">
                 Features & Amenities
               </h2>
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-6">
@@ -499,7 +499,7 @@ const CreateProperty = () => {
                       onChange={() => toggleFeature(feature)}
                       className="w-5 h-5 text-[#C19A6B] focus:ring-[#C19A6B] rounded border-gray-300"
                     />
-                    <span className="text-sm font-medium text-gray-800">
+                    <span className="text-sm font-medium text-gray-800 text-secondary">
                       {feature}
                     </span>
                   </label>
@@ -552,7 +552,7 @@ const CreateProperty = () => {
             <div className="flex justify-end space-x-4 pt-8 border-t border-gray-200">
               <button
                 type="button"
-                className="px-8 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors font-semibold"
+                className="px-8 py-3 border border-gray-300 text-gray-700 text-secondary rounded-lg hover:bg-gray-100 transition-colors font-semibold"
               >
                 Cancel
               </button>

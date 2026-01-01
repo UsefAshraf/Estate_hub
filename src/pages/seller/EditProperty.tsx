@@ -144,7 +144,7 @@ const EditProperty = () => {
 
     if (error && !property) {
         return (
-            <div className="min-h-screen bg-gradient-to-br from-red-50 to-pink-100 flex items-center justify-center">
+            <div className="min-h-screen bg-gradient-to-br  from-red-50 to-pink-100 flex items-center justify-center">
                 <div className="text-center bg-white p-8 rounded-2xl shadow-lg">
                     <XCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
                     <p className="text-lg text-red-600 mb-6">{error}</p>
@@ -163,22 +163,22 @@ const EditProperty = () => {
     if (!property) return null;
 
     return (
-        <section className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 py-12">
+        <section className="min-h-screen bg-gray-50 bg-primary from-blue-50 via-indigo-50 to-purple-50 py-12">
             <div className="max-w-6xl mx-auto px-4">
                 {/* Header */}
                 <div className="mb-8 flex items-center justify-between">
                     <div>
                         <button
                             onClick={() => navigate(-1)}
-                            className="flex items-center gap-2 text-slate-600 hover:text-slate-900 mb-4 transition"
+                            className="flex items-center gap-2 text-slate-600 text-secondary hover:text-slate-900 mb-4 transition"
                         >
                             <ArrowLeft className="w-5 h-5" />
                             <span>Back</span>
                         </button>
-                        <h1 className="text-4xl font-bold text-slate-900">
+                        <h1 className="text-4xl font-bold text-slate-900 text-primary">
                             Edit Property
                         </h1>
-                        <p className="text-slate-600 mt-2">
+                        <p className="text-slate-600 text-secondary mt-2">
                             Update your property information
                         </p>
                     </div>
@@ -186,7 +186,7 @@ const EditProperty = () => {
 
                 {/* Success Alert */}
                 {successMessage && (
-                    <div className="mb-6 p-4 bg-green-50 border-l-4 border-green-500 rounded-lg shadow-sm animate-in slide-in-from-top">
+                    <div className="mb-6 p-4 bg-green-50  border-l-4 border-green-500 rounded-lg shadow-sm animate-in slide-in-from-top">
                         <div className="flex items-center gap-3">
                             <CheckCircle className="w-6 h-6 text-green-600" />
                             <p className="text-green-800 font-medium">{successMessage}</p>
@@ -205,16 +205,16 @@ const EditProperty = () => {
                 )}
 
                 {/* Main Card */}
-                <div className="bg-white rounded-3xl shadow-xl overflow-hidden">
+                <div className="  bg-white bg-secondary rounded-3xl shadow-xl overflow-hidden">
                     {/* Basic Information */}
                     <div className="p-8 border-b border-slate-200">
-                        <h2 className="text-2xl font-bold text-slate-900 mb-6">
+                        <h2 className="text-2xl font-bold text-slate-900 text-primary mb-6">
                             Basic Information
                         </h2>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="md:col-span-2">
-                                <label className="block text-sm font-semibold text-slate-700 mb-2">
+                                <label className="block text-sm font-semibold text-slate-700 text-secondary mb-2">
                                     Property Title *
                                 </label>
                                 <input
@@ -227,7 +227,7 @@ const EditProperty = () => {
                             </div>
 
                             <div>
-                                <label className="block text-sm font-semibold text-slate-700 mb-2">
+                                <label className="block text-sm font-semibold text-slate-700 text-secondary mb-2">
                                     Price ($) *
                                 </label>
                                 <input
@@ -235,13 +235,13 @@ const EditProperty = () => {
                                     type="number"
                                     value={property.price}
                                     onChange={handleChange}
-                                    className="w-full rounded-xl border-2 border-slate-200 px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                                    className="w-full rounded-xl border-2 bg-secondary border-slate-200 px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
                                     placeholder="500000"
                                 />
                             </div>
 
                             <div>
-                                <label className="block text-sm font-semibold text-slate-700 mb-2">
+                                <label className="block text-sm font-semibold text-slate-700 text-secondary mb-2">
                                     Price Note
                                 </label>
                                 <input
@@ -254,14 +254,14 @@ const EditProperty = () => {
                             </div>
 
                             <div>
-                                <label className="block text-sm font-semibold text-slate-700 mb-2">
+                                <label className="block text-sm font-semibold text-slate-700 text-secondary mb-2">
                                     Status *
                                 </label>
                                 <select
                                     name="status"
                                     value={property.status}
                                     onChange={handleChange}
-                                    className="w-full rounded-xl border-2 border-slate-200 px-4 py-3 bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                                    className="w-full rounded-xl border-2 bg-secondary border-slate-200 px-4 py-3 bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
                                 >
                                     <option value="sale">For Sale</option>
                                     <option value="rent">For Rent</option>
@@ -270,14 +270,14 @@ const EditProperty = () => {
                             </div>
 
                             <div>
-                                <label className="block text-sm font-semibold text-slate-700 mb-2">
+                                <label className="block text-sm font-semibold text-slate-700 text-secondary mb-2">
                                     Property Type *
                                 </label>
                                 <select
                                     name="type"
                                     value={property.type}
                                     onChange={handleChange}
-                                    className="w-full rounded-xl border-2 border-slate-200 px-4 py-3 bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                                    className="w-full rounded-xl border-2 bg-secondary border-slate-200 px-4 py-3 bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
                                 >
                                     <option value="villa">Villa</option>
                                     <option value="apartment">Apartment</option>
@@ -289,7 +289,7 @@ const EditProperty = () => {
                             </div>
 
                             <div className="md:col-span-2">
-                                <label className="block text-sm font-semibold text-slate-700 mb-2">
+                                <label className="block text-sm font-semibold text-slate-700 text-secondary mb-2">
                                     Address *
                                 </label>
                                 <input
@@ -304,14 +304,14 @@ const EditProperty = () => {
                     </div>
 
                     {/* Property Details */}
-                    <div className="p-8 border-b border-slate-200 bg-slate-50">
-                        <h2 className="text-2xl font-bold text-slate-900 mb-6">
+                    <div className="p-8 border-amber-200 border-slate-200  bg-slate-50 bg-secondary">
+                        <h2 className="text-2xl font-bold text-slate-900 text-primary mb-6">
                             Property Details
                         </h2>
 
                         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                             <div>
-                                <label className="block text-sm font-semibold text-slate-700 mb-2">
+                                <label className="block text-sm font-semibold text-slate-700 text-secondary mb-2">
                                     Bedrooms *
                                 </label>
                                 <input
@@ -320,12 +320,12 @@ const EditProperty = () => {
                                     value={property.bedrooms}
                                     onChange={handleChange}
                                     min="0"
-                                    className="w-full rounded-xl border-2 border-slate-200 px-4 py-3 bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                                    className="w-full rounded-xl border-2 bg-secondary border-slate-200 px-4 py-3 bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
                                 />
                             </div>
 
                             <div>
-                                <label className="block text-sm font-semibold text-slate-700 mb-2">
+                                <label className="block text-sm font-semibold text-slate-700 text-secondary mb-2">
                                     Bathrooms *
                                 </label>
                                 <input
@@ -334,12 +334,12 @@ const EditProperty = () => {
                                     value={property.bathrooms}
                                     onChange={handleChange}
                                     min="0"
-                                    className="w-full rounded-xl border-2 border-slate-200 px-4 py-3 bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                                    className="w-full rounded-xl border-2 bg-secondary border-slate-200 px-4 py-3 bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
                                 />
                             </div>
 
                             <div>
-                                <label className="block text-sm font-semibold text-slate-700 mb-2">
+                                <label className="block text-sm font-semibold text-slate-700 text-secondary mb-2">
                                     Area (sqft) *
                                 </label>
                                 <input
@@ -348,12 +348,12 @@ const EditProperty = () => {
                                     value={property.area}
                                     onChange={handleChange}
                                     min="0"
-                                    className="w-full rounded-xl border-2 border-slate-200 px-4 py-3 bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                                    className="w-full rounded-xl border-2 bg-secondary border-slate-200 px-4 py-3 bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
                                 />
                             </div>
 
                             <div>
-                                <label className="block text-sm font-semibold text-slate-700 mb-2">
+                                <label className="block text-sm font-semibold text-slate-700 text-secondary mb-2">
                                     Year Built *
                                 </label>
                                 <input
@@ -363,15 +363,15 @@ const EditProperty = () => {
                                     onChange={handleChange}
                                     min="1800"
                                     max={new Date().getFullYear()}
-                                    className="w-full rounded-xl border-2 border-slate-200 px-4 py-3 bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                                    className="w-full rounded-xl border-2 bg-secondary border-slate-200 px-4 py-3 bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
                                 />
                             </div>
                         </div>
                     </div>
 
                     {/* Description */}
-                    <div className="p-8 border-b border-slate-200">
-                        <h2 className="text-2xl font-bold text-slate-900 mb-6">
+                    <div className="p-8 border-b border-amber-200 border-slate-200  ">
+                        <h2 className="text-2xl font-bold text-slate-900 text-primary mb-6">
                             Description
                         </h2>
 
@@ -380,14 +380,14 @@ const EditProperty = () => {
                             value={property.description}
                             onChange={handleChange}
                             rows={6}
-                            className="w-full rounded-xl border-2 border-slate-200 px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition resize-none"
+                            className="w-full rounded-xl border-2 bg-secondary border-slate-200 px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition resize-none"
                             placeholder="Describe your property in detail..."
                         />
                     </div>
 
                     {/* Features */}
-                    <div className="p-8 border-b border-slate-200 bg-slate-50">
-                        <h2 className="text-2xl font-bold text-slate-900 mb-6">
+                    <div className="p-8 border-b border-amber-200 bg-secondary border-slate-200 bg-slate-50">
+                        <h2 className="text-2xl font-bold text-slate-900 text-primary mb-6">
                             Features & Amenities
                         </h2>
 
@@ -395,7 +395,7 @@ const EditProperty = () => {
                             {property.features.map((feature, index) => (
                                 <span
                                     key={index}
-                                    className="inline-flex items-center gap-2 px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-sm font-medium"
+                                    className="inline-flex items-center gap-2 px-4 py-2  bg-amber-900 text-orange-200 rounded-full text-sm font-medium"
                                 >
                                     {typeof feature === 'string' ? feature : feature.name}
                                     <button
@@ -416,14 +416,14 @@ const EditProperty = () => {
                                 onChange={(e) => setNewFeature(e.target.value)}
                                 onKeyPress={(e) => e.key === "Enter" && (e.preventDefault(), addFeature())}
                                 placeholder="Add a feature (e.g., Swimming Pool)"
-                                className="flex-1 rounded-xl border-2 border-slate-200 px-4 py-3 bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                                className="flex-1 rounded-xl border-2 bg-secondary border-slate-200 px-4 py-3 bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
                             />
                             <button
                                 type="button"
                                 onClick={addFeature}
-                                className="px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition flex items-center gap-2 font-medium"
+                                className="px-6 py-3 rounded-xl bg-accent text-primary font-semibold hover:bg-accent-hover transition shadow"
                             >
-                                <Plus className="w-4 h-4" />
+                               
                                 Add
                             </button>
                         </div>
@@ -437,13 +437,13 @@ const EditProperty = () => {
                                 name="featured"
                                 checked={property.featured}
                                 onChange={handleChange}
-                                className="w-6 h-6 text-blue-600 rounded-lg border-2 border-slate-300 focus:ring-2 focus:ring-blue-500 cursor-pointer"
+                                className="w-6 h-6 text-orange-900 rounded-lg border-2 border-slate-300 focus:ring-2 focus:ring-offset-amber-900 cursor-pointer"
                             />
                             <div>
-                                <span className="text-lg font-semibold text-slate-900 group-hover:text-blue-600 transition">
+                                <span className="text-lg font-semibold text-slate-900 text-primary group-hover:text-orange-900 transition">
                                     Featured Property
                                 </span>
-                                <p className="text-sm text-slate-600">
+                                <p className="text-sm text-slate-600 text-secondary">
                                     Highlight this property on the homepage
                                 </p>
                             </div>
@@ -451,11 +451,11 @@ const EditProperty = () => {
                     </div>
 
                     {/* Actions */}
-                    <div className="p-8 bg-gradient-to-r from-slate-50 to-slate-100 flex justify-end gap-4">
+                    <div className="p-8 bg-secondary from-slate-50 to-slate-100 flex justify-end gap-4">
                         <button
                             onClick={() => navigate(-1)}
                             disabled={saving}
-                            className="px-8 py-3 rounded-xl border-2 border-slate-300 text-slate-700 hover:bg-white hover:border-slate-400 transition font-medium disabled:opacity-50"
+                            className="px-8 py-3 rounded-xl border-2 border-slate-300 text-slate-700 text-secondary hover:bg-white hover:border-slate-400 transition font-medium disabled:opacity-50"
                         >
                             Cancel
                         </button>
@@ -463,7 +463,7 @@ const EditProperty = () => {
                         <button
                             onClick={handleSubmit}
                             disabled={saving}
-                            className="px-8 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-700 hover:to-indigo-700 transition font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 shadow-lg"
+                            className="px-8 py-3 rounded-xl bg-gradient-to-r bg-accent text-slate-700 text-white font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 shadow-lg"
                         >
                             {saving ? (
                                 <>
