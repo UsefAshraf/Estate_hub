@@ -1,10 +1,250 @@
 import { useState, useEffect } from "react";
-import { CreditCard, Lock, Shield, CheckCircle2 } from "lucide-react";
+import { Lock, Shield, CheckCircle2 } from "lucide-react";
 import Swal from "sweetalert2";
 import { useNavigate, useParams } from "react-router-dom";
 import { getPropertyById, markPropertyAsSold } from "@/services/property.api";
+import { createPaymentIntent } from "@/services/stripe.api";
 import type { Property } from "@/types/property.types";
+import { loadStripe } from "@stripe/stripe-js";
+import {
+  Elements,
+  CardElement,
+  useStripe,
+  useElements,
+} from "@stripe/react-stripe-js";
 
+// Initialize Stripe with your publishable key
+// Replace with your actual Stripe publishable key from your Stripe dashboard
+const stripePromise = loadStripe("pk_test_51SebnV020wrLbjYwI2gOLIdtA3mMFs1TUexCj2M3mVjK9SqmMXIQRtZQ4rVHLsaBzjPuwzLH4MckOXPCDIHK803a00JT6xqE20");
+
+// Card element styling options
+const cardElementOptions = {
+  style: {
+    base: {
+      fontSize: "16px",
+      color: "#1f2937",
+      fontFamily: '"Inter", system-ui, sans-serif',
+      "::placeholder": {
+        color: "#9ca3af",
+      },
+      iconColor: "#6b7280",
+    },
+    invalid: {
+      color: "#dc2626",
+      iconColor: "#dc2626",
+    },
+  },
+  hidePostalCode: true,
+};
+
+// The actual payment form component that uses Stripe hooks
+interface CheckoutFormProps {
+  property: Property;
+  totalAmount: number;
+  serviceFee: number;
+}
+
+function CheckoutForm({ property, totalAmount, serviceFee }: CheckoutFormProps) {
+  const navigate = useNavigate();
+  const stripe = useStripe();
+  const elements = useElements();
+  const [processing, setProcessing] = useState(false);
+  const [cardError, setCardError] = useState<string | null>(null);
+  const [name, setName] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (!stripe || !elements) {
+      // Stripe.js hasn't loaded yet
+      return;
+    }
+
+    const cardElement = elements.getElement(CardElement);
+    if (!cardElement) {
+      return;
+    }
+
+    setProcessing(true);
+    setCardError(null);
+
+    try {
+      // Show processing message
+      Swal.fire({
+        title: "Processing Payment...",
+        text: "Please wait while we process your payment",
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        showConfirmButton: false,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
+
+      // Step 1: Create a Payment Intent on the backend
+      const paymentIntentResponse = await createPaymentIntent({
+        amount: Math.round(totalAmount * 100), // Stripe expects amount in cents
+        propertyId: property._id,
+        currency: "usd",
+      });
+
+      if (!paymentIntentResponse.success || !paymentIntentResponse.clientSecret) {
+        throw new Error("Failed to initialize payment");
+      }
+
+      // Step 2: Confirm the payment with Stripe
+      const { error, paymentIntent } = await stripe.confirmCardPayment(
+        paymentIntentResponse.clientSecret,
+        {
+          payment_method: {
+            card: cardElement,
+            billing_details: {
+              name: name,
+            },
+          },
+        }
+      );
+
+      if (error) {
+        // Payment failed
+        throw new Error(error.message || "Payment failed");
+      }
+
+      if (paymentIntent && paymentIntent.status === "succeeded") {
+        // Step 3: Mark property as sold
+        await markPropertyAsSold(property._id);
+
+        // Close loading and show success
+        await Swal.fire({
+          title: "Payment Successful! 🎉",
+          html: `
+            <div class="text-left">
+              <p class="mb-2">Congratulations on your new property!</p>
+              <p class="text-sm text-gray-500">Property: <strong>${property.title}</strong></p>
+              <p class="text-sm text-gray-500">Amount Paid: <strong>$${totalAmount.toLocaleString()}</strong></p>
+            </div>
+          `,
+          icon: "success",
+          position: "center",
+          width: 600,
+          timer: 5000,
+          timerProgressBar: true,
+          showConfirmButton: false,
+        });
+
+        // Navigate to confirmation page with property data
+        navigate("/confirmPayment", {
+          state: {
+            property: property,
+            totalAmount: totalAmount,
+            transactionDate: new Date().toISOString(),
+            paymentIntentId: paymentIntent.id,
+          },
+        });
+      }
+    } catch (error: any) {
+      console.error("Payment error:", error);
+
+      // Check if property is already sold
+      if (
+        error.response?.status === 400 &&
+        error.response?.data?.message?.includes("already")
+      ) {
+        Swal.fire({
+          icon: "warning",
+          title: "Property Unavailable",
+          text: "This property has already been sold.",
+          confirmButtonColor: "#f59e0b",
+        }).then(() => navigate("/homeBuyer"));
+      } else {
+        setCardError(error.message || "Payment failed. Please try again.");
+        Swal.fire({
+          icon: "error",
+          title: "Payment Failed",
+          text: error.message || "Failed to complete the purchase. Please try again.",
+          confirmButtonColor: "#dc2626",
+        });
+      }
+    } finally {
+      setProcessing(false);
+    }
+  };
+
+  const isFormValid = stripe && elements && name.length > 0;
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-6">
+      {/* Name on Card */}
+      <div className="space-y-2">
+        <label
+          htmlFor="name"
+          className="block text-sm font-semibold text-gray-700"
+        >
+          Name on Card
+        </label>
+        <input
+          id="name"
+          type="text"
+          className="block w-full px-4 py-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+          placeholder="John Doe"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          required
+        />
+      </div>
+
+      {/* Stripe Card Element */}
+      <div className="space-y-2">
+        <label className="block text-sm font-semibold text-gray-700">
+          Card Details
+        </label>
+        <div className="p-4 border border-gray-200 rounded-lg bg-gray-50 focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-transparent transition-all">
+          <CardElement options={cardElementOptions} />
+        </div>
+        {cardError && (
+          <p className="text-sm text-red-600 mt-1">{cardError}</p>
+        )}
+      </div>
+
+      {/* Trust Badges */}
+      <div className="pt-2 pb-2">
+        <div className="flex flex-wrap gap-6 items-center text-gray-500">
+          <div className="flex items-center gap-2">
+            <Lock className="w-4 h-4" />
+            <span className="text-sm font-medium">SSL Encrypted</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Shield className="w-4 h-4" />
+            <span className="text-sm font-medium">PCI Compliant</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <CheckCircle2 className="w-4 h-4" />
+            <span className="text-sm font-medium">Powered by Stripe</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Submit Button */}
+      <button
+        type="submit"
+        disabled={!isFormValid || processing}
+        className={`w-full py-4 px-6 rounded-lg text-white font-bold text-lg shadow-md transition-all duration-200 
+          ${!isFormValid || processing
+            ? "bg-gray-400 cursor-not-allowed"
+            : "bg-[#C19A6B] hover:bg-[#a68256] hover:shadow-lg transform hover:-translate-y-0.5"
+          }`}
+      >
+        {processing ? "Processing..." : `Pay $${totalAmount.toLocaleString()}`}
+      </button>
+
+      <p className="text-xs text-gray-400 text-center mt-4">
+        By clicking Pay, you agree to our Terms of Service and Privacy Policy
+      </p>
+    </form>
+  );
+}
+
+// Main PaymentPage component
 export default function PaymentPage() {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
@@ -12,12 +252,6 @@ export default function PaymentPage() {
   // Property state - fetched from backend
   const [property, setProperty] = useState<Property | null>(null);
   const [loading, setLoading] = useState(true);
-
-  const [cardNumber, setCardNumber] = useState("");
-  const [expiry, setExpiry] = useState("");
-  const [cvc, setCvc] = useState("");
-  const [name, setName] = useState("");
-  const [processing, setProcessing] = useState(false);
 
   const serviceFee = 99;
   const totalAmount = (property?.price || 0) + serviceFee;
@@ -61,175 +295,6 @@ export default function PaymentPage() {
     fetchProperty();
   }, [id, navigate]);
 
-  // --- Formatting Logic ---
-  const formatCardNumber = (value: string): string => {
-    const v = value.replace(/\s+/g, "").replace(/[^0-9]/gi, "");
-    const matches = v.match(/\d{4,16}/g);
-    const match = (matches && matches[0]) || "";
-    const parts = [];
-    for (let i = 0, len = match.length; i < len; i += 4) {
-      parts.push(match.substring(i, i + 4));
-    }
-    return parts.length ? parts.join(" ") : value;
-  };
-
-  const formatExpiry = (value: string): string => {
-    const v = value.replace(/\s+/g, "").replace(/[^0-9]/gi, "");
-    if (v.length >= 2) {
-      return v.substring(0, 2) + "/" + v.substring(2, 4);
-    }
-    return v;
-  };
-
-  const handleCardNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const formatted = formatCardNumber(e.target.value);
-    if (formatted.replace(/\s/g, "").length <= 16) {
-      setCardNumber(formatted);
-    }
-  };
-
-  const handleExpiryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const formatted = formatExpiry(e.target.value);
-    if (formatted.replace(/\//g, "").length <= 4) {
-      setExpiry(formatted);
-    }
-  };
-
-  const handleCvcChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.replace(/[^0-9]/gi, "");
-    if (value.length <= 4) {
-      setCvc(value);
-    }
-  };
-
-  // const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault();
-  //   setProcessing(true);
-  //   // Swal.fire({
-  //   //   title: "Payment Successful!",
-  //   //   text: "Thank you for your purchase. Redirecting in a moment...",
-  //   //   icon: "success",
-  //   //   position: "middle",
-  //   //   toast: true,
-  //   //   timer: 3000,
-  //   //   timerProgressBar: true,
-  //   //   showConfirmButton: false,
-  //   // });
-
-  //   Swal.fire({
-  //     title: "Payment Successful!",
-  //     text: "Thank you for your purchase. Your property documents are being processed.",
-  //     icon: "success",
-  //     position: "center", // Use 'center' for a big popup
-  //     // Remove: toast: true
-  //     // Add: Explicit width/size if needed, otherwise it defaults to a large size
-  //     width: 600, // Optional: Set a specific width (default is ~310px wide for normal popups)
-  //     timer: 5000, // Increased timer for better visibility of the large popup
-  //     timerProgressBar: true,
-  //     showConfirmButton: false, // Keep this if you want it to close automatically
-
-  //     // Optional: You can also add custom classes for styling
-  //     customClass: {
-  //       popup: 'my-big-success-popup',
-  //       title: 'text-3xl font-bold',
-  //       htmlContainer: 'text-xl'
-  //     }
-  //   });
-  //   setProcessing(false);
-  //   await new Promise(resolve => setTimeout(resolve, 3000));
-  //   navigate("/confirmPayment");
-  // };
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setProcessing(true);
-
-    try {
-      // Show processing message
-      Swal.fire({
-        title: "Processing Payment...",
-        text: "Please wait while we process your payment",
-        allowOutsideClick: false,
-        allowEscapeKey: false,
-        showConfirmButton: false,
-        didOpen: () => {
-          Swal.showLoading();
-        },
-      });
-
-      // Simulate payment processing delay (remove in production)
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-
-      // Mark the property as sold
-      const response = await markPropertyAsSold(id!);
-
-      if (response.data.success) {
-        // Close loading and show success
-        await Swal.fire({
-          title: "Payment Successful! 🎉",
-          html: `
-          <div class="text-left">
-            <p class="mb-2">Congratulations on your new property!</p>
-            <p class="text-sm text-gray-500">Property: <strong>${
-              property?.title
-            }</strong></p>
-            <p class="text-sm text-gray-500">Amount Paid: <strong>$${totalAmount.toLocaleString()}</strong></p>
-          </div>
-        `,
-          icon: "success",
-          position: "center",
-          width: 600,
-          timer: 5000,
-          timerProgressBar: true,
-          showConfirmButton: false,
-        });
-
-        // Navigate to confirmation page with property data
-        navigate("/confirmPayment", {
-          state: {
-            property: property,
-            totalAmount: totalAmount,
-            transactionDate: new Date().toISOString(),
-          },
-        });
-      } else {
-        throw new Error(response.data.message || "Failed to complete purchase");
-      }
-    } catch (error: any) {
-      console.error("Payment error:", error);
-
-      // Check if property is already sold
-      if (
-        error.response?.status === 400 &&
-        error.response?.data?.message?.includes("already")
-      ) {
-        Swal.fire({
-          icon: "warning",
-          title: "Property Unavailable",
-          text: "This property has already been sold.",
-          confirmButtonColor: "#f59e0b",
-        }).then(() => navigate("/homeBuyer"));
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: "Payment Failed",
-          text:
-            error.response?.data?.message ||
-            "Failed to complete the purchase. Please try again.",
-          confirmButtonColor: "#dc2626",
-        });
-      }
-    } finally {
-      setProcessing(false);
-    }
-  };
-
-  const isFormValid =
-    cardNumber.replace(/\s/g, "").length === 16 &&
-    expiry.length === 5 &&
-    cvc.length >= 3 &&
-    name.length > 0;
-
   // Loading State
   if (loading) {
     return (
@@ -270,7 +335,7 @@ export default function PaymentPage() {
             Complete Your Payment
           </h1>
           <p className="text-gray-500 text-lg">
-            Secure payment powered by industry-leading encryption
+            Secure payment powered by Stripe
           </p>
         </div>
 
@@ -286,133 +351,14 @@ export default function PaymentPage() {
                   <p className="text-gray-500">Enter your card details below</p>
                 </div>
 
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  {/* Card Number */}
-                  <div className="space-y-2">
-                    <label
-                      htmlFor="cardNumber"
-                      className="block text-sm font-semibold text-gray-700"
-                    >
-                      Card Number
-                    </label>
-                    <div className="relative">
-                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <CreditCard className="h-5 w-5 text-gray-400" />
-                      </div>
-                      <input
-                        id="cardNumber"
-                        type="text"
-                        className="block w-full pl-10 pr-3 py-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                        placeholder="1234 5678 9012 3456"
-                        value={cardNumber}
-                        onChange={handleCardNumberChange}
-                        required
-                      />
-                    </div>
-                  </div>
-
-                  {/* Name on Card */}
-                  <div className="space-y-2">
-                    <label
-                      htmlFor="name"
-                      className="block text-sm font-semibold text-gray-700"
-                    >
-                      Name on Card
-                    </label>
-                    <input
-                      id="name"
-                      type="text"
-                      className="block w-full px-4 py-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                      placeholder="John Doe"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      required
-                    />
-                  </div>
-
-                  {/* Expiry and CVC */}
-                  <div className="grid grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                      <label
-                        htmlFor="expiry"
-                        className="block text-sm font-semibold text-gray-700"
-                      >
-                        Expiry Date
-                      </label>
-                      <input
-                        id="expiry"
-                        type="text"
-                        className="block w-full px-4 py-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                        placeholder="MM/YY"
-                        value={expiry}
-                        onChange={handleExpiryChange}
-                        required
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <label
-                        htmlFor="cvc"
-                        className="block text-sm font-semibold text-gray-700"
-                      >
-                        CVC
-                      </label>
-                      <input
-                        id="cvc"
-                        type="text"
-                        className="block w-full px-4 py-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                        placeholder="123"
-                        value={cvc}
-                        onChange={handleCvcChange}
-                        required
-                      />
-                    </div>
-                  </div>
-
-                  {/* Trust Badges */}
-                  <div className="pt-2 pb-2">
-                    <div className="flex flex-wrap gap-6 items-center text-gray-500">
-                      <div className="flex items-center gap-2">
-                        <Lock className="w-4 h-4" />
-                        <span className="text-sm font-medium">
-                          SSL Encrypted
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Shield className="w-4 h-4" />
-                        <span className="text-sm font-medium">
-                          PCI Compliant
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <CheckCircle2 className="w-4 h-4" />
-                        <span className="text-sm font-medium">
-                          Secure Payment
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Submit Button */}
-                  <button
-                    type="submit"
-                    disabled={!isFormValid || processing}
-                    className={`w-full py-4 px-6 rounded-lg text-white font-bold text-lg shadow-md transition-all duration-200 
-                      ${
-                        !isFormValid || processing
-                          ? "bg-[#e0d0b8] cursor-not-allowed"
-                          : "bg-[#e0d0b8] xhover:bg-[#a68256] hover:shadow-lg transform hover:-translate-y-0.5"
-                      }`}
-                  >
-                    {processing
-                      ? "Processing..."
-                      : `Pay $${totalAmount.toLocaleString()}`}
-                  </button>
-
-                  <p className="text-xs text-gray-400 text-center mt-4">
-                    By clicking Pay, you agree to our Terms of Service and
-                    Privacy Policy
-                  </p>
-                </form>
+                {/* Stripe Elements Provider */}
+                <Elements stripe={stripePromise}>
+                  <CheckoutForm
+                    property={property}
+                    totalAmount={totalAmount}
+                    serviceFee={serviceFee}
+                  />
+                </Elements>
               </div>
             </div>
 
@@ -424,8 +370,8 @@ export default function PaymentPage() {
                   Your payment is secure
                 </h4>
                 <p className="text-sm text-[#8C7A63] leading-relaxed">
-                  We use bank-level encryption to protect your card information.
-                  Your data is never stored on our servers.
+                  We use Stripe for secure payment processing. Your card details
+                  are encrypted and never stored on our servers.
                 </p>
               </div>
             </div>

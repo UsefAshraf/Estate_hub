@@ -58,7 +58,7 @@ export const updateProperty = (
 ): Promise<AxiosResponse<PropertyResponse>> => {
   // Get token
   const token = localStorage.getItem("accessToken");
-  
+
   // Check if we have images to upload
   const hasImages = data.images && data.images.length > 0;
 
@@ -82,7 +82,7 @@ export const updateProperty = (
     });
 
     return API.put(`/api/properties/${id}`, formData, {
-      headers: { 
+      headers: {
         "Content-Type": "multipart/form-data",
         "Authorization": `Bearer ${token}`,
         "accessToken": token || "",
@@ -95,7 +95,7 @@ export const updateProperty = (
     Object.entries(data).forEach(([key, value]) => {
       if (key === "features" && value) {
         // Format features properly
-        updateData.features = (value as any[]).map((f) => 
+        updateData.features = (value as any[]).map((f) =>
           typeof f === 'string' ? f : f.name
         );
       } else if (key !== "images" && value !== undefined && value !== null) {
@@ -108,7 +108,7 @@ export const updateProperty = (
     console.log("With token:", token);
 
     return API.put(`/api/properties/${id}`, updateData, {
-      headers: { 
+      headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${token}`,
         "accessToken": token || "",
@@ -120,7 +120,7 @@ export const updateProperty = (
 export const deleteProperty = (
   id: string
 ): Promise<AxiosResponse<{ success: boolean; message: string }>> =>
-  API.delete(`/api/properties/${id}`,{
+  API.delete(`/api/properties/${id}`, {
     headers: { accessToken: localStorage.getItem("accessToken") }
   });
 
@@ -129,4 +129,4 @@ export const getSoldProperties = (): Promise<AxiosResponse<PropertiesResponse>> 
   API.get("/api/properties/sold");
 
 
-export const markPropertyAsSold = (id: string) => {  return API.patch(`/api/properties/${id}/sold`);};
+export const markPropertyAsSold = (id: string) => { return API.patch(`/api/properties/${id}/sold`); };
