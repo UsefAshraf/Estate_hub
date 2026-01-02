@@ -5,7 +5,7 @@ import type {
   FavoriteResponse,
 } from "../types/favourites.types.ts";
 
-const API_URL = "http://localhost:3000";
+const API_URL = "https://estatehub.duckdns.org";
 
 const API = axios.create({
   baseURL: API_URL,

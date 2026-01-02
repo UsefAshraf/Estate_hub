@@ -1,7 +1,7 @@
 import type { SignUpRequest, SignInRequest, SignUpResponse, SignInResponse, VerifyEmailResponse, ResetPasswordRequest } from "@/types/auth.types";
 import axios, { type AxiosResponse } from "axios";
 
-const API_URL = "http://localhost:3000";
+const API_URL = "https://estatehub.duckdns.org";
 
 const API = axios.create({
   baseURL: API_URL,

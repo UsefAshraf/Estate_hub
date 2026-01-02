@@ -8,7 +8,7 @@
 // } from "@/types/property.types";
 
 // const API = axios.create({
-//   baseURL: "http://localhost:3000",
+//   baseURL: "https://estatehub.duckdns.org",
 // });
 
 // /* ---------- Attach token globally ---------- */
@@ -142,7 +142,7 @@ import type {
 } from "@/types/property.types";
 
 const API = axios.create({
-  baseURL: "http://localhost:3000",
+  baseURL: "https://estatehub.duckdns.org",
 });
 
 /* ---------- Attach token globally ---------- */
@@ -196,7 +196,7 @@ export const updateProperty = (
 ): Promise<AxiosResponse<PropertyResponse>> => {
   // Get token
   const token = localStorage.getItem("accessToken");
-  
+
   // Check if we have images to upload
   const hasImages = data.images && data.images.length > 0;
 
@@ -221,7 +221,7 @@ export const updateProperty = (
     });
 
     return API.put(`/api/properties/${id}`, formData, {
-      headers: { 
+      headers: {
         "Content-Type": "multipart/form-data",
         "Authorization": `Bearer ${token}`,
         "accessToken": token || "",
@@ -250,7 +250,7 @@ export const updateProperty = (
     console.log("With token:", token);
 
     return API.put(`/api/properties/${id}`, updateData, {
-      headers: { 
+      headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${token}`,
         "accessToken": token || "",
@@ -262,7 +262,7 @@ export const updateProperty = (
 export const deleteProperty = (
   id: string
 ): Promise<AxiosResponse<{ success: boolean; message: string }>> =>
-  API.delete(`/api/properties/${id}`,{
+  API.delete(`/api/properties/${id}`, {
     headers: { accessToken: localStorage.getItem("accessToken") }
   });
 

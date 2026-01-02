@@ -427,7 +427,6 @@
 
 // export default SignUpPage;
 
-
 import React, { useState, useEffect } from "react";
 import { Home, User, Mail, Phone, Lock, Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -476,8 +475,9 @@ const SignUpPage: React.FC = () => {
   });
   const [errors, setErrors] = useState<any>({});
 
-  const API_URL = "http://localhost:3000"; // Change to your backend URL
-  const GOOGLE_CLIENT_ID = "584541693614-7khqp9pqbrc0sk693tk9ecean8e244up.apps.googleusercontent.com"; // Add your Google Client ID
+  const API_URL = "https://estatehub.duckdns.org"; // Change to your backend URL
+  const GOOGLE_CLIENT_ID =
+    "584541693614-7khqp9pqbrc0sk693tk9ecean8e244up.apps.googleusercontent.com"; // Add your Google Client ID
 
   useEffect(() => {
     // Load Google Sign-In script
@@ -629,7 +629,9 @@ const SignUpPage: React.FC = () => {
         Swal.fire({
           icon: "error",
           title: "Signup Failed",
-          text: data.message || "An error occurred during signup. Please try again.",
+          text:
+            data.message ||
+            "An error occurred during signup. Please try again.",
           confirmButtonColor: "#dc2626",
         });
       }
@@ -649,7 +651,7 @@ const SignUpPage: React.FC = () => {
   const handleGoogleResponse = async (response: GoogleCredentialResponse) => {
     setIsLoading(true);
     console.log(response);
-    
+
     try {
       const res = await fetch(`${API_URL}/auth/gmail-signup`, {
         method: "POST",
@@ -661,7 +663,6 @@ const SignUpPage: React.FC = () => {
 
       const data = await res.json();
       console.log(data);
-      
 
       if (res.ok) {
         if (data.token) {
@@ -810,7 +811,10 @@ const SignUpPage: React.FC = () => {
 
           {/* Google Sign-In Button */}
           <div className="mb-4">
-            <div id="google-signup-button" className="flex justify-center"></div>
+            <div
+              id="google-signup-button"
+              className="flex justify-center"
+            ></div>
           </div>
 
           <div className="flex items-center my-4">

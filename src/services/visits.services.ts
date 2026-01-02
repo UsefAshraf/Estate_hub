@@ -6,7 +6,7 @@ import type {
 } from "@/types/visits.types";
 import axios, { type AxiosResponse } from "axios";
 
-const API_URL = "http://localhost:3000";
+const API_URL = "https://estatehub.duckdns.org";
 
 const API = axios.create({
   baseURL: API_URL,
@@ -77,7 +77,7 @@ export const cancelVisitByAdmin = (visitId: string): Promise<AxiosResponse<Visit
 //   VisitsResponse,
 // } from "@/types/visits.types";
 
-// const API_URL = "http://localhost:3000";
+// const API_URL = "https://estatehub.duckdns.org";
 
 // const API = axios.create({
 //   baseURL: API_URL, 

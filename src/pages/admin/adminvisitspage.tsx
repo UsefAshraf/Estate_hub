@@ -9,8 +9,9 @@ import type { Visit } from "@/types/visits.types";
 
 const AdminVisitsPage = () => {
   const [visits, setVisits] = useState<Visit[]>([]);
-  const [filterStatus, setFilterStatus] =
-    useState<Visit["status"] | "all">("all");
+  const [filterStatus, setFilterStatus] = useState<Visit["status"] | "all">(
+    "all"
+  );
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -33,15 +34,35 @@ const AdminVisitsPage = () => {
   const getStatusConfig = (status: Visit["status"]) => {
     switch (status) {
       case "upcoming":
-        return { color: "text-blue-600 bg-blue-500/10", borderColor: "border-blue-500", dotColor: "bg-blue-500" };
+        return {
+          color: "text-blue-600 bg-blue-500/10",
+          borderColor: "border-blue-500",
+          dotColor: "bg-blue-500",
+        };
       case "completed":
-        return { color: "text-green-600 bg-green-500/10", borderColor: "border-green-500", dotColor: "bg-green-500" };
+        return {
+          color: "text-green-600 bg-green-500/10",
+          borderColor: "border-green-500",
+          dotColor: "bg-green-500",
+        };
       case "cancelled":
-        return { color: "text-red-600 bg-red-500/10", borderColor: "border-red-500", dotColor: "bg-red-500" };
+        return {
+          color: "text-red-600 bg-red-500/10",
+          borderColor: "border-red-500",
+          dotColor: "bg-red-500",
+        };
       case "pending":
-        return { color: "text-amber-600 bg-amber-500/10", borderColor: "border-amber-500", dotColor: "bg-amber-500" };
+        return {
+          color: "text-amber-600 bg-amber-500/10",
+          borderColor: "border-amber-500",
+          dotColor: "bg-amber-500",
+        };
       default:
-        return { color: "text-secondary bg-primary/5", borderColor: "border-custom", dotColor: "bg-secondary" };
+        return {
+          color: "text-secondary bg-primary/5",
+          borderColor: "border-custom",
+          dotColor: "bg-secondary",
+        };
     }
   };
 
@@ -51,9 +72,7 @@ const AdminVisitsPage = () => {
     try {
       await acceptVisit(id);
       setVisits((prev) =>
-        prev.map((v) =>
-          v._id === id ? { ...v, status: "upcoming" } : v
-        )
+        prev.map((v) => (v._id === id ? { ...v, status: "upcoming" } : v))
       );
     } catch {
       alert("Failed to accept visit");
@@ -66,9 +85,7 @@ const AdminVisitsPage = () => {
     try {
       await cancelVisitByAdmin(id);
       setVisits((prev) =>
-        prev.map((v) =>
-          v._id === id ? { ...v, status: "cancelled" } : v
-        )
+        prev.map((v) => (v._id === id ? { ...v, status: "cancelled" } : v))
       );
     } catch {
       alert("Failed to cancel visit");
@@ -79,8 +96,7 @@ const AdminVisitsPage = () => {
     .filter((v) => filterStatus === "all" || v.status === filterStatus)
     .sort(
       (a, b) =>
-        new Date(b.createdAt).getTime() -
-        new Date(a.createdAt).getTime()
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     );
 
   const statusCounts = {
@@ -99,8 +115,12 @@ const AdminVisitsPage = () => {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-primary mb-2">Admin - Property Visits</h1>
-          <p className="text-secondary">Manage and track all scheduled property viewings</p>
+          <h1 className="text-4xl font-bold text-primary mb-2">
+            Admin - Property Visits
+          </h1>
+          <p className="text-secondary">
+            Manage and track all scheduled property viewings
+          </p>
         </div>
 
         {/* Stats Cards */}
@@ -125,11 +145,15 @@ const AdminVisitsPage = () => {
                 key={key}
                 onClick={() => setFilterStatus(key as Visit["status"] | "all")}
                 className={`p-3 rounded-lg transition-all ${
-                  filterStatus === key ? `${colors[key]} ring-2 ring-offset-2 ${activeColors[key]}` : colors[key]
+                  filterStatus === key
+                    ? `${colors[key]} ring-2 ring-offset-2 ${activeColors[key]}`
+                    : colors[key]
                 } shadow-md border border-custom`}
               >
                 <div className="text-2xl font-bold text-primary">{count}</div>
-                <div className="text-xs font-medium mt-0.5">{key.charAt(0).toUpperCase() + key.slice(1)}</div>
+                <div className="text-xs font-medium mt-0.5">
+                  {key.charAt(0).toUpperCase() + key.slice(1)}
+                </div>
               </button>
             );
           })}
@@ -142,30 +166,47 @@ const AdminVisitsPage = () => {
               const config = getStatusConfig(visit.status);
 
               return (
-                <div key={visit._id} className="bg-secondary rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 group">
+                <div
+                  key={visit._id}
+                  className="bg-secondary rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 group"
+                >
                   <div className="p-6">
                     {/* Status Badge */}
                     <div className="mb-4">
-                      <div className={`inline-flex items-center gap-1.5 ${config.color} px-3 py-1 rounded-full text-xs font-semibold border ${config.borderColor}`}>
-                        <span className={`w-2 h-2 rounded-full ${config.dotColor}`} />
-                        {visit.status.charAt(0).toUpperCase() + visit.status.slice(1)}
+                      <div
+                        className={`inline-flex items-center gap-1.5 ${config.color} px-3 py-1 rounded-full text-xs font-semibold border ${config.borderColor}`}
+                      >
+                        <span
+                          className={`w-2 h-2 rounded-full ${config.dotColor}`}
+                        />
+                        {visit.status.charAt(0).toUpperCase() +
+                          visit.status.slice(1)}
                       </div>
                     </div>
 
                     {/* Property Name */}
-                    <h3 className="text-xl font-bold text-primary mb-3 transition-colors">{visit.propertyName}</h3>
+                    <h3 className="text-xl font-bold text-primary mb-3 transition-colors">
+                      {visit.propertyName}
+                    </h3>
 
                     {/* Date and Time */}
                     <div className="space-y-2 mb-4">
                       <div className="flex items-center gap-2 text-secondary">
                         <Calendar className="w-4 h-4" />
                         <span className="text-sm font-medium">
-                          {new Date(visit.date).toLocaleDateString("en-US", { weekday: "short", year: "numeric", month: "short", day: "numeric" })}
+                          {new Date(visit.date).toLocaleDateString("en-US", {
+                            weekday: "short",
+                            year: "numeric",
+                            month: "short",
+                            day: "numeric",
+                          })}
                         </span>
                       </div>
                       <div className="flex items-center gap-2 text-secondary">
                         <Clock className="w-4 h-4" />
-                        <span className="text-sm font-medium">{visit.time}</span>
+                        <span className="text-sm font-medium">
+                          {visit.time}
+                        </span>
                       </div>
                     </div>
 
@@ -180,7 +221,8 @@ const AdminVisitsPage = () => {
                           Accept
                         </button>
                       )}
-                      {(visit.status === "pending" || visit.status === "upcoming") && (
+                      {(visit.status === "pending" ||
+                        visit.status === "upcoming") && (
                         <button
                           onClick={() => handleCancel(visit._id)}
                           className="flex-1 bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors font-medium flex items-center justify-center gap-1"
@@ -198,8 +240,14 @@ const AdminVisitsPage = () => {
         ) : (
           <div className="bg-secondary rounded-2xl shadow-lg border border-custom p-12 text-center">
             <Calendar className="w-16 h-16 text-secondary mx-auto mb-4 opacity-50" />
-            <h3 className="text-xl font-semibold text-primary mb-2">No visits found</h3>
-            <p className="text-secondary mb-6">{filterStatus !== "all" ? "Try adjusting your filters" : "No property visits scheduled yet"}</p>
+            <h3 className="text-xl font-semibold text-primary mb-2">
+              No visits found
+            </h3>
+            <p className="text-secondary mb-6">
+              {filterStatus !== "all"
+                ? "Try adjusting your filters"
+                : "No property visits scheduled yet"}
+            </p>
           </div>
         )}
       </div>
@@ -374,7 +422,6 @@ export default AdminVisitsPage;
 
 // export default AdminVisitsPage;
 
-
 // // import { useEffect, useState } from "react";
 // // import { Calendar, Clock, Check, X, User, Home, Phone, Mail } from "lucide-react";
 
@@ -426,8 +473,8 @@ export default AdminVisitsPage;
 // //   const [error, setError] = useState<string>("");
 
 // //   // API calls inline
-// //   const API_URL = "http://localhost:3000";
-  
+// //   const API_URL = "https://estatehub.duckdns.org";
+
 // //   const getAuthHeaders = () => {
 // //     const token = localStorage.getItem("accessToken");
 // //     return {
@@ -484,7 +531,7 @@ export default AdminVisitsPage;
 
 // //   const handleAcceptVisit = async (visitId: string) => {
 // //     if (!confirm("Accept this visit request?")) return;
-    
+
 // //     try {
 // //       await acceptVisit(visitId);
 // //       setVisits((prev) =>
@@ -497,7 +544,7 @@ export default AdminVisitsPage;
 
 // //   const handleCancelVisit = async (visitId: string) => {
 // //     if (!confirm("Cancel this visit?")) return;
-    
+
 // //     try {
 // //       await cancelVisitByAdmin(visitId);
 // //       setVisits((prev) =>

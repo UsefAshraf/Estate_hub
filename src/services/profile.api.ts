@@ -1,7 +1,7 @@
 // services/userService.ts
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:3000/api'; // Updated to match your port
+const API_BASE_URL = 'https://estatehub.duckdns.org/api'; // Updated to match your port
 
 // Create axios instance with default config
 const apiClient = axios.create({

@@ -423,7 +423,7 @@ const SignInPage: React.FC = () => {
   });
   const [errors, setErrors] = useState<any>({});
 
-  const API_URL = "http://localhost:3000"; // Change to your backend URL
+  const API_URL = "https://estatehub.duckdns.org"; // Change to your backend URL
   const GOOGLE_CLIENT_ID =
     "584541693614-7khqp9pqbrc0sk693tk9ecean8e244up.apps.googleusercontent.com"; // Add your Google Client ID
 
@@ -537,8 +537,9 @@ const SignInPage: React.FC = () => {
         await Swal.fire({
           icon: "success",
           title: "Welcome Back!",
-          text: `Signed in successfully as ${data.user?.userName || data.user?.username || "User"
-            }`,
+          text: `Signed in successfully as ${
+            data.user?.userName || data.user?.username || "User"
+          }`,
           timer: 1500,
           showConfirmButton: false,
         });
