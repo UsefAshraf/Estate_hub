@@ -1,19 +1,23 @@
 // src/App.tsx
-import React from "react";
-import { BrowserRouter as Router } from "react-router-dom";
+import React, { useEffect } from "react";
 import AppRoutes from "./routes/AppRoutes";
-import Navbar from "./components/Navbar/Navbar";
-import Footer from "./components/Footer/Footer"; // import Footer
+import { loadTheme } from "./hooks/ThemeLoader";
+import { useAppDispatch } from "./hooks/HooksStore";
+import { changeTheme } from "./store/slices/ThemeSlice";
+import UserManagement from "./pages/admin/usermanagement";
+import Propertydetail from "./pages/buyer/propertydetail";
 
 const App: React.FC = () => {
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    const theme = loadTheme();
+    dispatch(changeTheme(theme));
+  }, []);
   return (
-    <Router>
-      <Navbar />
-      <div className="mt-4">
-        <AppRoutes />
-      </div>
-      <Footer />
-    </Router>
+    <div className="App">
+      <AppRoutes />
+    </div>
   );
 };
 
